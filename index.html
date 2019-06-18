@@ -390,7 +390,7 @@
                 
               
 
-              <time title="创建时间：2019-06-18 17:21:37 / 修改时间：17:28:48" itemprop="dateCreated datePublished" datetime="2019-06-18T17:21:37+08:00">2019-06-18</time>
+              <time title="创建时间：2019-06-18 17:21:37 / 修改时间：17:33:40" itemprop="dateCreated datePublished" datetime="2019-06-18T17:21:37+08:00">2019-06-18</time>
             
 
             
@@ -455,249 +455,20 @@
 
       
         
+          <h1 id="SSH协议"><a href="#SSH协议" class="headerlink" title="SSH协议"></a>SSH协议</h1><p>这是一篇去年学习ssh协议时写的文，基本上是SSH标准协议的翻译，放上来仅供参考，里边的一些细节我也有些忘记了。</p>
+<h2 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h2><p>SSH是Secure SHell的缩写，即安全外壳协议，是一种在不安全网络提供安全远程登陆以及其他安全网络服务的协议。SSH是建立在应用层基础上的安全协议，可以有效防止远程管理过程中的信息泄露问题。
+          <!--noindex-->
           
-            <h1 id="SSH协议"><a href="#SSH协议" class="headerlink" title="SSH协议"></a>SSH协议</h1><p>这是一篇去年学习ssh协议时写的文，基本上是SSH标准协议的翻译，放上来仅供参考，里边的一些细节我也有些忘记了。</p>
-<h2 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h2><p>SSH是Secure SHell的缩写，即安全外壳协议，是一种在不安全网络提供安全远程登陆以及其他安全网络服务的协议。SSH是建立在应用层基础上的安全协议，可以有效防止远程管理过程中的信息泄露问题。</p>
-<h2 id="功能"><a href="#功能" class="headerlink" title="功能"></a>功能</h2><h3 id="主要功能"><a href="#主要功能" class="headerlink" title="主要功能"></a>主要功能</h3><p>提供网络服务程序功能，加密传输数据，可抵抗中间人攻击。</p>
-<h3 id="应用场景"><a href="#应用场景" class="headerlink" title="应用场景"></a>应用场景</h3><ul>
-<li>替代Telnet进行远程通信</li>
-<li>提供安全FTP服务</li>
-<li>为POP、PPP协议提供安全信道</li>
-</ul>
-<h2 id="组成"><a href="#组成" class="headerlink" title="组成"></a>组成</h2><p>SSH协议由三个子协议组成：传输层协议(SSH-TRANS)、用户认证协议(SSH-USERAUTH)、连接协议(SSH-CONNECT)</p>
-<h3 id="SSH-TRANS"><a href="#SSH-TRANS" class="headerlink" title="SSH-TRANS"></a>SSH-TRANS</h3><h4 id="功能-1"><a href="#功能-1" class="headerlink" title="功能"></a>功能</h4><p>安全的低级传输协议。提供服务器认证，保密性和完整性，还提供压缩功能。</p>
-<p>通常运行在TCP/IP连接上，也可用于其他可靠数据流上。</p>
-<p>身份验证是居于主机的，不执行用户认证，更高层的用户认证协议可以基于此协议设计。</p>
-<h4 id="规范"><a href="#规范" class="headerlink" title="规范"></a>规范</h4><h5 id="端口"><a href="#端口" class="headerlink" title="端口"></a>端口</h5><p>通过TCP/IP使用时，端口默认为22</p>
-<h5 id="协议版本交换"><a href="#协议版本交换" class="headerlink" title="协议版本交换"></a>协议版本交换</h5><p>标识字符串：</p>
-<pre><code>SSH-protoversion-softwareversion SP comments CR LF</code></pre><p>‘protoversion’是”2.0”（现多为SSH2版本），’comments’字符串可选，若包含’comments’字符串,SP字符(空格符,ASCII 32)务必将’softwareversion’和’comments’字符串分开。标识字符串必须由单个CR字符(回车符，ASCII 13)和单个LF字符（换行符，ASCII 10）终止。</p>
-<p>字符串中不能出现其他的空字符，最大长度为255个字符(包含回车和换行)，在回车和换行(CR LF)之前的标识字符串部分用于Diffie-Hellman密钥交换。</p>
-<p>实例：</p>
-<pre><code>SSH-2.0-OpenSSH CR LF</code></pre><h5 id="兼容性"><a href="#兼容性" class="headerlink" title="兼容性"></a>兼容性</h5><p>服务端为新版本，客户端为旧版本时，服务端可兼容旧版协议</p>
-<p>服务端为旧版本，客户端为新版本时，服务端无法识别，须使用旧版本访问</p>
-<h5 id="数据包格式"><a href="#数据包格式" class="headerlink" title="数据包格式"></a>数据包格式</h5><pre><code>uint32    packet_length
-byte      padding_length
-byte[n1]  payload; n1 = packet_length - padding_length - 1
-byte[n2]  random padding; n2 = padding_length
-byte[m]   mac (Message Authentication Code - MAC); m = mac_length</code></pre><p>packet_length 数据包的长度(以字节为单位)，不包括’mac’或’packet_length’字段本身。</p>
-<p>padding_length 随机填充字节的长度</p>
-<p>payload 有效载荷：数据包的游泳内容。默认压缩为无，已协商压缩，此字段将被压缩</p>
-<p>random padding 随机填充：任意长度的填充，使得总长度是密码块大小或8的倍数，取其较大者。必须至少由四个字节的填充，最大填充量是255个字节</p>
-<p>mac 消息认证码，默认为无，若一些上，此字段包含MAC字节</p>
-<h5 id="压缩"><a href="#压缩" class="headerlink" title="压缩"></a>压缩</h5><p>可选压缩，已协商压缩，则使用协商算法压缩“有效载荷”。</p>
-<p>压缩方法：zlib可选ZLIB(LZ77)压缩</p>
-<h5 id="加密"><a href="#加密" class="headerlink" title="加密"></a>加密</h5><p>加密算法和密钥将在密钥交换期间进行协商。当加密生效时，每个数据包的数据包长度，填充长度，有效载荷和填充字段必须用给定算法加密。</p>
-<h5 id="数据完整性"><a href="#数据完整性" class="headerlink" title="数据完整性"></a>数据完整性</h5><p>数据完整性通过在每个数据包中包含从共享密钥，数据包序列号和数据包内容计算出的MAC来加以保护。</p>
-<p>消息认证算法和密钥在密钥交换期间进行协商，根据协商算法，计算方式为：</p>
-<pre><code>mac = MAC（key，sequence_number || unencrypted_packet）</code></pre><p>unencrypted_packet是没有’mac’的整个分组</p>
-<p>sequence_number是一个隐含的包序列号，表示为unit32格式</p>
-<h5 id="密钥交换"><a href="#密钥交换" class="headerlink" title="密钥交换"></a>密钥交换</h5><p>采用Diffie-Hellman方法。密钥交换（kex）始于每边发送支持算法的名称列表</p>
-<p>产生两个制：一个共享密钥K和一个交换散列H。加密和认证密钥来自于这两个值</p>
-<h4 id="流程"><a href="#流程" class="headerlink" title="流程"></a>流程</h4><ol>
-<li>客户端和服务器端想对方发送SSH版本识别字符串</li>
-<li>收到版本字符串后，双方通过质地的那个格式二进制包进行通信</li>
-<li>在传输完版本字符串后，客户端和服务端开始进行密钥交换(key exchange，简称kex)。Kex用来让客户端和服务器生成本次通信的密钥和序列号。在kex的最后一步，服务器给客户端发送他的公钥，客户端查询本地的known_hosts查找志告公钥验证服务器身份。在kex之后，客户端进行SSH-AUTH，请求服务器验证自己的身份。</li>
-</ol>
-<h3 id="SSH-AUTH"><a href="#SSH-AUTH" class="headerlink" title="SSH-AUTH"></a>SSH-AUTH</h3><h4 id="功能-2"><a href="#功能-2" class="headerlink" title="功能"></a>功能</h4><p>SSH认证协议提供了客户端认证功能，向服务器发起请求，验证客户端的合法性。</p>
-<h4 id="认证方法"><a href="#认证方法" class="headerlink" title="认证方法"></a>认证方法</h4><ol>
-<li>password 密码验证</li>
-<li>public key 无密码公钥验证</li>
-<li>hostbased 基于主机的身份验证</li>
-</ol>
-<h4 id="规范-1"><a href="#规范-1" class="headerlink" title="规范"></a>规范</h4><h5 id="身份验证请求"><a href="#身份验证请求" class="headerlink" title="身份验证请求"></a>身份验证请求</h5><p>消息格式：</p>
-<pre><code>byte      SSH_MSG_USERAUTH_REQUEST
-string    user name(UTF-8)
-string    service name(ASCII)
-string    method name(ASCII)
-....      method specific fields</code></pre><p>如果用户名和服务名称发生改变，则断开连接</p>
-<p>定义的方法名(method name)：</p>
-<pre><code>&quot;publickey&quot;             REQUIRED
-&quot;password&quot;              OPTIONAL
-&quot;hostbased&quot;             OPTIONAL
-&quot;none&quot;                  NOT RECOMMENDED</code></pre><h5 id="认证协议消息号码"><a href="#认证协议消息号码" class="headerlink" title="认证协议消息号码"></a>认证协议消息号码</h5><p>一般的认证信息代码：</p>
-<pre><code>SSH_MSG_USERAUTH_REQUEST            50
-SSH_MSG_USERAUTH_FAILURE            51
-SSH_MSG_USERAUTH_SUCCESS            52
-SSH_MSG_USERAUTH_BANNER             53</code></pre><p>此外还有一些为方法特定的消息保留的消息编号(60到79)</p>
-<h5 id="认证方法-1"><a href="#认证方法-1" class="headerlink" title="认证方法"></a>认证方法</h5><p><strong>1.公钥认证方法：publickey</strong></p>
-<p>a. 客户端创建自己的密钥对，将公钥提交到需要访问的服务器上。</p>
-<p>b. 客户端向服务器发起请求，请求用私钥签名进行认证。请求报文：</p>
-<pre><code>byte      SSH_MSG_USERAUTH_REQUEST
-string    user name
-string    service name
-string    &quot;publickey&quot;
-boolean   TRUE
-string    public key algorithm name
-string    public key to be used for authentication
-string    signature</code></pre><p>其中签名项的内容为：</p>
-<pre><code>string    session identifier
-byte      SSH_MSG_USERAUTH_REQUEST
-string    user name
-string    service name
-string    &quot;publickey&quot;
-boolean   TRUE
-string    public key algorithm name
-string    public key to be used for authentication</code></pre><p>c. 服务器收到请求后，在公钥目录中查找对应用户，如果存在，则产生一个随机字符串，用公钥加密后发送给用户。</p>
-<p>d. 用户收到字符串后，用自己的私钥进行解密，将解密后的字符串发送给服务器。</p>
-<p>e. 服务器接收到字符串后与之前生成的随机字符串进行对比，如果一致，则允许用户登陆。</p>
-<p><strong>2.密码验证方法：password</strong></p>
-<p>客户端向服务器发起请求，发送包含自己用户名和对应密码的数据包，格式为：</p>
-<pre><code>byte      SSH_MSG_USERAUTH_REQUEST
-string    user name
-string    service name
-string    &quot;password&quot;
-boolean   FALSE
-string    plaintext password(UTF-8)</code></pre><p>数据包由传输层进行加密</p>
-<p><strong>3.基于主机的身份验证:hostbased</strong></p>
-<p>通过来源主机和用户名进行身份验证，客户端发送消息请求身份认证，格式为：</p>
-<pre><code>byte      SSH_MSG_USERAUTH_REQUEST
-string    user name
-string    service name
-string    &quot;hostbased&quot;
-string    public key algorithm for host key
-string    public host key and certificates for client host
-string    client host name expressed as the FQDN(ASCII)
-string    user name on the client host(UTF-8)
-string    signature</code></pre><p>签名的值为：</p>
-<pre><code>string    session identifier
-byte      SSH_MSG_USERAUTH_REQUEST
-string    user name
-string    service name
-string    &quot;hostbased&quot;
-string    public key algorithm for host key
-string    public host key and certificates for client host
-string    client host name expressed as the FQDN(ASCII)
-string    user name on the client host(UTF-8)</code></pre><h3 id="SSH-CONN"><a href="#SSH-CONN" class="headerlink" title="SSH-CONN"></a>SSH-CONN</h3><h4 id="功能-3"><a href="#功能-3" class="headerlink" title="功能"></a>功能</h4><p>提供交互式登陆会话，远程执行命令，转发TCP/IP连接和转发X11连接。</p>
-<h4 id="channel机制"><a href="#channel机制" class="headerlink" title="channel机制"></a>channel机制</h4><p>所有终端会话，转发连接等都是通过建立channel来通信的。任何一方都可以打开一个信道。多个信道被复用成一个单一的连接。</p>
-<p>信道由末尾的数字进行标识。</p>
-<p>信道是流量控制的。只有标为可用的窗口空间才可以发送数据。</p>
-<h5 id="打开信道"><a href="#打开信道" class="headerlink" title="打开信道"></a>打开信道</h5><p>任何一端都可以开启一个新的信道，并分配一个本地信道号。发送请求,包含本地信道号和初始窗口大小。请求格式：</p>
-<pre><code>byte      SSH_MSG_CHANNEL_OPEN
-string    channel type(ASCII)
-uint32    sender channel
-uint32    initial window size
-uint32    maximum packet size
-....      channel type specific data follows</code></pre><p>远端回复是否可以打开信道：</p>
-<p>打开信道 SSH_MSG_CHANNEL_OPEN_CONFIRMATION：</p>
-<pre><code>byte      SSH_MSG_CHANNEL_OPEN_CONFIRMATION
-uint32    recipient channel
-uint32    sender channel
-uint32    initial window size
-uint32    maximum packet size
-....      channel type specific data follows</code></pre><p>打开失败  SSH_MSG_CHANNEL_OPEN_FAILURE：</p>
-<pre><code>byte      SSH_MSG_CHANNEL_OPEN_FAILURE
-uint32    recipient channel
-uint32    reason code
-string    description(UTF-8)
-string    language tag</code></pre><p>原因代码(reason code)显示打开失败的原因</p>
-<h4 id="数据传输"><a href="#数据传输" class="headerlink" title="数据传输"></a>数据传输</h4><p>在打开新的信道时窗口大小已经规定，可以通过以下消息进行调整：</p>
-<pre><code>byte      SSH_MSG_CHANNEL_WINDOW_ADJUST
-uint32    recipient channel
-uint32    bytes to add</code></pre><p>窗口大小指定对方可以发送多少个字节。</p>
-<p>数据传输的消息格式：</p>
-<pre><code>byte      SSH_MSG_CHANNEL_DATA
-uint32    recipient channel
-string    data</code></pre><h4 id="关闭信道"><a href="#关闭信道" class="headerlink" title="关闭信道"></a>关闭信道</h4><p>当一方不再发送更多数据到一个信道时，应该发送SSH_MSG_CHANNEL_EOF，格式为：</p>
-<pre><code>byte      SSH_MSG_CHANNEL_EOF
-uint32    recipient channel</code></pre><p>当任何一方希望终止信道时，发送SSH_MSG_CHANNEL_CLOSE。收到此消息后，另一方必须回复一个SSH_MSG_CHANNEL_CLOSE。则该信道被视为已关闭。</p>
-<h4 id="特定信道请求"><a href="#特定信道请求" class="headerlink" title="特定信道请求"></a>特定信道请求</h4><p>许多信道类型值具有特定信道类型的扩展名。特定信道的请求格式为：</p>
-<pre><code>byte      SSH_MSG_CHANNEL_REQUEST
-uint32    recipient channel
-string    request type(ASCII)
-boolean   want reply
-....      type-specific data follows</code></pre><h3 id="交互会话"><a href="#交互会话" class="headerlink" title="交互会话"></a>交互会话</h3><p>会话是程序的远程执行，该程序可以是shell，应用程序，系统命令或者某些内置子系统。会涉及到虚拟终端，X11转发。可以同时激活多个会话。</p>
-<h4 id="开始会话"><a href="#开始会话" class="headerlink" title="开始会话"></a>开始会话</h4><p>通过发送以下消息开始会话：</p>
-<pre><code>byte      SSH_MSG_CHANNEL_OPEN
-string    &quot;session&quot;
-uint32    sender channel
-uint32    initial window size
-uint32    maximum packet size</code></pre><h4 id="请求一个伪终端"><a href="#请求一个伪终端" class="headerlink" title="请求一个伪终端"></a>请求一个伪终端</h4><p>通过发送以下消息请求一个伪终端：</p>
-<pre><code>byte      SSH_MSG_CHANNEL_REQUEST
-uint32    recipient channel
-string    &quot;pty-req&quot;
-boolean   want_reply
-string    TERM environment variable value
-uint32    terminal width, characters
-uint32    terminal height, rows
-uint32    terminal width, pixels
-uint32    terminal height, pixels
-string    encoded terminal modes</code></pre><h4 id="X11转发"><a href="#X11转发" class="headerlink" title="X11转发"></a>X11转发</h4><h5 id="请求X11转发"><a href="#请求X11转发" class="headerlink" title="请求X11转发"></a>请求X11转发</h5><p>通过发送SSH_MSG_CHANNEL_REQUEST消息请求X11转发：</p>
-<pre><code>byte      SSH_MSG_CHANNEL_REQUEST
-uint32    recipient channel
-string    &quot;x11-req&quot;
-boolean   want reply
-boolean   single connection
-string    x11 authentication protocol
-string    x11 authentication cookie
-uint32    x11 screen number</code></pre><h5 id="X11信道"><a href="#X11信道" class="headerlink" title="X11信道"></a>X11信道</h5><p>X11信道以信道开启请求的形式开启，请求通过的结果是开启一个独立于会话的信道，关闭会话信道不会关闭X11转发信道。请求格式为:</p>
-<pre><code>byte      SSH_MSG_CHANNEL_OPEN
-string    &quot;x11&quot;
-uint32    sender channel
-uint32    initial window size
-uint32    maximum packet size
-string    originator address
-uint32    originator port</code></pre><p>接受到请求的一方应使用SSH_MSG_CHANNEL_OPEN_CONFIRMATION开启信道或者SSH_MSG_CHANNEL_OPEN_FAILURE开启信道失败进行响应。</p>
-<h4 id="环境变量传递"><a href="#环境变量传递" class="headerlink" title="环境变量传递"></a>环境变量传递</h4><p>环境变量可以传递给shell/command。请求格式为：</p>
-<pre><code>byte      SSH_MSG_CHANNEL_REQUEST
-uint32    recipient channel
-string    &quot;env&quot;
-boolean   want reply
-string    variable name
-string    variable value</code></pre><h4 id="启动shell-command"><a href="#启动shell-command" class="headerlink" title="启动shell/command"></a>启动shell/command</h4><p>会话建立时，远程终端的一个程序开启。这个程序可以是shell，应用程序，或者独立于主机的子系统。</p>
-<pre><code>byte      SSH_MSG_CHANNEL_REQUEST
-uint32    recipient channel
-string    &quot;shell&quot;
-boolean   want reply</code></pre><p>该消息请求开启一个用户默认的shell</p>
-<pre><code>byte      SSH_MSG_CHANNEL_REQUEST
-uint32    recipient channel
-string    &quot;exec&quot;
-boolean   want reply
-string    command</code></pre><p>该消息请求服务器执行给定的命令。’command’字符串可能包含一个路径。</p>
-<pre><code>byte      SSH_MSG_CHANNEL_REQUEST
-uint32    recipient channel
-string    &quot;subsystem&quot;
-boolean   want reply
-string    subsystem name</code></pre><p>该消息请求开启一个预定义的子系统。</p>
-<h5 id="会话数据传输"><a href="#会话数据传输" class="headerlink" title="会话数据传输"></a>会话数据传输</h5><p>会话的数据传输使用SSH_MSG_CHANNEL\DATA和SSH_MSG_CHANNEL_EXTENDED_DATA包和窗口机制。SSH_MSG_CHANNEL_EXTENDED_DATA已被定义为stderr数据。</p>
-<h4 id="其他控制消息"><a href="#其他控制消息" class="headerlink" title="其他控制消息"></a>其他控制消息</h4><ol>
-<li>窗口尺寸更改消息</li>
-<li>本地流量控制</li>
-<li>信号</li>
-</ol>
-<h4 id="返回退出状态"><a href="#返回退出状态" class="headerlink" title="返回退出状态"></a>返回退出状态</h4><p>在另一端的命令终止时，会返回命令的退出状态。收到消息后，通过SSH_MSG_CHANNEL_CLOSE关闭信道。消息格式如下:</p>
-<pre><code>byte      SSH_MSG_CHANNEL_REQUEST
-uint32    recipient channel
-string    &quot;exit-signal&quot;
-boolean   FALSE
-string    signal name (without the &quot;SIG&quot; prefix)
-boolean   core dumped
-string    error message(UTF-8)
-string    language tag</code></pre><h3 id="TCP-IP端口转发"><a href="#TCP-IP端口转发" class="headerlink" title="TCP/IP端口转发"></a>TCP/IP端口转发</h3><h4 id="请求端口转发"><a href="#请求端口转发" class="headerlink" title="请求端口转发"></a>请求端口转发</h4><p>请求消息格式：</p>
-<pre><code>byte      SSH_MSG_GLOBAL_REQUEST
-string    &quot;tcpip-forward&quot;
-boolean   want reply
-string    address to bind
-uint32    port number to bind</code></pre><h4 id="TCP-IP转发信道"><a href="#TCP-IP转发信道" class="headerlink" title="TCP/IP转发信道"></a>TCP/IP转发信道</h4><p>当连接达到远程转发的端口被请求时，打开一个信道将端口转发给另一个端口侧。请求消息格式：</p>
-<pre><code>byte      SSH_MSG_CHANNEL_OPEN
-string    &quot;forwarded-tcpip&quot;
-uint32    sender channel
-uint32    initial window size
-uint32    maximum packet size
-string    address that was connected
-uint32    port that was connected
-string    originator IP address
-uint32    originator port</code></pre><h2 id="工作过程"><a href="#工作过程" class="headerlink" title="工作过程"></a>工作过程</h2><ol>
-<li>版本号协商阶段，通信双方确定使用的协议版本</li>
-<li>密钥和算法协商阶段，通信双方协商出最终使用的算法</li>
-<li>认证阶段，SSH客户端向服务器端发起认证请求，服务器端对客户端进行认证</li>
-<li>会话请求阶段，认证通过后，客户端向服务器端发送会话请求</li>
-<li>交互会话阶段，会话请求通过后，服务器端和客户端进行交互会话</li>
-</ol>
-
+            <div class="post-button text-center">
+              <a class="btn" href="/2019/06/18/ssh-protocol/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
           
+          <!--/noindex-->
         
       
-    </div>
+    </p></div>
 
     
 
