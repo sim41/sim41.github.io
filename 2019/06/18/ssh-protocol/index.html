@@ -96,17 +96,18 @@
 
 
 
-  <meta name="description" content="Focus on database/Linux/C/go/docker">
-<meta name="keywords" content="Database, Linux, C&#x2F;C++, go">
-<meta property="og:type" content="website">
-<meta property="og:title" content="Simest&#39;s Blog">
-<meta property="og:url" content="http://sim41.github.io/index.html">
+  <meta name="description" content="SSH协议这是一篇去年学习ssh协议时写的文，基本上是SSH标准协议的翻译，放上来仅供参考，里边的一些细节我也有些忘记了。 概述SSH是Secure SHell的缩写，即安全外壳协议，是一种在不安全网络提供安全远程登陆以及其他安全网络服务的协议。SSH是建立在应用层基础上的安全协议，可以有效防止远程管理过程中的信息泄露问题。 功能主要功能提供网络服务程序功能，加密传输数据，可抵抗中间人攻击。 应用">
+<meta name="keywords" content="ssh">
+<meta property="og:type" content="article">
+<meta property="og:title" content="ssh-protocol">
+<meta property="og:url" content="http://sim41.github.io/2019/06/18/ssh-protocol/index.html">
 <meta property="og:site_name" content="Simest&#39;s Blog">
-<meta property="og:description" content="Focus on database/Linux/C/go/docker">
+<meta property="og:description" content="SSH协议这是一篇去年学习ssh协议时写的文，基本上是SSH标准协议的翻译，放上来仅供参考，里边的一些细节我也有些忘记了。 概述SSH是Secure SHell的缩写，即安全外壳协议，是一种在不安全网络提供安全远程登陆以及其他安全网络服务的协议。SSH是建立在应用层基础上的安全协议，可以有效防止远程管理过程中的信息泄露问题。 功能主要功能提供网络服务程序功能，加密传输数据，可抵抗中间人攻击。 应用">
 <meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2019-06-18T09:28:48.827Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Simest&#39;s Blog">
-<meta name="twitter:description" content="Focus on database/Linux/C/go/docker">
+<meta name="twitter:title" content="ssh-protocol">
+<meta name="twitter:description" content="SSH协议这是一篇去年学习ssh协议时写的文，基本上是SSH标准协议的翻译，放上来仅供参考，里边的一些细节我也有些忘记了。 概述SSH是Secure SHell的缩写，即安全外壳协议，是一种在不安全网络提供安全远程登陆以及其他安全网络服务的协议。SSH是建立在应用层基础上的安全协议，可以有效防止远程管理过程中的信息泄露问题。 功能主要功能提供网络服务程序功能，加密传输数据，可抵抗中间人攻击。 应用">
 
 
 
@@ -114,7 +115,7 @@
 
   
   
-  <link rel="canonical" href="http://sim41.github.io/">
+  <link rel="canonical" href="http://sim41.github.io/2019/06/18/ssh-protocol/">
 
 
 
@@ -124,7 +125,7 @@
   };
 </script>
 
-  <title>Simest's Blog</title>
+  <title>ssh-protocol | Simest's Blog</title>
   
 
 
@@ -172,8 +173,7 @@
     
   
 
-  <div class="container sidebar-position-left 
-  page-home">
+  <div class="container sidebar-position-left page-post-detail">
     <div class="headband"></div>
 
     <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
@@ -215,7 +215,7 @@
         
         
           
-          <li class="menu-item menu-item-home menu-item-active">
+          <li class="menu-item menu-item-home">
 
     
     
@@ -328,9 +328,9 @@
           
           <div id="content" class="content">
             
-  <section id="posts" class="posts-expand">
+
+  <div id="posts" class="posts-expand">
     
-      
 
   
 
@@ -362,10 +362,8 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">
-                
-                
-                <a href="/2019/06/18/ssh-protocol/" class="post-title-link" itemprop="url">ssh-protocol</a>
+          <h1 class="post-title" itemprop="name headline">ssh-protocol
+
               
             
           </h1>
@@ -454,9 +452,7 @@
       
 
       
-        
-          
-            <h1 id="SSH协议"><a href="#SSH协议" class="headerlink" title="SSH协议"></a>SSH协议</h1><p>这是一篇去年学习ssh协议时写的文，基本上是SSH标准协议的翻译，放上来仅供参考，里边的一些细节我也有些忘记了。</p>
+        <h1 id="SSH协议"><a href="#SSH协议" class="headerlink" title="SSH协议"></a>SSH协议</h1><p>这是一篇去年学习ssh协议时写的文，基本上是SSH标准协议的翻译，放上来仅供参考，里边的一些细节我也有些忘记了。</p>
 <h2 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h2><p>SSH是Secure SHell的缩写，即安全外壳协议，是一种在不安全网络提供安全远程登陆以及其他安全网络服务的协议。SSH是建立在应用层基础上的安全协议，可以有效防止远程管理过程中的信息泄露问题。</p>
 <h2 id="功能"><a href="#功能" class="headerlink" title="功能"></a>功能</h2><h3 id="主要功能"><a href="#主要功能" class="headerlink" title="主要功能"></a>主要功能</h3><p>提供网络服务程序功能，加密传输数据，可抵抗中间人攻击。</p>
 <h3 id="应用场景"><a href="#应用场景" class="headerlink" title="应用场景"></a>应用场景</h3><ul>
@@ -694,8 +690,6 @@ uint32    originator port</code></pre><h2 id="工作过程"><a href="#工作过�
 <li>交互会话阶段，会话请求通过后，服务器端和客户端进行交互会话</li>
 </ol>
 
-          
-        
       
     </div>
 
@@ -713,522 +707,66 @@ uint32    originator port</code></pre><h2 id="工作过程"><a href="#工作过�
     
 
     
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://sim41.github.io/2019/06/18/tls/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Simest">
-      <meta itemprop="description" content="Focus on database/Linux/C/go/docker">
-      <meta itemprop="image" content="/images/avatar.png">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Simest's Blog">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                
-                <a href="/2019/06/18/tls/" class="post-title-link" itemprop="url">tls</a>
-              
-            
-          </h1>
+      <div>
         
 
-        <div class="post-meta">
-          <span class="post-time">
 
-            
-            
-            
 
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
 
-              
-                
-              
+  
 
-              <time title="创建时间：2019-06-18 16:18:02 / 修改时间：17:08:06" itemprop="dateCreated datePublished" datetime="2019-06-18T16:18:02+08:00">2019-06-18</time>
-            
 
-            
-              
 
-              
-            
-          </span>
-
-          
-            <span class="post-category">
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/协议，网络/" itemprop="url" rel="index"><span itemprop="name">协议，网络</span></a></span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
+<ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>本文作者： </strong>Simest</li>
+  <li class="post-copyright-link">
+    <strong>本文链接：</strong>
     
+    <a href="http://sim41.github.io/2019/06/18/ssh-protocol/" title="ssh-protocol">http://sim41.github.io/2019/06/18/ssh-protocol/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="noopener" target="_blank"><i class="fa fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！</li>
+</ul>
 
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h1 id="SSL-TLS协议"><a href="#SSL-TLS协议" class="headerlink" title="SSL/TLS协议"></a>SSL/TLS协议</h1><h2 id="一、-概述"><a href="#一、-概述" class="headerlink" title="一、 概述"></a>一、 概述</h2><p>关于SSL/TLS的历史和作用此处按下不表，可以检索相关文章进行了解。在建目录的时候，我还认证考虑了一下应该将SSL/TLS归类到几层协议中，经过思考和查找资料，我决定放弃，SSL/TLS协议基本上可以分为握手协议，和传输协议两部分，介于TCP和HTTP协议之间，可能并不太适用于与OSI模型进行匹配。</p>
-
-          
-        
-      
-    </div>
-
-    
-
-    
-    
-    
-
-    
-
-    
-      
-    
-    
-
+      </div>
     
 
     <footer class="post-footer">
       
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://sim41.github.io/2019/06/17/mysql-charset/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Simest">
-      <meta itemprop="description" content="Focus on database/Linux/C/go/docker">
-      <meta itemprop="image" content="/images/avatar.png">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Simest's Blog">
-    </span>
-
-    
-      <header class="post-header">
-
         
+          
         
-          <h1 class="post-title" itemprop="name headline">
-                
-                
-                <a href="/2019/06/17/mysql-charset/" class="post-title-link" itemprop="url">mysql-charset</a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-
-            
-            
-            
-
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-
-              
-                
-              
-
-              <time title="创建时间：2019-06-17 22:18:59" itemprop="dateCreated datePublished" datetime="2019-06-17T22:18:59+08:00">2019-06-17</time>
-            
-
-            
-              
-
-              
-                
-                <span class="post-meta-divider">|</span>
-                
-
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-calendar-check-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">更新于</span>
-                
-                <time title="修改时间：2019-06-18 11:45:26" itemprop="dateModified" datetime="2019-06-18T11:45:26+08:00">2019-06-18</time>
-              
-            
-          </span>
-
+        <div class="post-tags">
           
-            <span class="post-category">
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/database/" itemprop="url" rel="index"><span itemprop="name">database</span></a></span>
-
-                
-                
-                  ，
-                
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/database/MySQL/" itemprop="url" rel="index"><span itemprop="name">MySQL</span></a></span>
-
-                
-                
-              
-            </span>
+            <a href="/tags/ssh/" rel="tag"># ssh</a>
           
-
-          
-            
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
         </div>
-      </header>
-    
+      
 
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
+      
       
       
 
       
-        
-          <h1 id="数据库系列-1"><a href="#数据库系列-1" class="headerlink" title="数据库系列 1"></a>数据库系列 1</h1><h2 id="—MySQL数据库协议之字符集与排序"><a href="#—MySQL数据库协议之字符集与排序" class="headerlink" title="—MySQL数据库协议之字符集与排序"></a>—MySQL数据库协议之字符集与排序</h2><h3 id="开篇碎碎念"><a href="#开篇碎碎念" class="headerlink" title="开篇碎碎念"></a>开篇碎碎念</h3><p>​        因为日常工作与数据库打交道，先准备写点简单的自己关于数据库的认识。今天刚好在看有关字符集协商的问题，简单的开篇讲一下MySQL中的字符集设定。</p>
-<p>​        MySQL数据库的设置与其协议都是简洁且自由度高的，这两种特性综合起来就导致了在使用MySQL数据库中会遇到一些由于灵活的配置导致的坑。</p>
-<p>​        可能很多人都遇到过一个问题，就是在使用MySQL数据库时，会发先一些中文字符或者表情产生了乱码。或者使用了较新的客户端去连接服务器的时候，产生了类似于「ERROR 1115 (42000): Unknown character set: ‘utf8mb4’」这样连接失败的错误。
-          <!--noindex-->
-          
-            <div class="post-button text-center">
-              <a class="btn" href="/2019/06/17/mysql-charset/#more" rel="contents">
-                阅读全文 &raquo;
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2019/06/18/tls/" rel="next" title="tls">
+                <i class="fa fa-chevron-left"></i> tls
               </a>
-            </div>
-          
-          <!--/noindex-->
-        
-      
-    </p></div>
-
-    
-
-    
-    
-    
-
-    
-
-    
-      
-    
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://sim41.github.io/2019/06/13/index/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Simest">
-      <meta itemprop="description" content="Focus on database/Linux/C/go/docker">
-      <meta itemprop="image" content="/images/avatar.png">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Simest's Blog">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                
-                <a href="/2019/06/13/index/" class="post-title-link" itemprop="url">开篇</a>
-              
             
-          </h1>
-        
+          </div>
 
-        <div class="post-meta">
-          <span class="post-time">
+          <span class="post-nav-divider"></span>
 
+          <div class="post-nav-prev post-nav-item">
             
-            
-            
-
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-
-              
-                
-              
-
-              <time title="创建时间：2019-06-13 18:40:08" itemprop="dateCreated datePublished" datetime="2019-06-13T18:40:08+08:00">2019-06-13</time>
-            
-
-            
-              
-
-              
-                
-                <span class="post-meta-divider">|</span>
-                
-
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-calendar-check-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">更新于</span>
-                
-                <time title="修改时间：2019-06-14 03:49:05" itemprop="dateModified" datetime="2019-06-14T03:49:05+08:00">2019-06-14</time>
-              
-            
-          </span>
-
-          
-
-          
-            
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
+          </div>
         </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
       
 
       
-        
-          
-            <p>经过使用Jekyll搭建，再转向hexo，用next主题建起了博客；期间也入了OS X的坑。填了一些坑，走了一些歪路，总算是建起来了，也算是步入正轨。</p>
-<p>博客中主要写一些技术分享的文章，看心情可能也会有日常记录。主要关注数据库技术，网络相关技术，各种协议以及关于服务器部署的相关技术。环境主要基于Linux/OS X，语言主要是C/go（未来希望能够熟悉C++，其他语言视需求扩展）。</p>
-
-          
-        
-      
-    </div>
-
-    
-
-    
-    
-    
-
-    
-
-    
-      
-    
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
       
     </footer>
   </div>
@@ -1238,14 +776,19 @@ uint32    originator port</code></pre><h2 id="工作过程"><a href="#工作过�
   </article>
 
 
-    
-  </section>
-
-  
+  </div>
 
 
           </div>
           
+
+  
+    <div class="comments" id="gitalk-container">
+    </div>
+
+  
+
+
 
         </div>
         
@@ -1265,8 +808,17 @@ uint32    originator port</code></pre><h2 id="工作过程"><a href="#工作过�
       
 
       
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
 
-      <div class="site-overview-wrap sidebar-panel sidebar-panel-active">
+      <div class="site-overview-wrap sidebar-panel">
         <div class="site-overview">
           <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
             
@@ -1370,6 +922,23 @@ uint32    originator port</code></pre><h2 id="工作过程"><a href="#工作过�
         </div>
       </div>
 
+      
+      <!--noindex-->
+        <div class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+            
+            
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#SSH协议"><span class="nav-number">1.</span> <span class="nav-text">SSH协议</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#概述"><span class="nav-number">1.1.</span> <span class="nav-text">概述</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#功能"><span class="nav-number">1.2.</span> <span class="nav-text">功能</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#主要功能"><span class="nav-number">1.2.1.</span> <span class="nav-text">主要功能</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#应用场景"><span class="nav-number">1.2.2.</span> <span class="nav-text">应用场景</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#组成"><span class="nav-number">1.3.</span> <span class="nav-text">组成</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#SSH-TRANS"><span class="nav-number">1.3.1.</span> <span class="nav-text">SSH-TRANS</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#功能-1"><span class="nav-number">1.3.1.1.</span> <span class="nav-text">功能</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#规范"><span class="nav-number">1.3.1.2.</span> <span class="nav-text">规范</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#端口"><span class="nav-number">1.3.1.2.1.</span> <span class="nav-text">端口</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#协议版本交换"><span class="nav-number">1.3.1.2.2.</span> <span class="nav-text">协议版本交换</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#兼容性"><span class="nav-number">1.3.1.2.3.</span> <span class="nav-text">兼容性</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#数据包格式"><span class="nav-number">1.3.1.2.4.</span> <span class="nav-text">数据包格式</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#压缩"><span class="nav-number">1.3.1.2.5.</span> <span class="nav-text">压缩</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#加密"><span class="nav-number">1.3.1.2.6.</span> <span class="nav-text">加密</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#数据完整性"><span class="nav-number">1.3.1.2.7.</span> <span class="nav-text">数据完整性</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#密钥交换"><span class="nav-number">1.3.1.2.8.</span> <span class="nav-text">密钥交换</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#流程"><span class="nav-number">1.3.1.3.</span> <span class="nav-text">流程</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#SSH-AUTH"><span class="nav-number">1.3.2.</span> <span class="nav-text">SSH-AUTH</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#功能-2"><span class="nav-number">1.3.2.1.</span> <span class="nav-text">功能</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#认证方法"><span class="nav-number">1.3.2.2.</span> <span class="nav-text">认证方法</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#规范-1"><span class="nav-number">1.3.2.3.</span> <span class="nav-text">规范</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#身份验证请求"><span class="nav-number">1.3.2.3.1.</span> <span class="nav-text">身份验证请求</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#认证协议消息号码"><span class="nav-number">1.3.2.3.2.</span> <span class="nav-text">认证协议消息号码</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#认证方法-1"><span class="nav-number">1.3.2.3.3.</span> <span class="nav-text">认证方法</span></a></li></ol></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#SSH-CONN"><span class="nav-number">1.3.3.</span> <span class="nav-text">SSH-CONN</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#功能-3"><span class="nav-number">1.3.3.1.</span> <span class="nav-text">功能</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#channel机制"><span class="nav-number">1.3.3.2.</span> <span class="nav-text">channel机制</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#打开信道"><span class="nav-number">1.3.3.2.1.</span> <span class="nav-text">打开信道</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#数据传输"><span class="nav-number">1.3.3.3.</span> <span class="nav-text">数据传输</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#关闭信道"><span class="nav-number">1.3.3.4.</span> <span class="nav-text">关闭信道</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#特定信道请求"><span class="nav-number">1.3.3.5.</span> <span class="nav-text">特定信道请求</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#交互会话"><span class="nav-number">1.3.4.</span> <span class="nav-text">交互会话</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#开始会话"><span class="nav-number">1.3.4.1.</span> <span class="nav-text">开始会话</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#请求一个伪终端"><span class="nav-number">1.3.4.2.</span> <span class="nav-text">请求一个伪终端</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#X11转发"><span class="nav-number">1.3.4.3.</span> <span class="nav-text">X11转发</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#请求X11转发"><span class="nav-number">1.3.4.3.1.</span> <span class="nav-text">请求X11转发</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#X11信道"><span class="nav-number">1.3.4.3.2.</span> <span class="nav-text">X11信道</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#环境变量传递"><span class="nav-number">1.3.4.4.</span> <span class="nav-text">环境变量传递</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#启动shell-command"><span class="nav-number">1.3.4.5.</span> <span class="nav-text">启动shell/command</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#会话数据传输"><span class="nav-number">1.3.4.5.1.</span> <span class="nav-text">会话数据传输</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#其他控制消息"><span class="nav-number">1.3.4.6.</span> <span class="nav-text">其他控制消息</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#返回退出状态"><span class="nav-number">1.3.4.7.</span> <span class="nav-text">返回退出状态</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#TCP-IP端口转发"><span class="nav-number">1.3.5.</span> <span class="nav-text">TCP/IP端口转发</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#请求端口转发"><span class="nav-number">1.3.5.1.</span> <span class="nav-text">请求端口转发</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#TCP-IP转发信道"><span class="nav-number">1.3.5.2.</span> <span class="nav-text">TCP/IP转发信道</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#工作过程"><span class="nav-number">1.4.</span> <span class="nav-text">工作过程</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </div>
+      <!--/noindex-->
       
 
       
@@ -1492,6 +1061,10 @@ uint32    originator port</code></pre><h2 id="工作过程"><a href="#工作过�
 
 
   
+  <script src="/js/scrollspy.js?v=7.1.2"></script>
+<script src="/js/post-details.js?v=7.1.2"></script>
+
+
 
   
 
@@ -1507,6 +1080,37 @@ uint32    originator port</code></pre><h2 id="工作过程"><a href="#工作过�
 
   
 
+
+  
+    
+
+<script src="//cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.js"></script>
+
+
+
+<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.css">
+
+
+
+<script src="//cdn.jsdelivr.net/npm/js-md5@0.7.3/src/md5.min.js"></script>
+
+<script>
+  var gitalk = new Gitalk({
+    clientID: '959bd6f4a9ccefbd3618',
+    clientSecret: '54441cf712a8521ff81aa43897433808fb7548d8',
+    repo: 'comment',
+    owner: 'sim41',
+    admin: ['sim41'],
+    id: md5(location.pathname),
+    
+      language: window.navigator.language || window.navigator.userLanguage,
+    
+    distractionFreeMode: 'true'
+  });
+  gitalk.render('gitalk-container');
+</script>
+
+  
 
 
   
