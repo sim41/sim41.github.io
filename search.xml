@@ -17,7 +17,8 @@
     <url>%2F2019%2F06%2F18%2Ftls%2F</url>
     <content type="text"><![CDATA[SSL/TLS协议一、 概述关于SSL/TLS的历史和作用此处按下不表，可以检索相关文章进行了解。在建目录的时候，我还认证考虑了一下应该将SSL/TLS归类到几层协议中，经过思考和查找资料，我决定放弃，SSL/TLS协议基本上可以分为握手协议，和传输协议两部分，介于TCP和HTTP协议之间，可能并不太适用于与OSI模型进行匹配。]]></content>
       <categories>
-        <category>协议，网络</category>
+        <category>协议</category>
+        <category>网络</category>
       </categories>
       <tags>
         <tag>密码学</tag>
