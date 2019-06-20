@@ -1,0 +1,2159 @@
+<!DOCTYPE html>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+<html class="theme-next muse use-motion" lang="zh-CN">
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css?v=4.7.0">
+
+<link rel="stylesheet" href="/css/main.css?v=7.1.2">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=7.1.2">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=7.1.2">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=7.1.2">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=7.1.2" color="#222">
+
+
+
+
+
+
+
+<script id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Muse',
+    version: '7.1.2',
+    sidebar: {"position":"left","display":"post","offset":12,"onmobile":false,"dimmer":false},
+    back2top: true,
+    back2top_sidebar: false,
+    fancybox: false,
+    fastclick: false,
+    lazyload: false,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+  
+
+
+
+
+  <meta name="description" content="openssh最近由于到期末，一致在忙着交结课作业，还要临时抱佛脚准备期末考试，日常熬夜到2，3点。没什么时间更新，继续旧文新更。还是一篇去年的关于ssh的文章，有关openssh的使用说明。ssh篇至此完结。">
+<meta name="keywords" content="ssh">
+<meta property="og:type" content="article">
+<meta property="og:title" content="openssh">
+<meta property="og:url" content="https://sim41.com/2019/06/20/openssh/index.html">
+<meta property="og:site_name" content="Simest&#39;s Blog">
+<meta property="og:description" content="openssh最近由于到期末，一致在忙着交结课作业，还要临时抱佛脚准备期末考试，日常熬夜到2，3点。没什么时间更新，继续旧文新更。还是一篇去年的关于ssh的文章，有关openssh的使用说明。ssh篇至此完结。">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2019-06-20T10:03:31.528Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="openssh">
+<meta name="twitter:description" content="openssh最近由于到期末，一致在忙着交结课作业，还要临时抱佛脚准备期末考试，日常熬夜到2，3点。没什么时间更新，继续旧文新更。还是一篇去年的关于ssh的文章，有关openssh的使用说明。ssh篇至此完结。">
+
+
+
+
+
+  
+  
+  <link rel="canonical" href="https://sim41.com/2019/06/20/openssh/">
+
+
+
+<script id="page.configurations">
+  CONFIG.page = {
+    sidebar: "",
+  };
+</script>
+
+  <title>openssh | Simest's Blog</title>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .motion-element,
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-title { opacity: initial; }
+
+  .use-motion .logo,
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Simest's Blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+    
+      
+        <p class="site-subtitle">Life and code</p>
+      
+    
+    
+  </div>
+
+  <div class="site-nav-toggle">
+    <button aria-label="切换导航栏">
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  
+    <ul id="menu" class="menu">
+      
+        
+        
+        
+          
+          <li class="menu-item menu-item-home">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/" rel="section"><i class="menu-item-icon fa fa-fw fa-home"></i> <br>首页</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-about">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/about/" rel="section"><i class="menu-item-icon fa fa-fw fa-user"></i> <br>关于</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-tags">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/tags/" rel="section"><i class="menu-item-icon fa fa-fw fa-tags"></i> <br>标签</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-categories">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/categories/" rel="section"><i class="menu-item-icon fa fa-fw fa-th"></i> <br>分类</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-archives">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/archives/" rel="section"><i class="menu-item-icon fa fa-fw fa-archive"></i> <br>归档</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-sitemap">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/sitemap.xml" rel="section"><i class="menu-item-icon fa fa-fw fa-sitemap"></i> <br>站点地图</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-baidusitemap">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/baidusitemap.xml" rel="section"><i class="menu-item-icon fa fa-fw fa-baidusitemap"></i> <br>baidusitemap</a>
+
+  </li>
+
+      
+      
+    </ul>
+  
+
+  
+    
+
+  
+
+  
+</nav>
+
+
+
+  
+
+
+
+</div>
+    </header>
+
+    
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://sim41.com/2019/06/20/openssh/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Simest">
+      <meta itemprop="description" content="Focus on database/Linux/C/go/docker">
+      <meta itemprop="image" content="/images/avatar.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Simest's Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">openssh
+
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2019-06-20 17:55:53 / 修改时间：18:03:31" itemprop="dateCreated datePublished" datetime="2019-06-20T17:55:53+08:00">2019-06-20</time>
+            
+
+            
+              
+
+              
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/协议/" itemprop="url" rel="index"><span itemprop="name">协议</span></a></span>
+
+                
+                
+                  ，
+                
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/协议/ssh/" itemprop="url" rel="index"><span itemprop="name">ssh</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="openssh"><a href="#openssh" class="headerlink" title="openssh"></a>openssh</h1><p>最近由于到期末，一致在忙着交结课作业，还要临时抱佛脚准备期末考试，日常熬夜到2，3点。没什么时间更新，继续旧文新更。还是一篇去年的关于ssh的文章，有关openssh的使用说明。ssh篇至此完结。</p>
+<a id="more"></a>
+
+
+<h2 id="安装"><a href="#安装" class="headerlink" title="安装"></a>安装</h2><h3 id="安装openssh客户端"><a href="#安装openssh客户端" class="headerlink" title="安装openssh客户端"></a>安装openssh客户端</h3><ul>
+<li>默认安装了openssh客户端</li>
+<li>软件包安装:apt,yum,rpm</li>
+<li>源码编译安装,下载源码(下载支持库)</li>
+</ul>
+<h3 id="安装openssh服务器"><a href="#安装openssh服务器" class="headerlink" title="安装openssh服务器"></a>安装openssh服务器</h3><p>openssh-server</p>
+<h2 id="配置"><a href="#配置" class="headerlink" title="配置"></a>配置</h2><h3 id="服务器配置"><a href="#服务器配置" class="headerlink" title="服务器配置"></a>服务器配置</h3><p>sshd_config</p>
+<h4 id="常用配置"><a href="#常用配置" class="headerlink" title="常用配置"></a>常用配置</h4><p><strong>基本配置</strong></p>
+<ul>
+<li>Port 22:　　监听的端口</li>
+<li>ListenAddress 0.0.0.0:　　监听的地址,0.0.0.0代表监听本地的所有已经启用的IP</li>
+<li>Portocol 2:　　ssh协议版本号</li>
+<li>LogLevel INFO:　　日志级别(INFO级别)</li>
+</ul>
+<p><strong>认证相关</strong></p>
+<ul>
+<li>Allow user,…:　　允许登陆的用户</li>
+<li>Allow group,…:　允许登陆的用户组</li>
+<li>Deny user,…:　　禁止登陆的用户</li>
+<li>Deny group,…:　　禁止登陆的用户组</li>
+<li>LoginGraceTime 20s:　　登陆超时</li>
+<li>PermitRootLogin no:　　允许root登陆</li>
+<li>MaxAuthTries 6:　　输入密码允许次数,达到次数后一段时间不可登陆</li>
+<li>MaxSessions 10:　　最大同时打开会话数</li>
+<li>RSAAuthentication yes:　　是否启用RSA认证</li>
+<li>PubkeyAuthentication yes:　是否启用公钥认证</li>
+<li>PasswordAuthentication no:　　是否启用密码认证</li>
+<li>PermitEmptyPasswords no:　是否允许空密码登陆</li>
+<li>ClientAliveInterval 300:　会话超时时间</li>
+<li>ClientAliveCountMax 3:　　会话超时次数判断</li>
+</ul>
+<h4 id="用户手册"><a href="#用户手册" class="headerlink" title="用户手册"></a>用户手册</h4><p><strong>名称</strong></p>
+<p>sshd_config:　　OpenSSH SSH守护进程配置文件</p>
+<p><strong>描述</strong></p>
+<p>sshd从/etc/ssh/sshd_config(或在命令行中用-f指定配置文件)读取配置数据.该文件包含每行一个关键字-参数对.对于每个关键字,使用第一个获得的值.’#’和空行开始的行解释为注释.包含空格的参数可以使用双引号(“”)包含在内</p>
+<p>关键字不区分大小写,参数区分大小写</p>
+<p>关键字列表</p>
+<p><strong>时间格式</strong></p>
+<p>sshd命令行参数和配置文件选项中指定时间的参数,可以用time[qualifier]的格式表示,qualifier代表时间单位,由以下值:</p>
+<pre><code>- &lt;none&gt;    seconds 单位为空时默认为s
+- s|S    seconds
+- m|M    minutes
+- h|H    hours
+- d|D    days
+- w|W    weeks</code></pre><p><strong>TOKENS(标记)</strong></p>
+<p>某些关键字的参数可以使用标记符进行传递</p>
+<pre><code>%%        字义的&apos;%&apos;本身
+%D        接收到的传入连接的路由域
+%F        CA密钥的指纹
+%f        证书木有的指纹
+%h        用户的home目录地址
+%i        证书的密钥ID
+%K        base64编码的CA密钥
+%k        base64编码的认证密钥/证书
+%s        证书序列号
+%T        CA密钥的类型
+%t        证书密钥的类型
+%u        用户名</code></pre><p>AuthorizedKeysCommand 接受 %%, %f, %h, %k, %t, 和 %u.</p>
+<p>AuthorizedKeysFile    接受 %%, %h, 和 %u.</p>
+<p>AuthorizedPrincipalsCommand 接受 %%, %F, %f, %h, %i, %K, %k, %s, %T, %t, 和 %u.</p>
+<p>AuthorizedPrincipalsFile 接受 %%, %h, 和 %u.</p>
+<p>ChrootDiretory 接受%%, %h, 和 %u.</p>
+<p>RoutingDomain  接受%D.传入</p>
+<p><strong>文件</strong></p>
+<p>sshd的配置在/etc/ssh/sshd_config中,该文件只能由root用户写入,但建议是(非必须)全局可读的</p>
+<h3 id="服务器进程"><a href="#服务器进程" class="headerlink" title="服务器进程"></a>服务器进程</h3><p>sshd OpenSSH SSH守护进程</p>
+<h4 id="命令"><a href="#命令" class="headerlink" title="命令"></a>命令</h4><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sshd [-46DdeiqTt] [-C connection_spec] [-c host_certificate_file] [-E log_file] [-f config_file] [-g login_grace_time] [-h host_key_file] [-o option] [-p port] [-u len]</span><br></pre></td></tr></table></figure>
+
+<h4 id="参数解释"><a href="#参数解释" class="headerlink" title="参数解释"></a>参数解释</h4><p>sshd(OpenSSH Daemon)是ssh的守护进程.sshd监听来自客户端的连接,通常从/etc/rc中的启动项开始.该进程为每个传入分配一个新的守护进程</p>
+<p><strong>选项</strong></p>
+<p>-4</p>
+<blockquote>
+<p>强制sshd仅使用IPv4地址</p>
+</blockquote>
+<p>-6</p>
+<blockquote>
+<p>强制sshd仅使用IPv6地址</p>
+</blockquote>
+<p>-C connection_spec</p>
+<blockquote>
+<p>指定用于-T扩展测试模式的连接参数.提供参数,配置文件中可能会应用的任何Match指令都将在配置写入标准输出之前应用.参数以key-value值对的形式提供.可以使用多个-C选项想或逗号分隔列表.关键字包括addr(元地址),user(用户),host(主机名),laddr(本地地址),lport(本地端口号)和rdomain(路由域)</p>
+</blockquote>
+<p>-c host_certificate_file</p>
+<blockquote>
+<p>指定用于在密钥交互期间证明sshd的证书路径.证书文件必须与使用-h选项或HostKey配置指令指定的主机密钥文件匹配</p>
+</blockquote>
+<p>-D</p>
+<blockquote>
+<p>选定该模式,sshd不会分叉并不会成为守护进程.该模式可以简易监听sshd</p>
+</blockquote>
+<p>-d</p>
+<blockquote>
+<p>Debug模式.服务器不会进入后台模式,发送明确的debug输出到标准错误信息.服务器不会分支并只会处理一个连接.多重-d选项增加了调试级别,最高为3</p>
+</blockquote>
+<p>-E log_file</p>
+<blockquote>
+<p>将调试日志写入log_file而不是系统日志</p>
+</blockquote>
+<p>-e</p>
+<blockquote>
+<p>将调试日志写入标准错误而不是系统日志</p>
+</blockquote>
+<p>-f config_file</p>
+<blockquote>
+<p>指定配置文件的名称.缺省值是/etc/ssh/sshd_config.如果没有配置文件,sshd拒绝启动</p>
+</blockquote>
+<p>-g　login_grace_time</p>
+<blockquote>
+<p>为客户端身份验证时间进行限制(默认120秒).如果客户端在限定时间内为能对用户进行身份验证,则服务器将断开连接并退出.值为0表示没有限制</p>
+</blockquote>
+<p>-h host_key_file</p>
+<blockquote>
+<p>指定读取主机密钥的文件.如果sshd不是以超级用户身份运行,则必须给出该选项(因为通常主机密钥文件不能被除root以外的任何人读取).缺省值是/etc/ssh/ssh_host_ecdsa_key, /etc/ssh/ssh_host_ed25519_key和/etc/ssh/ssh_host_rsa_key.对于不同的主机密钥算法可能有多个主机密钥文件</p>
+</blockquote>
+<p>-i</p>
+<blockquote>
+<p>指定从inetd运行sshd</p>
+</blockquote>
+<p>-o option</p>
+<blockquote>
+<p>为可用于配置文件的格式提供选项.这对于指定没有单独的命令行标志的选项很有用.这些选项的配置值在sshd_config中</p>
+</blockquote>
+<p>-p port</p>
+<blockquote>
+<p>指定服务器监听连接的端口(缺省值为22).多个端口选项是允许的.当指定命令行端口时,配置文件中使用Port选项指定的设置将会被忽略.使用ListenAddress选项指定的端口会覆盖命令行端口</p>
+</blockquote>
+<p>-q</p>
+<blockquote>
+<p>静音模式.什么都不会发送到系统日志.通常记录每个连接的开始,认证和终止</p>
+</blockquote>
+<p>-T</p>
+<blockquote>
+<p>扩展测试模式.检查配置文件的有效性,将有效配置输出到标准输出流;或者通过使用一个或多个-C选项指定连接参数来应用匹配规则</p>
+</blockquote>
+<p>-t</p>
+<blockquote>
+<p>测试模式.只检查配置文件的有效性和密钥的完整性.对于可靠地更新sshd很有用,因为配置选项可能会更改</p>
+</blockquote>
+<p>-u len</p>
+<blockquote>
+<p>该选项用于指定存储远程主机名的utmp结构的字段大小.如果解析的主机名比len长,则会使用点分十进制.这允许具有很长主机名的主机溢出该字段后仍然被唯一标识.指定-u0 表示只应将点分十进制地址放入utmp文件中.-u0也可以用来防止sshd发出DNS请求,除非认证机制或配置需要.可能需要DNS身份验证机制包括HostbasedAuthentication并在密钥文件中使用from=”pattern-list”选项.需要DNS的配置选项包括在AllowUsers或DenyUsers中使用USER@HOST模式</p>
+</blockquote>
+<h4 id="验证"><a href="#验证" class="headerlink" title="验证"></a>验证</h4><ol>
+<li><p>sshd只支持SSH2协议.每台主机都有一个主机专用密钥,用于识别主机.每当客户端连接时,守护进程都会使用其公共主机密钥进行响应.客户端将主机密钥与自己的数据库进行比较,验证其是否更改.</p>
+</li>
+<li><p>通过Diffie-Hellman密钥协议提供前向安全性.该密钥协议产生共享会话密钥.会话的其余部分使用堆成加密,当前使用128位AES, Blowfish, 3DES, CAST128, Arcfour, 192位AES或256位AES.客户端选择使用服务器提供的加密算法.此外,会话完整性通关过加密消息认证代码(hmac-md5, hmac-sha1, umac-64, umac-128, hmac-sha2-256或hmac-sha2-512)提供.</p>
+</li>
+<li><p>服务器和客户端进入认证对话框.客户端尝试使用基于主机的身份验证,公钥身份验证,键盘交互(质询-挑战)验证或密码身份验证方式进行身份验证.</p>
+</li>
+</ol>
+<p>如果客户端成功进行身份验证,则会输入用于准备会话的对话框.此时,客户端可能会请求分配伪终端,转发X11连接,转发TCP连接或通过安全通道转发身份验证代理连接等操作.</p>
+<p>此后客户端请求一个shell或执行一个命令,双方进入会话模式.此模式下,任何一方都可以随时发送数据,并将这些数据转发到服务器端的shell或命令以及客户端的用户终端</p>
+<p>当用户程序终止且所有转发的X11和其他连接关闭时,服务器向客户端发送命令退出状态,双方退出</p>
+<h4 id="登陆过程"><a href="#登陆过程" class="headerlink" title="登陆过程"></a>登陆过程</h4><p>当一个用户成功登陆时,sshd将会执行:</p>
+<ol>
+<li>如果登陆在tty上,且未指定任何命令,输出最后登陆时间和/etc/motd(除非文件中配置了保护选项)</li>
+<li>如果登陆在tty上,记录登陆时间</li>
+<li>检查/etc/nologin;如果存在,打印内容并退出(root以为)</li>
+<li>更改以普通用户权限运行</li>
+<li>建立级别的环境</li>
+<li>如果文件存在,且允许用户更改其环境,读取文件~/.ssh/environment</li>
+<li>更改用户的主目录</li>
+<li>如果~/.ssh/rc存在并且设置了sshd_config中PermitUserRC选项,则运行它;否则,如果/etc/ssh/sshrc存在,运行它;否则运行xauth.</li>
+<li>运行用户的shell或命令.所有的命令都在系统密码数据库中指定的用户登陆shell才可以运行</li>
+</ol>
+<h4 id="SSHRC"><a href="#SSHRC" class="headerlink" title="SSHRC"></a>SSHRC</h4><p>如果~/.ssh/rc文件存在,sh将会在读取环境配置文件后,启动用户shell或命令前执行.它不能在stdout上产生任何输出,而必须使用stderr.如果正在使用X11转发,将会在标准输入中接收到proto cookie对(并展示在X11环境中).该脚本必须调用xauth,因为sshd不会自动运行xauth来添加X11 cookie</p>
+<p>该文件的主要目的时在用户的主目录可访问之前运行可能协议的任何初始化例程.</p>
+<h4 id="AUTHORIZED-KEYS文件格式"><a href="#AUTHORIZED-KEYS文件格式" class="headerlink" title="AUTHORIZED_KEYS文件格式"></a>AUTHORIZED_KEYS文件格式</h4><p>AuthorizedKeysFile指定包含 用于公钥认证的公钥 的文件;如果未指定该项,则缺省值为~/.ssh/authorized_keys 和 ~/.ssh/authorized_keys2.</p>
+<p>文件的每一行都包含一个关键字.公钥由以下空格分隔字段组成: options, keytype, base64-encoded key, comment. options选项字段时可选的,keytype密钥类型是:“ecdsa-sha2-nistp256”, “ecdsa-sha2-nistp384”, “ecdsa-sha2-nistp521”, “ssh-ed25519”, “ssh-dss” or “ssh-rsa”中的一种;commit注释字段不用于任何功能,方便识别</p>
+<p>sshd强制执行1024位的最小RSA密钥模数大小</p>
+<p><strong>选项</strong></p>
+<p>选项由都会分隔的规范组成.除双引号外,不需要由空格</p>
+<p>agent-forwarding</p>
+<blockquote>
+<p>代理转发,启用由restrict选项禁用的身份验证代理转发</p>
+</blockquote>
+<p>cert-authority</p>
+<blockquote>
+<p>证书中心,指定列出的密钥是可信的验证机构</p>
+</blockquote>
+<p>command=”command”</p>
+<blockquote>
+<p>指定只要使用该密钥进行身份验证就执行该命令.用户提供的密钥将会被忽略</p>
+</blockquote>
+<p>environment=”NAME=value”</p>
+<blockquote>
+<p>指定在使用该密钥登陆时要将字符串添加到环境中,此方式设置的环境变量会覆盖其他默认环境值.允许多个选项</p>
+</blockquote>
+<p>expiry-time=”timespec”</p>
+<blockquote>
+<p>指定密钥不会被接受的时间</p>
+</blockquote>
+<p>from=”pattern-list”</p>
+<blockquote>
+<p>指定除了公钥认证意外,远程主机的规范名称或其IP地址必须存在于逗号分隔的模式列表中</p>
+</blockquote>
+<p>no-agent-forwarding</p>
+<blockquote>
+<p>无代理转发,使用该密钥时禁止身份验证代理转发</p>
+</blockquote>
+<p>no-port-forwarding</p>
+<blockquote>
+<p>无端口转发,使用该密钥时禁止TCP转发.客户端的任何端口转发都会返回错误</p>
+</blockquote>
+<p>no-pty</p>
+<blockquote>
+<p>防止tty分配</p>
+</blockquote>
+<p>no-user-rc</p>
+<blockquote>
+<p>禁用~/.ssh/rc的执行</p>
+</blockquote>
+<p>no-X11-forwarding</p>
+<blockquote>
+<p>禁用X11转发</p>
+</blockquote>
+<p>primitopen=”host:port”</p>
+<blockquote>
+<p>限制使用ssh -L进行本地端口转发,使其只能连接到指定的主机和端口.可以通过将地址放在方括号中指定IPv6地址.多个规则用逗号分隔.</p>
+</blockquote>
+<p>port-forwarding</p>
+<blockquote>
+<p>启用由restrict选项禁用的端口转发</p>
+</blockquote>
+<p>principals=”principals”</p>
+<blockquote>
+<p>在cert-authority行上,以逗号分隔列表的形式指定允许的证书中心.至少一个证书机构协议存在于接受的可信机构中</p>
+</blockquote>
+<p>pty</p>
+<blockquote>
+<p>允许启用由restrict禁用的tty分配</p>
+</blockquote>
+<p>restrict</p>
+<blockquote>
+<p>启用所有限制,禁用端口,代理和X11转发,以及禁止PTY分配和执行~/.ssh/rc</p>
+</blockquote>
+<p>tunnel=”n”</p>
+<blockquote>
+<p>在服务器上请求tun设备.如没有该选项,客户端请求隧道,将使用下一个可用设备</p>
+</blockquote>
+<p>user-rc</p>
+<blockquote>
+<p>启用由restrict选项禁用的~/.ssh/rc</p>
+</blockquote>
+<p>X11-forwarding</p>
+<blockquote>
+<p>启用由restirct选项禁用的~/.ssh/rc</p>
+</blockquote>
+<h4 id="SSH-KNOWN-HOSTS文件格式"><a href="#SSH-KNOWN-HOSTS文件格式" class="headerlink" title="SSH_KNOWN_HOSTS文件格式"></a>SSH_KNOWN_HOSTS文件格式</h4><p>/etc/ssh/ssh_know_hosts/和~/.ssh/known_hosts文件中包含着已知主机的主机公钥.全局文件由管理员准备,并且每个用户文件都会自动维护:每当用户连接到未知主机时,其密钥都会添加到每个用户文件中</p>
+<p>文件包含字段:markers(标记,可选项), hostnames(主机名), keytype(密钥类型), base64-encoded key(base64编码密钥), comment(注释).</p>
+<p>markers:</p>
+<blockquote>
+<p>标记是可选的,但如果存在该字段,则必须是认证中心cert-authority中的一个(“@cert-authority”),表明该行包含CA密钥 或”@revorked”表示该密钥在该行被撤销,不能被接收</p>
+</blockquote>
+<p>hostnames:</p>
+<blockquote>
+<p>主机名是逗号分隔的模式列表(‘*’和’?’为通配符);每个模式依次与主机名匹配.</p>
+</blockquote>
+<blockquote>
+<p>模式可以使用!来表示否定:如果主机名与否定模式相匹配,即使与另一模式相匹配,也不会被接收.主机名或地址可以可选地包含在’[‘ ‘]’中,然后以’:’加非标准端口表示</p>
+</blockquote>
+<blockquote>
+<p>或者在公开的文件中,以散列形式存储主机名并隐藏主机名和地址</p>
+</blockquote>
+<p>keytype base64-encoded key</p>
+<blockquote>
+<p>keytype 和 base64编码的密钥直接从主机密钥中获取,可以从/etc/ssh/ssh_host_rsa_key.pub获取.可选的注释会持续到该行结尾</p>
+</blockquote>
+<h3 id="客户端配置"><a href="#客户端配置" class="headerlink" title="客户端配置"></a>客户端配置</h3><p>ssh_config 客户端配置文件</p>
+<h4 id="概要"><a href="#概要" class="headerlink" title="概要"></a>概要</h4><p>ssh以以下顺序获取配置信息:</p>
+<ol>
+<li>命令行选项</li>
+<li>用户的配置文件(~/.ssh/config)</li>
+<li>系统的全局配置文件(/etc/ssh/ssh_config)</li>
+</ol>
+<p>对于每个参数,将使用第一个获得的值,一般在文件开头附近提供主机特定声明,在结尾处提供默认值</p>
+<p>使用key-value对表示参数,’#’和空行开始的行解释为注释</p>
+<h4 id="关键字"><a href="#关键字" class="headerlink" title="关键字"></a>关键字</h4><p>关键字不区分大小写,参数区分大小写</p>
+<p>host</p>
+<blockquote>
+<p>限制之后的参数声明仅限于给定模式匹配的主机.给定多个模式,以空格机型分隔.’*’为通配符,当个使用为所有主机提供全局默认值</p>
+</blockquote>
+<blockquote>
+<p>可以使用’!’作为否定模式,该主机模式将会被忽略</p>
+</blockquote>
+<p>match</p>
+<blockquote>
+<p>只有满足match关键字后边的条件,才可以使用以后的参数声明.可用的标准关键字是:canonical, exec, host, originalhost, user 和 localuser.match条件可用单独使用,组合使用或使用’all’关键字表示全部匹配.’all’关键字只可以单独使用或在canonical后立即出现.其他关键字可用任意组合.除了canonical和all关键字,其他的关键字都需要一个参数.可用通过’!’表示否定模式.</p>
+</blockquote>
+<blockquote>
+<p>canonical关键字只有当配置文件被主机名规范重新分析后才发生匹配.对指定只有规范主机名才可以工作很有效</p>
+</blockquote>
+<blockquote>
+<p>exec关键字执行用户shell中指定的命令.exec接收TOKENS中定义的token作为参数</p>
+</blockquote>
+<blockquote>
+<p>其他关键字必须是单个条目或是逗号分隔的列表,且可用使用PATTERNNS中定义的通配符和否定运算符.Hostname或CanonicalizeHostname选项中有任何替换内容,则host关键字和目标主机名进行匹配.originalhost关键字匹配命令行中指定的主机名.user关键字匹配远程主机上的目标用户名.localuser关键字匹配运行ssh的本地用户名</p>
+</blockquote>
+<p>AddKeysToAgent</p>
+<blockquote>
+<p>指定密钥是否应该自动添加到正在运行的ssh-agent.参数为:yes, confirm, ask 或 no.参数设置为yes,且从文件加载密钥,则密钥及其密码将添加到具有默认生命周期的代理程序.设为confirm,则每次使用密钥时都需要进行确认.设为ask,则在添加密钥之前,ssh将需要使用该SSH_ASKPASS程序进行确认.设为no,则不向文件添加密钥</p>
+</blockquote>
+<p>AddressFamily</p>
+<blockquote>
+<p>指定地址族,参数:any,inet,inet6</p>
+</blockquote>
+<p>BatchMode</p>
+<blockquote>
+<p>批处理模式,参数yes/no.设定为yes,则密码/密码查询将被禁用</p>
+</blockquote>
+<p>BindAddress</p>
+<blockquote>
+<p>使用本地机器上的指定地址作为连接的源地址(只用于具有多个地址的系统),如果UsePrivilegedPort设定为yes,则该项不生效.</p>
+</blockquote>
+<p>BindInterface</p>
+<blockquote>
+<p>使用指定接口作为连接的源地址.同上</p>
+</blockquote>
+<p>CanonicalDomains</p>
+<blockquote>
+<p>启用CanonicalizeHostname时,此选项指定搜索目标主机的域后缀列表</p>
+</blockquote>
+<p>CanonicalizeFallbackLocal</p>
+<blockquote>
+<p>指定主机名规范化失败时是否失败并报错</p>
+</blockquote>
+<p>CanonicalizeHostname</p>
+<blockquote>
+<p>指定是否执行明确的主机名规范化.默认设为no,不执行任何名称重写,并让系统解析器处理所有主机名查找.如果设为yes,对不适用ProxyCommand的连接,尝试使用CanonicalDomains后缀和CanonicalizePermittedCNAMEs规则对于命令行中指定的主机名进行鬼画符.设为always,将会将规范化应用于代理连接</p>
+</blockquote>
+<p>CanonicalizeMaxDots</p>
+<blockquote>
+<p>指定在禁用规范化之前主机名中最大点数.默认为1</p>
+</blockquote>
+<p>CanonicalizePermittedCNAMEs</p>
+<blockquote>
+<p>指定规则用于在主机名进行规范化时是否应遵循CNAME.</p>
+</blockquote>
+<p>CertificateFile</p>
+<blockquote>
+<p>指定读取用户证书的文件</p>
+</blockquote>
+<p>ChallengeResponseAuthentication</p>
+<blockquote>
+<p>指定是否使用挑战-应答模式验证</p>
+</blockquote>
+<p>CheckHostIP</p>
+<blockquote>
+<p>默认为yes,ssh将另外检查呢known_hosts文件中的主机IP地址,以检测由于DNS欺骗导致的主机密钥发生更改,且无论StrictHostKeyChecking的设置,都会将目标主机的地址增加到进程的~/.ssh/known_hosts中.</p>
+</blockquote>
+<p>Ciphers</p>
+<blockquote>
+<p>指定支持的加密算法和偏好顺序.多个加密方式由逗号分隔.以’+’开头,会将指定的密码追加到默认集;以’-‘开头,将指定密码移除.支持的密码:</p>
+<p>3DES-CBC<br>AES128-CBC<br>AES192-CBC<br>AES256-CBC<br>AES128-CTR<br>AES192-CTR<br>AES256-CTR<br><a href="mailto:aes128-gcm@openssh.com" target="_blank" rel="noopener">aes128-gcm@openssh.com</a><br><a href="mailto:aes256-gcm@openssh.com" target="_blank" rel="noopener">aes256-gcm@openssh.com</a><br><a href="mailto:chacha20-poly1305@openssh.com" target="_blank" rel="noopener">chacha20-poly1305@openssh.com</a></p>
+</blockquote>
+<blockquote>
+<p>默认为</p>
+<p><a href="mailto:chacha20-poly1305@openssh.com" target="_blank" rel="noopener">chacha20-poly1305@openssh.com</a>， 
+AES128-CTR，AES192-CTR，AES256-CTR，<br>AES128-GCM @ openssh.com，AES256-GCM @ openssh.com</p>
+</blockquote>
+<p>ClearAllForwardings</p>
+<blockquote>
+<p>指定清楚配置文件或命令行指定的所有本地,远程和动态端口转发</p>
+</blockquote>
+<p>Compression</p>
+<blockquote>
+<p>指定是否压缩</p>
+</blockquote>
+<p>ConnectionAttempts</p>
+<blockquote>
+<p>指定退出尝试的次数(每秒一次)</p>
+</blockquote>
+<p>ConnectTimeout</p>
+<blockquote>
+<p>指定连接到SSH服务器时使用的超时</p>
+</blockquote>
+<p>ControlMaster</p>
+<blockquote>
+<p>通过单个网络连接启用多个会话的共享</p>
+</blockquote>
+<p>ControlPath</p>
+<blockquote>
+<p>指定ControlMaster中用于连接共享的控制套接字的路径,或指定字符串none来禁用连接共享.</p>
+</blockquote>
+<p>ControlPersist</p>
+<blockquote>
+<p>与ControlMaster配合使用,指定在初始客户端连接关闭后,主链接应在后台保持打开状态(等待将来的客户端连接)</p>
+</blockquote>
+<p>DynamicForward</p>
+<blockquote>
+<p>指定通过安全通道转发本地计算机上的TCP端口,然后使用应用程序协议确定从远程计算机连接到的位置.参数为[bind_address:]port</p>
+</blockquote>
+<p>EnableSSHKeysign</p>
+<blockquote>
+<p>在全局客户端配置文件/etc/ssh/ssh_config中设定,设定为yes,在主机验证方式时,看使用帮助程序</p>
+</blockquote>
+<p>EscapeChar</p>
+<blockquote>
+<p>设置转移字符</p>
+</blockquote>
+<p>ExitOnForwardFailure</p>
+<blockquote>
+<p>指定在无法及进行转发时,应该终止连接</p>
+</blockquote>
+<p>FingerprintHash</p>
+<blockquote>
+<p>指定显示密钥指纹的hash算法.可选项:md5和sha256(默认)</p>
+</blockquote>
+<p>ForwardAgent</p>
+<blockquote>
+<p>指定身份验证代理连接是否将被转发到远程计算机</p>
+</blockquote>
+<p>ForwardX11</p>
+<blockquote>
+<p>指定是否通过安全通道自动重定向X11连接并进行显示设置</p>
+</blockquote>
+<p>ForwardX11Trusted</p>
+<blockquote>
+<p>设为yes,远程X11客户端将获得原始X11主机的完全访问权</p>
+</blockquote>
+<p>GatewayPorts</p>
+<blockquote>
+<p>指定是否允许元辰个主机连接到本地转发的端口.默认条件下,ssh将本地端口转发绑定到回传地址,以防止其他远程主机连接到转发的端口</p>
+</blockquote>
+<p>GlobalKnownHostsFile</p>
+<blockquote>
+<p>指定用于全局主机密钥数据库的一个或多个文件,用空格分隔.缺省值是/etc/ssh/ssh_known_hosts, /etc/ssh/ssh_known_hosts2</p>
+</blockquote>
+<p>GSSAPIAuthentication</p>
+<blockquote>
+<p>指定是否允许基于GSSAPI的用户认证</p>
+</blockquote>
+<p>GSSAPIDelegateCredentials</p>
+<blockquote>
+<p>转发(委托)凭据到服务器</p>
+</blockquote>
+<p>HashKnownHosts</p>
+<blockquote>
+<p>设定ssh将地址添加到~/.ssh/known_hosts时,是否hash主机名和地址</p>
+</blockquote>
+<p>HostbasedAuthentication</p>
+<blockquote>
+<p>指定是否尝试使用基于rhosts的公钥认证方法</p>
+</blockquote>
+<p>HostbasedKeyTypes</p>
+<blockquote>
+<p>以逗号分隔的模式列表指定基于主机的身份验证的密钥类型.默认值为:</p>
+<p><a href="mailto:ecdsa-sha2-nistp256-cert-v01@openssh.com" target="_blank" rel="noopener">ecdsa-sha2-nistp256-cert-v01@openssh.com</a>, 
+<a href="mailto:ecdsa-sha2-nistp384-cert-v01@openssh.com" target="_blank" rel="noopener">ecdsa-sha2-nistp384-cert-v01@openssh.com</a>, 
+<a href="mailto:ecdsa-sha2-nistp521-cert-v01@openssh.com" target="_blank" rel="noopener">ecdsa-sha2-nistp521-cert-v01@openssh.com</a>, 
+<a href="mailto:ssh-ed25519-cert-v01@openssh.com" target="_blank" rel="noopener">ssh-ed25519-cert-v01@openssh.com</a>, 
+<a href="mailto:ssh-rsa-cert-v01@openssh.com" target="_blank" rel="noopener">ssh-rsa-cert-v01@openssh.com</a>, 
+ecdsa-sha2-nistp256,ecdsa-sha2-nistp384,ecdsa-sha2-nistp521,<br>ssh-ed25519,ssh-rsa</p>
+</blockquote>
+<p>HostKeyAlgorithms</p>
+<blockquote>
+<p>指定客户端使用的主机密钥算法的顺序,默认值为:</p>
+<p><a href="mailto:ecdsa-sha2-nistp256-cert-v01@openssh.com" target="_blank" rel="noopener">ecdsa-sha2-nistp256-cert-v01@openssh.com</a>, 
+<a href="mailto:ecdsa-sha2-nistp384-cert-v01@openssh.com" target="_blank" rel="noopener">ecdsa-sha2-nistp384-cert-v01@openssh.com</a>, 
+<a href="mailto:ecdsa-sha2-nistp521-cert-v01@openssh.com" target="_blank" rel="noopener">ecdsa-sha2-nistp521-cert-v01@openssh.com</a>, 
+<a href="mailto:ssh-ed25519-cert-v01@openssh.com" target="_blank" rel="noopener">ssh-ed25519-cert-v01@openssh.com</a>, 
+<a href="mailto:ssh-rsa-cert-v01@openssh.com" target="_blank" rel="noopener">ssh-rsa-cert-v01@openssh.com</a>, 
+ecdsa-sha2-nistp256,ecdsa-sha2-nistp384,ecdsa-sha2-nistp521,<br>ssh-ed25519,ssh-rsa<br>可使用”ssh -Q key”查询可用密钥类型</p>
+</blockquote>
+<p>HostKeyAlias</p>
+<blockquote>
+<p>指定在主机密钥数据库文件中查看或保存主机密钥以及验证主机证书时,指定使用别名而不是实际主机名</p>
+</blockquote>
+<p>Hostname</p>
+<blockquote>
+<p>指定要登陆的真是主机名.可用来指定主机的昵称或缩写.参数接收TOKENS中的token.数字IP地址也是允许的.默认值是命令行中给出的名称</p>
+</blockquote>
+<p>IdentitiesOnly</p>
+<blockquote>
+<p>设定为ssh只能使用在shh_config文件中显式配置或在命令行上传递的身份认证和证书文件</p>
+</blockquote>
+<p>IdentityAgent</p>
+<blockquote>
+<p>指定用于与身份验证代理进行通信的UNIX-domain套接字.该选项覆盖SSH_AUTH_SOCK环境变量,可用于选择特定的代理.将套接字名称设置为”none”会禁用身份验证代理的使用.指定”SSH_AUTH_SOCK”将从SSH_AUTH_SOCK中读取位置</p>
+</blockquote>
+<p>IdentityFile</p>
+<blockquote>
+<p>指定读取用户的DSA,ECDSA,Ed25519或RSA认证标识的文件.默认值为~/.ssh/id_dsa. ~/.ssh/id_ecdsa, ~/.ssh/id_ed25519, ~/.ssh/id_rsa.</p>
+</blockquote>
+<p>IgnoreUnknown</p>
+<blockquote>
+<p>如果在配置解析中遇到未知选项,则指定要忽略的未知选项的模式列表.尽早列在配置文件中(不会识别在其之前的未知选项)</p>
+</blockquote>
+<p>Include</p>
+<blockquote>
+<p>包含指定的配置文件.可指定多个路径名,可含通配符,对用户配置,可用包含对用户主目录的’~’shell的引用.如果在系统配置文件中,包含/etc/ssh</p>
+</blockquote>
+<p>IPQoS</p>
+<blockquote>
+<p>指定用于连接的IPv4服务类型或DSCP类.可用选择一个或两个参数,空格分隔.一个参数,用作包类;两个参数,第一个为交互式会话,第二个为非交互式会话</p>
+</blockquote>
+<p>KbdInteractiveAuthentication</p>
+<blockquote>
+<p>指定是否使用键盘交互身份验证方式</p>
+</blockquote>
+<p>KbdInteractiveDevices</p>
+<blockquote>
+<p>指定在键盘交互身份验证中使用的方法列表.多个方法名称用逗号分隔.可能是空或多个:bsdauth,pam和skey</p>
+</blockquote>
+<p>KexAlgorithms</p>
+<blockquote>
+<p>指定可用的KEX(密钥交换)算法.多个算法用逗号分隔.默认值是:</p>
+<p>curve25519-sha256,<a href="mailto:curve25519-sha256@libssh.org" target="_blank" rel="noopener">curve25519-sha256@libssh.org</a>, 
+ecdh-sha2-nistp256,ecdh-sha2-nistp384,ecdh-sha2-nistp521,<br>diffie-hellman-group-exchange-sha256,<br>diffie-hellman-group16-sha512,<br>diffie-hellman-group18-sha512,<br>diffie-hellman-group-exchange-sha1,<br>diffie-hellman-group14-sha256,<br>diffie-hellman-group14-sha1</p>
+</blockquote>
+<p>LocalCommand</p>
+<blockquote>
+<p>指定成功连接到服务器后在本地计算机上执行的命令.命令字符串延伸到行的末尾,并于用户的shell一起执行</p>
+</blockquote>
+<p>LocalForward</p>
+<blockquote>
+<p>指定本地计算机上的TCP端口通过安全通道转发到远程计算机的指定主机和端口.第一个参数必须是[bind_address:]port,第二个参数必须是host:port.可通过将地址放在方括号中指定IPv6地址</p>
+</blockquote>
+<p>LogLevel</p>
+<blockquote>
+<p>提供从ssh记录消息时使用的详细级别</p>
+</blockquote>
+<p>MACs</p>
+<blockquote>
+<p>指定MAC算法的优先顺序.默认值为:</p>
+<p><a href="mailto:umac-64-etm@openssh.com" target="_blank" rel="noopener">umac-64-etm@openssh.com</a>,umac-128-etm@openssh.com,<br><a href="mailto:hmac-sha2-256-etm@openssh.com" target="_blank" rel="noopener">hmac-sha2-256-etm@openssh.com</a>,hmac-sha2-512-etm@openssh.com,<br><a href="mailto:hmac-sha1-etm@openssh.com" target="_blank" rel="noopener">hmac-sha1-etm@openssh.com</a>, 
+<a href="mailto:umac-64@openssh.com" target="_blank" rel="noopener">umac-64@openssh.com</a>,umac-128@openssh.com,<br>hmac-sha2-256,hmac-sha2-512,hmac-sha1</p>
+</blockquote>
+<p>NoHostAuthenticationForLocalhost</p>
+<blockquote>
+<p>禁用本地主机的主机认证(环回地址)</p>
+</blockquote>
+<p>NumberOfPasswordPrompts</p>
+<blockquote>
+<p>指定放弃访问的密码尝试次数,默认为3</p>
+</blockquote>
+<p>PasswordAuthentication</p>
+<blockquote>
+<p>设定设否使用密码认证方法</p>
+</blockquote>
+<p>PermitLocalCommand</p>
+<blockquote>
+<p>允许通过LocalCommand选项执行本地命令或使用’!command’在ssh中转义</p>
+</blockquote>
+<p>PKCS11Provider</p>
+<blockquote>
+<p>指定选用的PKCS#11提供者.该关键字的参数是ssh用PKCS#11共享库与存储用户RSA私钥的PKCS#11令牌进行通信</p>
+</blockquote>
+<p>Port</p>
+<blockquote>
+<p>指定在远程主机上使用的端口号,默认为22</p>
+</blockquote>
+<p>PreferredAuthentications</p>
+<blockquote>
+<p>指定客户端尝试验证方法的顺序.这使得客户端可用选择更偏好的验证方法.默认值是:</p>
+<p>gssapi-with-mic,hostbased,publickey,<br>keyboard-interactive,password</p>
+</blockquote>
+<p>ProxyCommand</p>
+<blockquote>
+<p>指定用于连接到服务器的参数.命令字符串追加到行尾,并使用用户shell exec指令执行,以避免延迟shell进程.命令设置为none将禁用该选项.参数接受TOKENS中的token.冲动标准输入读取并写入标准输出.应连接到某台机器上运行的sshd服务器或在某处执行sshd -i</p>
+</blockquote>
+<p>ProxyJump</p>
+<blockquote>
+<p>以[user@]host[:port]或ssh URI形式指定一个或多个跳转代理.多个代理可用逗号分隔,且会顺序访问.该选项导致ssh先于指定的跳板主机建立ssh连接,然后建立向最终目标的TCP转发,与目标主机建立连接</p>
+</blockquote>
+<p>ProxyUseFdpass</p>
+<blockquote>
+<p>指定ProxyCommand将连接的文件描述符传递回ssh,而不是继续执行并传递数据</p>
+</blockquote>
+<p>PubkeyAcceptedKeyTypes</p>
+<blockquote>
+<p>指定接收公钥的密钥类型,默认值为:</p>
+<p><a href="mailto:ecdsa-sha2-nistp256-cert-v01@openssh.com" target="_blank" rel="noopener">ecdsa-sha2-nistp256-cert-v01@openssh.com</a>, 
+<a href="mailto:ecdsa-sha2-nistp384-cert-v01@openssh.com" target="_blank" rel="noopener">ecdsa-sha2-nistp384-cert-v01@openssh.com</a>, 
+<a href="mailto:ecdsa-sha2-nistp521-cert-v01@openssh.com" target="_blank" rel="noopener">ecdsa-sha2-nistp521-cert-v01@openssh.com</a>, 
+<a href="mailto:ssh-ed25519-cert-v01@openssh.com" target="_blank" rel="noopener">ssh-ed25519-cert-v01@openssh.com</a>, 
+<a href="mailto:ssh-rsa-cert-v01@openssh.com" target="_blank" rel="noopener">ssh-rsa-cert-v01@openssh.com</a>, 
+ecdsa-sha2-nistp256,ecdsa-sha2-nistp384,ecdsa-sha2-nistp521,<br>ssh-ed25519,ssh-rsa</p>
+</blockquote>
+<p>PubkeyAuthentications</p>
+<blockquote>
+<p>设定是否使用公钥验证方法</p>
+</blockquote>
+<p>RekeyLimit</p>
+<blockquote>
+<p>指定在会话密钥重新协商之前可用传输的最大数据量,可选项指定最大时间.第一个参数是最大数据量,以字节为单位(K,M,G),默认值在1G到4G之间.第二个可选参数是最大时间,以秒为单位,可使用TIME FORMATS中指定的任何单位</p>
+</blockquote>
+<p>RemoteCommand</p>
+<blockquote>
+<p>指定成功连接到服务器后在远程计算机上执行的命令.命令字符串追加到行的末尾,并与用户的shell一起执行</p>
+</blockquote>
+<p>RemoteForward</p>
+<blockquote>
+<p>指定通过安全通道转发远程计算机上的TCP端口.远程端口可用从本地计算机转发到指定的主机和端口;也可用充当SOCK4/5代理使远程客户端从本地连接到任意目标.第一个参数必须是[bind_address:]port;如果转发到特定的目标,则第二个参数必须是host:hostport,如果没有指定目标参数,则远程转发将被建立SOCKS代理</p>
+</blockquote>
+<blockquote>
+<p>可用通过将地址放在[]中指定IPv6地址.可用指定多个转发,并在命令行上提供额外的转发.只有在远程计算机上使用root身份登陆,才能转发特权端口</p>
+</blockquote>
+<blockquote>
+<p>如果port参数为0,则监听端口将在服务器上动态分配并在运行时报告给客户端</p>
+</blockquote>
+<blockquote>
+<p>如果未指定bind_address,则默认仅绑定到回传地址.如果bind_address是’*’或一个空字符串,则转发请求在所有端口上监听.</p>
+</blockquote>
+<p>RequestTTY</p>
+<blockquote>
+<p>指定是否为会话请求伪终端.参数为:no,yes,force 或 auto.</p>
+</blockquote>
+<p>RevokedHostKeys</p>
+<blockquote>
+<p>指定撤销的主机公钥.此文件中列出的密钥将会被拒绝进行主机验证.将密钥指定为文本文件,每行列出一个公钥.如果此文件不存在或不可读,则所有主机都将拒绝主机身份验证</p>
+</blockquote>
+<p>SendEnv</p>
+<blockquote>
+<p>指定应将哪些本地环境变量发送到服务器.</p>
+</blockquote>
+<p>ServerAliveCountMax</p>
+<blockquote>
+<p>设置客户端未从服务器接收到任何返回信息的情况下服务器活动状态消息最大数量,达到数量时客户端端口服务器连接,并终止会话</p>
+</blockquote>
+<p>ServerAliveInterval</p>
+<blockquote>
+<p>设置以秒未单位的超时时间.超时后,如果没有从服务器收到数据,ssh将通过加密通道发送消息请求服务器的响应.默认为0,表示不发送</p>
+</blockquote>
+<p>StreamLocalBindMask</p>
+<blockquote>
+<p>设置为本地或远程端口转发创建Unix域套接字文件时的权限掩码umask.缺省值时0177,创建一个只能由所有者读写的Unix域套接字文件</p>
+</blockquote>
+<p>StreamLocalBindUnlink</p>
+<blockquote>
+<p>设置在创建新的Unix域套接字文件前是否删除现有的用于本地或远程端口转发的套接字文件</p>
+</blockquote>
+<p>StrictHostKeyChecking</p>
+<blockquote>
+<p>如果此标志设为”yes”,ssh将不会自动将主机密钥添加到~/.ssh/known_hosts文件,并拒绝连接到主机密钥已更改的主机.为避免中间人攻击提供保护.</p>
+</blockquote>
+<blockquote>
+<p>如果设为”accept-new”,则ssh将自动将新主机密钥添加到用户已知的主机密钥,但不允许连接到已更改的主机.</p>
+</blockquote>
+<blockquote>
+<p>如果设为”no”或”off”则ssh会自动将新主机密钥添加到用户已知主机文件中,并允许主机密钥更改的主机在限制条件下连接.<br>如果设为”ask”,则只有在用户确认了该行为后才会将新主机密钥添加到用户已知主机文件中,并将拒绝主机密钥已改变的主机</p>
+</blockquote>
+<p>SyslogFacility</p>
+<blockquote>
+<p>给出记录ssh日志消息的设备代码.有效值为:DAEMON, USER, AUTH, LOCAL0, LOCAL1, LOCAL2, LOCAL3, LOCAL4, LOCAL5, LOCAL6, LOCAL7. 默认值是USER.</p>
+</blockquote>
+<p>TCPKeepAlive</p>
+<blockquote>
+<p>指定系统是否向另一端发送TCP保持活动消息.发送该消息,如果连接死机或某台机器崩溃将会被反馈得知</p>
+</blockquote>
+<p>Tunnel</p>
+<blockquote>
+<p>在客户端和服务器之间请求设备转发.参数是: yes, point-to-point (第三层), ethernet (第二层), or no (默认).yes请求默认隧道模式,即point-to-point(点对点)模式</p>
+</blockquote>
+<p>TunnelDevice</p>
+<blockquote>
+<p>指定要在客户端(local_tun)和服务器(remote_tun)上打开的隧道tun设备.参数是local_tun[:remote_tun]这些设备可用数字ID或关键字”any”来指定.默认为any:any</p>
+</blockquote>
+<p>UpdateHostKeys</p>
+<blockquote>
+<p>规定ssh是否接收来自其他服务器沿着国通的新增主机密钥通知并将其加入已知主机文件中.</p>
+</blockquote>
+<p>UsePrivilegedPort</p>
+<blockquote>
+<p>规定是否将特权端口用于传出连接.默认为no,设为yes则ssh必须是root用户</p>
+</blockquote>
+<p>User</p>
+<blockquote>
+<p>指定登陆用户.</p>
+</blockquote>
+<p>UserKnownHostsFile</p>
+<blockquote>
+<p>指定用于主机密钥数据库的一个或多个文件,用空格分隔.默认为~/.ssh/known_hosts, ~/.ssh/known_hosts2</p>
+</blockquote>
+<p>VerifyHostKeyDNS</p>
+<blockquote>
+<p>指定是否使用DNS和SSHFP资源记录验证远程密钥.设置为yes,客户端将默认信任来自DNS的能够匹配安全指纹的密钥,并与设为ask一样处理不安全的指纹.设为ask,将会显示有关指纹匹配的信息,但用户仍然需要根据StrictHostKeyChecking选项确认新的主机密钥.</p>
+</blockquote>
+<p>VisualHostKey</p>
+<blockquote>
+<p>如果设为yes,则除了登陆时的指纹字符串和未知主机密钥意外,还会打印的ASCII art形式的远程主机密钥指纹</p>
+</blockquote>
+<p>XAuthLocation</p>
+<blockquote>
+<p>指定xauth程序的完整路径名</p>
+</blockquote>
+<h4 id="TOKENS-标记"><a href="#TOKENS-标记" class="headerlink" title="TOKENS(标记)"></a>TOKENS(标记)</h4><p>参数接受的标记为:</p>
+<pre><code>%%    字面的%
+%C    %l%h%p%r的哈希值
+%d    本地用户的home(~)目录
+%h    远程主机名
+%i    本地用户ID
+%L    本地主机名
+%l    本地主机名,包含域名
+%n    原始远程主机名,如命令行所示
+%p    远程端口
+%r    远程用户名
+%T    如果请求隧道转发,则分配本地tun(4)或tap(4)网络接口,否则为&quot;NONE&quot;
+%u    本地用户名</code></pre><p>Match exec 接受标记: %%, %h, %L, %l, %n, %p, %r, 和 %u.</p>
+<p>CertificateFile 接受标记: %%, %d, %h, %l, %r, 和 %u.</p>
+<p>ControlPath 接受标记: %%, %C, %h, %i, %L, %l, %n, %p, %r, 和 %u.<br>HostName 接受标记: %% 和 %h.<br>IdentityAgent 和IdentityFile 接受标记: %%, %d, %h, %l, %r, 和 %u.<br>LocalCommand 接受标记: %%, %C, %d, %h, %l, %n, %p, %r, %T, 和 %u.<br>ProxyCommand 接受标记: %%, %h, %p, 和 %r.<br>RemoteCommand 接受标记: %%, %C, %d, %h, %l, %n, %p, %r, 和 %u.</p>
+<h3 id="客户端进程"><a href="#客户端进程" class="headerlink" title="客户端进程"></a>客户端进程</h3><p>ssh:OpenSSH SSH客户端(远程登陆程序)</p>
+<h4 id="命令-1"><a href="#命令-1" class="headerlink" title="命令"></a>命令</h4><pre><code>ssh    [-46AaCfGgKkMNnqsTtVvXxYy] [-B bind_interface] [-b bind_address] [-c cipher_spec] [-D [bind_address:]port] [-E log_file] [-e escape_char] [-F configfile] [-I pkcs11] [-i identity_file] [-J destination] [-L address] [-l login_name] [-m mac_spec] [-O ctl_cmd] [-o option] [-p port] [-Q query_option] [-R address] [-S ctl_path] [-W host:port] [-w local_tun[:remote_tun]] destination [command]</code></pre><h4 id="参数解释-1"><a href="#参数解释-1" class="headerlink" title="参数解释"></a>参数解释</h4><p>-4</p>
+<blockquote>
+<p>强制sshd仅使用IPv4地址</p>
+</blockquote>
+<p>-6</p>
+<blockquote>
+<p>强制sshd仅使用IPv6地址</p>
+</blockquote>
+<p>-A</p>
+<blockquote>
+<p>启用身份验证代理连接的转发.也可以在每个主机的基础配置文件中设定</p>
+</blockquote>
+<p>-a</p>
+<blockquote>
+<p>禁用转发身份验证代理连接</p>
+</blockquote>
+<p>-B bind_interface</p>
+<blockquote>
+<p>尝试连接到远程主机的监听bind_interface接口</p>
+</blockquote>
+<p>-b bind_address</p>
+<blockquote>
+<p>使用本地的bind_address作为连接的源地址</p>
+</blockquote>
+<p>-C</p>
+<blockquote>
+<p>请求压缩所有数据.压缩算法与gzip使用的算法相同</p>
+</blockquote>
+<p>-c cipher_spec</p>
+<blockquote>
+<p>选择用于加密会话的密码规范.按优先顺序列出以逗号分隔的密码列表</p>
+</blockquote>
+<p>-D [bind_address:]port</p>
+<blockquote>
+<p>指定本地动态应用层端口转发.通过分配一个套接字监听本地端口port,可选地绑定到指定的监听地址bind_address.只要连接到此端口,就会通过安全通道转发连接,然后使用应用层协议确定从远程计算机连接到本地的位置.目前支持SOCKS4和SOCKS5,ssh充当SOCKS服务器.只有root可以转发特权端口.</p>
+</blockquote>
+<p>-E log_file</p>
+<blockquote>
+<p>将调试日志写入log_file中,而不输出到标准错误stderr中.</p>
+</blockquote>
+<p>-e escape_char</p>
+<blockquote>
+<p>设置在pty上进行会话的转义符(默认为”*”).只有行首的转义符才会被识别.在转义符后跟一个点(‘.’)关闭连接;跟随control-Z暂停连接;跟随该字符本身,发送一个转义字符.将该项设为”none”将禁用任何转义</p>
+</blockquote>
+<p>-F configfile</p>
+<blockquote>
+<p>指定一个可选的单个用户的配置文件.如果在命令行上给出配置文件,则系统的配置文件(/etc/ssh/ssh_config)将被忽略.用户的默认配置文件是~/.ssh/config</p>
+</blockquote>
+<p>-f</p>
+<blockquote>
+<p>请求ssh在命令执行前转到后台.在ssh询问口令或密码,但用户希望ssh在后台运行时很有用.在远程主机启动X11进程的推荐方式时使用ssh -f host xterm的方法</p>
+</blockquote>
+<p>-G</p>
+<blockquote>
+<p>让ssh在评估Host和Match块后打印其配置并退出</p>
+</blockquote>
+<p>-g</p>
+<blockquote>
+<p>运行远程主机连接到本地转发的端口.如果在多路复用连接上使用,则必须在主进程上指定此选项</p>
+</blockquote>
+<p>-I pkcs11</p>
+<blockquote>
+<p>指定ssh用于与PKCS#11令牌通信提供用户私钥所使用的PKCS#11共享库</p>
+</blockquote>
+<p>-i identity_file</p>
+<blockquote>
+<p>选择读取公钥认证方法的证明(即私钥)的文件.默认为~/.ssh/id_dsa, ~/.ssh/id_ecdsa, ~/.ssh/id_ed25519 和 ~/.ssh/id_rsa.私钥所在文件也可以在配置文件中以主机为目标指定.可以由多个-i选项(以及配置文件中指定的多个身份).如果CertificateFile项没有明确指定证书,则ssh会尝试从加载-cert.pub获得的文件名来识别加载证书文件</p>
+</blockquote>
+<p>-J destination</p>
+<blockquote>
+<p>先与destination描述的跳转主机进行ssh连接,然后在跳转主机建立到最终目的地的TCP转发,实现连接目标主机.可以用逗号字符指定多个跳转节点.时指定ProxyJump配置的快捷方法</p>
+</blockquote>
+<p>-K</p>
+<blockquote>
+<p>启用基于GSSAPI的身份验证并将GSSAPI凭据转发到服务器</p>
+</blockquote>
+<p>-k</p>
+<blockquote>
+<p>禁用GSSAPI凭据转发到服务器</p>
+</blockquote>
+<p>-L [bind_address:]port:host:hostport<br><br>-L [bind_address:]port:remote_socket<br><br>-L local_socket:host:hostport<br><br>-L local_socket:remote_socket<br></p>
+<blockquote>
+<p>指定到本地主机(客户端)上给定TCP端口或Unix套接字的连接将转发到远程端的给定主机和端口或Unix套接字.</p>
+</blockquote>
+<p>-I login_name</p>
+<blockquote>
+<p>指定要在远程计算机上登陆的用户.</p>
+</blockquote>
+<p>-M</p>
+<blockquote>
+<p>将ssh客户端置为”master”模式进行连接共享</p>
+</blockquote>
+<p>-m mac_spec</p>
+<blockquote>
+<p>MAC算法按优先级指定的逗号分隔列表</p>
+</blockquote>
+<p>-N</p>
+<blockquote>
+<p>不执行远程命令,对转发端口很有用</p>
+</blockquote>
+<p>-n</p>
+<blockquote>
+<p>重定向标准输入stdin到/dev/null(防止从stdin读取).在ssh在后台运行时必须使用</p>
+</blockquote>
+<p>-O ctl_cmd</p>
+<blockquote>
+<p>控制活动连接复用进程.指定-O参数时,将解释ctl_cmd参数并将其传递给主进程.有效命令是:”check”,”forward”,”cancel”,”exit”和”stop”.</p>
+</blockquote>
+<p>-o option</p>
+<blockquote>
+<p>用于给出配置文件中使用的选项.选项列表为:</p>
+<p>AddKeysToAgent<br>AddressFamily<br>BatchMode<br>BindAddress<br>CanonicalDomains<br>CanonicalizeFallbackLocal<br>CanonicalizeHostname<br>CanonicalizeMaxDots<br>CanonicalizePermittedCNAMEs<br>CertificateFile<br>ChallengeResponseAuthentication<br>CheckHostIP<br>Ciphers<br>ClearAllForwardings<br>Compression<br>ConnectionAttempts<br>ConnectTimeout<br>ControlMaster<br>ControlPath<br>ControlPersist<br>DynamicForward<br>EscapeChar<br>ExitOnForwardFailure<br>FingerprintHash<br>ForwardAgent<br>ForwardX11<br>ForwardX11Timeout<br>ForwardX11Trusted<br>GatewayPorts<br>GlobalKnownHostsFile<br>GSSAPIAuthentication<br>GSSAPIDelegateCredentials<br>HashKnownHosts<br>Host<br>HostbasedAuthentication<br>HostbasedKeyTypes<br>HostKeyAlgorithms<br>HostKeyAlias<br>HostName<br>IdentitiesOnly<br>IdentityAgent<br>IdentityFile<br>IPQoS<br>KbdInteractiveAuthentication<br>KbdInteractiveDevices<br>KexAlgorithms<br>LocalCommand<br>LocalForward<br>LogLevel<br>MACs<br>Match<br>NoHostAuthenticationForLocalhost<br>NumberOfPasswordPrompts<br>PasswordAuthentication<br>PermitLocalCommand<br>PKCS11Provider<br>Port<br>PreferredAuthentications<br>ProxyCommand<br>ProxyJump<br>ProxyUseFdpass<br>PubkeyAcceptedKeyTypes<br>PubkeyAuthentication<br>RekeyLimit<br>RemoteCommand<br>RemoteForward<br>RequestTTY<br>SendEnv<br>ServerAliveInterval<br>ServerAliveCountMax<br>StreamLocalBindMask<br>StreamLocalBindUnlink<br>StrictHostKeyChecking<br>TCPKeepAlive<br>Tunnel<br>TunnelDevice<br>UpdateHostKeys<br>UsePrivilegedPort<br>User<br>UserKnownHostsFile<br>VerifyHostKeyDNS<br>VisualHostKey<br>XAuthLocation</p>
+</blockquote>
+<p>-p port</p>
+<blockquote>
+<p>远程主机连接的目标端口</p>
+</blockquote>
+<p>-Q query_option</p>
+<blockquote>
+<p>查询ssh以获得支持ssh2的算法.可用的功能有:cipher(受支持的堆成加密方法) ,cipher-auth(支持的认证加密方法) ,mac(支持的mac算法) ,kex(密钥交互算法) ,key(密钥类型) ,key-cert(证书密钥类型) ,key-plain(无证书密钥类型),和protocol-version(支持的SSH协议版本)</p>
+</blockquote>
+<p>-q:</p>
+<blockquote>
+<p>静音模式.导致大多数警告和诊断消息不显示</p>
+</blockquote>
+<p>-R [bind_address:]port:host:hostport<br><br>-R [bind_address:]port:local_socket<br><br>-R remote_socket:host:hostport<br><br>-R remote_socket:local_socket<br><br>-R [bind_address:]port<br></p>
+<blockquote>
+<p>指定到远程主机(服务器)上给定的TCP端口或Unix套接字将被转发到本地端.通过分配套接字来监听TCP端口port或远程Unix套接字,并且从本地机器连接到由主机host或local_socket指定的显示目标;如果没有明确的目标指定,SSH作为一个SOCKS4/5代理</p>
+</blockquote>
+<p>-S ctl_path</p>
+<blockquote>
+<p>指定用于连接共享的控制套接字的位置,或者none禁用共享连接</p>
+</blockquote>
+<p>-s</p>
+<blockquote>
+<p>可用于请求调用远程系统上的子系统.</p>
+</blockquote>
+<p>-T</p>
+<blockquote>
+<p>禁用伪终端分配</p>
+</blockquote>
+<p>-t</p>
+<blockquote>
+<p>强制伪终端分配.可用于在远程机器上执行任意基于屏幕的程序</p>
+</blockquote>
+<p>-V</p>
+<blockquote>
+<p>显示版本号并退出</p>
+</blockquote>
+<p>-v</p>
+<blockquote>
+<p>详细模式.使ssh打印有关进程的调试信息.</p>
+</blockquote>
+<p>-W host:port</p>
+<blockquote>
+<p>请求在客户端的标准输入和标准输出通过安全通道转发到主机host上端口port</p>
+</blockquote>
+<p>-w local_tun[:remote_tun]</p>
+<blockquote>
+<p>使用指定的tun设备在客户端(local_tun)和服务器(remote_tun)之间请求隧道转发</p>
+</blockquote>
+<p>-X</p>
+<blockquote>
+<p>启用X11转发</p>
+</blockquote>
+<p>-x</p>
+<blockquote>
+<p>禁用X11转发</p>
+</blockquote>
+<p>-Y</p>
+<blockquote>
+<p>启用可信的X11转发</p>
+</blockquote>
+<p>-y</p>
+<blockquote>
+<p>使用syslog系统模块发送日志信息.默认情况下,日志信息发送到stderr</p>
+</blockquote>
+<h3 id="ssh-keygen"><a href="#ssh-keygen" class="headerlink" title="ssh-keygen"></a>ssh-keygen</h3><p>ssh-keygen:身份验证密钥生成,管理和转换</p>
+<h4 id="命令-2"><a href="#命令-2" class="headerlink" title="命令"></a>命令</h4><p>1.</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ssh-keygen	[-q] [-b bits] [-t dsa | ecdsa | ed25519 | rsa] [-N new_passphrase] [-C comment] [-f output_keyfile]</span><br></pre></td></tr></table></figure>
+
+<p>-q: </p>
+<blockquote>
+<p>静默调用ssh-keygen 在创建新密钥时由/etc/rc调用</p>
+</blockquote>
+<p>-b bits: </p>
+<blockquote>
+<p>指定要创建的密钥的位数.RSA最小1024位,默认2048位.DSA必须符合FIPS 186-2规定的1024位.ECDSA通过从三个椭圆曲线大小中选择一个确定该密钥长度:256/384/521位(其他长度会失败).Ed25519具有固定长度,-b标志被忽略</p>
+</blockquote>
+<p>-t dsa | ecdsa | ed25519 | rsa:</p>
+<blockquote>
+<p>指定要创建的密钥的类型</p>
+</blockquote>
+<p>-N new_passphrase: </p>
+<blockquote>
+<p>提供新的密码</p>
+</blockquote>
+<p>-C comment:</p>
+<blockquote>
+<p>注释</p>
+</blockquote>
+<p>-f filename(output_keyfile):</p>
+<blockquote>
+<p>文件名,这里用于输出密钥的文件名</p>
+</blockquote>
+<p>2.</p>
+<pre><code>ssh-keygen    -p [-P old_passphrase] [-N new_passphrase] [-f keyfile]</code></pre><p>-p:</p>
+<blockquote>
+<p>请求更改私钥文件的密码.程序提示输入包含私钥的文件,旧密码以及新密码两次</p>
+</blockquote>
+<p>-P passphrase(old_passphrase):</p>
+<blockquote>
+<p>提供密码,这里用于提供旧密码</p>
+</blockquote>
+<p>3.</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ssh-keygen	-i [-m key_format] [-f input_keyfile]</span><br></pre></td></tr></table></figure>
+
+<p>-i:</p>
+<blockquote>
+<p>以-m选项指定的格式读取未加密的私钥/公钥文件,并将与OpenSSH兼容的私钥/公钥输出到标准输出stdout.允许从其他软件导入密钥.默认导入格式是”RFC4716”</p>
+</blockquote>
+<p>-m key_format:</p>
+<blockquote>
+<p>指定导入(-i)或导出(-e)转换选项的密钥格式.支持的密钥格式是:”RFC4716”,”PKCS8”或”PEM”.默认的转换格式是”RFC4716”</p>
+</blockquote>
+<p>4.</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ssh-keygen	-e [-m key_format] [-f input_keyfile]</span><br></pre></td></tr></table></figure>
+
+<p>-e:</p>
+<blockquote>
+<p>读取OpenSSH公钥或私钥文件,并以-m选项指定的格式输出该密钥.默认的到处格式是”RFC4617”.允许到处OpenSSH密钥宫其他程序使用.</p>
+</blockquote>
+<p>5.</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ssh-keygen	-y [-f input_keyfile]</span><br></pre></td></tr></table></figure>
+
+<p>-y:</p>
+<blockquote>
+<p>读取一个OpenSSH格式私钥并输出对应的OpenSSH公钥文件</p>
+</blockquote>
+<p>6.</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ssh-keygen	-c [-P passphrase] [-C comment] [-f keyfile]</span><br></pre></td></tr></table></figure>
+
+<p>-c:</p>
+<blockquote>
+<p>请求更改私钥和公钥文件中的注释.仅支持比较新的OpenSSH格式存储的密钥.将提示输入包含私钥的文件,密钥的密码及新注释</p>
+</blockquote>
+<p>7.</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ssh-keygen	-l [-v] [-E fingerprint_hash] [-f input_keyfile]</span><br></pre></td></tr></table></figure>
+
+<p>-l:</p>
+<blockquote>
+<p>显示指定公钥的指纹.对于RSA和DSA密钥,会尝试查找匹配的公钥文件并打印其指纹.如果与-v结合使用个,会提供可视化的ASCII art形式的指纹图</p>
+</blockquote>
+<p>-v:</p>
+<blockquote>
+<p>详细模式.让ssh-keygen打印有关其进度的调试信息.多个-v选项增加详细程度,最大值为3</p>
+</blockquote>
+<p>-E fingerprint_hash:</p>
+<blockquote>
+<p>指定显示密钥指纹时的散列算法.有效选项:”md5”和”sha256”.默认为”sha256”</p>
+</blockquote>
+<p>8.</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ssh-keygen	-B [-f input_keyfile]</span><br></pre></td></tr></table></figure>
+
+<p>-B:</p>
+<blockquote>
+<p>显示指定私钥/公钥文件的bubble babble编码的摘要</p>
+</blockquote>
+<p>9.</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ssh-keygen	-D pkcs11</span><br></pre></td></tr></table></figure>
+
+<p>-D pkcs11:</p>
+<blockquote>
+<p>下载由PKCS#11共享库pkcs11提供的RSA公钥.与-s一起使用,表示CA密钥主流在PKCS#11令牌中</p>
+</blockquote>
+<p>10.</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ssh-keygen	-F hostname [-f known_hosts_file] [-l]</span><br></pre></td></tr></table></figure>
+
+<p>-F hostname:</p>
+<blockquote>
+<p>在knewn_hosts文件中搜索指定的主机名hostname,列出找到的所有项.配合-H选项以hash格式打印找到的密钥</p>
+</blockquote>
+<p>11.</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ssh-keygen	-H [-f known_hosts_file]</span><br></pre></td></tr></table></figure>
+
+<p>-H:</p>
+<blockquote>
+<p>hash一个known_hosts文件.将用指定文件中的hash表示体会所有主机名和地址;原始内容将被移到具有.old后缀的文件.hash值可以被ssh和sshd正常使用</p>
+</blockquote>
+<p>12.</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ssh-keygen	-R hostname [-f known_hosts_file]</span><br></pre></td></tr></table></figure>
+
+<p>-R hostname:</p>
+<blockquote>
+<p>从known_hosts文件中删除属于hostname的所有密钥</p>
+</blockquote>
+<p>13.</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ssh-keygen	-r hostname [-f input_keyfile] [-g]</span><br></pre></td></tr></table></figure>
+
+<p>-r hostname:</p>
+<blockquote>
+<p>打印指定公钥文件的hostname的SSHFP指纹资源记录</p>
+</blockquote>
+<p>14.</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ssh-keygen	-G output_file [-v] [-b bits] [-M memory] [-S start_point]</span><br></pre></td></tr></table></figure>
+
+<p>-G output_file:</p>
+<blockquote>
+<p>为DH-GEX生成候选素数.这些素数在使用前必须进行安全筛选(-T)</p>
+</blockquote>
+<p>-M memory:</p>
+<blockquote>
+<p>为DH-GEX生成候选模数时,指定要使用的内存大小(以M字节为单位)</p>
+</blockquote>
+<p>-S start_point:</p>
+<blockquote>
+<p>为DH-GEX生成候选模数时指定起始点(十六进制)</p>
+</blockquote>
+<p>15.</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ssh-keygen	-T output_file -f input_file [-v] [-a rounds] [-J num_lines] [-j start_line] [-K checkpt] [-W generator]</span><br></pre></td></tr></table></figure>
+
+<p>-T output_file:</p>
+<blockquote>
+<p>测试DH组交换候选素数(使用-G选项生成)以确保安全</p>
+</blockquote>
+<p>-a rounds:</p>
+<blockquote>
+<p>当保存新格式私钥(即ed25519密钥或设置-o选项)时,指定使用的KDF(密钥导出函数)循环次数.较高的次数导致密码验证较慢,但对清理密码破解的抵抗力增加.</p>
+</blockquote>
+<blockquote>
+<p>当筛选DH-GEX候选模数时(-T命令).该选项指定要执行的素性测试的次数.</p>
+</blockquote>
+<p>-J num_lines:</p>
+<blockquote>
+<p>在使用-T选项执行DH候选模数筛选时筛选指定的行数后退出</p>
+</blockquote>
+<p>-K checkpt:</p>
+<blockquote>
+<p>在使用-T选项执行DH候选模数筛选时将最后一行的筛选进程写入checkpt.如果作业重新启动,将用于跳过输入文件中已处理的行</p>
+</blockquote>
+<p>-W generator:</p>
+<blockquote>
+<p>在测试DH-DEX的候选模量时指定所需的发生器</p>
+</blockquote>
+<p>16.</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ssh-keygen	-s ca_key -I certificate_identity [-h] [-U] [-D pkcs11_provider] [-n principals] [-O option] [-V validity_interval] [-z serial_number] file ...</span><br></pre></td></tr></table></figure>
+
+<p>-s ca_key:</p>
+<blockquote>
+<p>使用指定的CA密钥对公钥进行认证(签名).在生成KRL时,-s指定用于通过密钥ID或序列号直接撤销证书的CA公钥文件的路径</p>
+</blockquote>
+<p>-I certificate_identity:</p>
+<blockquote>
+<p>签署公钥时指定密钥身份</p>
+</blockquote>
+<p>-h:</p>
+<blockquote>
+<p>签署密钥时,创建主机证书而不是用户证书</p>
+</blockquote>
+<p>-U:</p>
+<blockquote>
+<p>与-s一起使用时,此选项表示CA密钥主流在ssh-agent中</p>
+</blockquote>
+<p>-n principals:</p>
+<blockquote>
+<p>在签署密钥时指定一个或多个委托人(用户名或主机名)包含在证书中.可用指定多个委托人,以逗号分隔</p>
+</blockquote>
+<p>-O option:</p>
+<blockquote>
+<p>签署密钥时指定过一个证书选项.有效选项为:</p>
+<p>clear:       清除所有启用的权限<br>critical:name[=contents]<br>extension:name[=contents]<br>   包含任意证书关键选项或扩展名.指定的name应包含域名后缀(“<a href="mailto:name@example.com" target="_blank" rel="noopener">name@example.com</a>“).如果contents被指定,它作为扩展名/选项的内容以字符串格式编码被包含.<br>force-command=command<br>   当使用证书进行身份验证时,强制执行command而不是用户指定的任何shell或命令<br>no-agent-forwarding<br>   禁用代理转发<br>no-port-forwarding<br>   禁用端口转发<br>no-pty<br>   禁用pty分配<br>no-user-rc<br>   禁用通过sshd执行<del>/.ssh/rc<br>no-X11-forwarding<br>   禁用X11转发(以上禁用选项默认允许)<br>permit-agent-forwarding<br>   允许ssh-agent转发<br>permit-port-forwarding<br>   允许端口转发<br>permit-port-pty<br>   允许分配pty<br>permit-user-rc<br>   允许通过sshd执行</del>/.ssh/rc<br>permit-X11-forwarding<br>   允许X11转发<br>source-address=address_list<br>   限制证书认为有效的源地址.ADDRESS_LIST时逗号分隔的CIDR格式的一个或多个地址/网络掩码对的列表</p>
+</blockquote>
+<p>-V validity_interval:</p>
+<blockquote>
+<p>签署证书时指定一个有效期间.一个有效时间间隔可用由单个时间组成,表面证书从现在开始有效并在那个时间到期;或由两个用冒号分隔指示明确的时间间隔</p>
+</blockquote>
+<p>-z serial_number:</p>
+<blockquote>
+<p>指定要嵌入证书中的序列号,以将此证书与同一CA中的其他证书区分开来.默认为0.当生成KRL时,-z标志用于指定KRL版本号</p>
+</blockquote>
+<p>17.</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ssh-keygen	-L [-f input_keyfile]</span><br></pre></td></tr></table></figure>
+
+<p>-L:</p>
+<blockquote>
+<p>打印一个或多个证书的内容</p>
+</blockquote>
+<p>18.</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ssh-keygen	-A [-f prefix_path]</span><br></pre></td></tr></table></figure>
+
+<p>-A:</p>
+<blockquote>
+<p>对于每个不存在主机密钥的密钥类型(rsa,dsa,ecdsa和ed25519),使用默认密钥文件路径,空密码,密码类型的默认位数和默认注释生成主机密钥.如果还指定-f,则其参数将用作生成规定主机密钥文件的默认路径的前缀.该项又/etc/rc用于产生新的主机密钥</p>
+</blockquote>
+<p>19.</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ssh-keygen	-k -f krl_file [-u] [-s ca_public] [-z version_number] file ...</span><br></pre></td></tr></table></figure>
+
+<p>-k:</p>
+<blockquote>
+<p>生成一个KRL文件.在该模式下,ssh-keygen将在通过-f标志指定的位置生成一个KRL文件,该文件撤销命令行中显示的每个密钥或证书.</p>
+</blockquote>
+<p>20.</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ssh-keygen	-Q -f krl_file file ...</span><br></pre></td></tr></table></figure>
+
+<p>-Q:</p>
+<blockquote>
+<p>测试密钥是否在KRL中被撤销.</p>
+</blockquote>
+<h4 id="模块生成"><a href="#模块生成" class="headerlink" title="模块生成"></a>模块生成</h4><p>ssh-keygen可用于为Diffie-Hellman组交换(DH-GEX)协议生成组.生成组的过程:先使用快速但内存密集的进程生成候选素数,然后对候选素数进行适应性测试(CPU密集型进程)</p>
+<p>使用-G选项执行素数的生成,长度由-b选项指定</p>
+<pre><code>#ssh-keygen -G moduli-2048.candidates -b 2048</code></pre><p>默认情况下,搜索素数从所需长度范围内的随机点开始.可使用-S选项覆盖,指定不同的起点</p>
+<p>产生了一组候选素数后,开始筛选适合性.使用-T选项执行.从标准输入(或-f指定文件)读取候选项.</p>
+<pre><code>#ssh-keygen -T modulic-2048 -f moduli-2048.candidates</code></pre><p>默认情况下,每个候选素数将受到100次素性测试.可使用-a选项覆盖.如果需要特定的生成器,可用使用-W选项,有效的生成器是2,3,5</p>
+<h4 id="证书"><a href="#证书" class="headerlink" title="证书"></a>证书</h4><p>ssh-keygen支持签署密钥以生成可用用于用户或主机身份验证的证书.证书由公钥,身份信息,0或多个主体(用户或主机)名称以及证书颁发机构(CA)密钥签署的一组选项组成.然后,客户或服务器可用仅新人CA密钥并在证书上验证其签名.</p>
+<p>ssh-keygen支持两种类型的证书:用户和主机.用户证书将用户认证到服务器,主机证书向用户认证服务器主机</p>
+<h3 id="ssh-keyscan"><a href="#ssh-keyscan" class="headerlink" title="ssh-keyscan"></a>ssh-keyscan</h3><p>ssh-keyscan 收集SSH公钥</p>
+<p>ssh-keyscan 是一个用于收集各个主机的SSH主机公钥的程序.功能是帮助构建和验证ssh_known_hosts文件,其格式记录在sshd中.提供了一个适用于shell和perl脚本的最小界面</p>
+<p>ssh-keyscan使用非阻塞套接字I/O来并行连接尽可能多的主机,因此非常搞笑.即使某些主机关闭或不运行sshd,也可以在几十秒内收集1000个主机域中的密钥</p>
+<h4 id="命令与参数"><a href="#命令与参数" class="headerlink" title="命令与参数"></a>命令与参数</h4><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ssh-keyscan	[-46cDHv] [-f file] [-p port] [-T timeout] [-t type] [host | addrlist namelist]</span><br></pre></td></tr></table></figure>
+
+<h4 id="参数解释-2"><a href="#参数解释-2" class="headerlink" title="参数解释"></a>参数解释</h4><p>-4</p>
+<blockquote>
+<p>强制ssh-keyscan 仅使用IPv4地址</p>
+</blockquote>
+<p>-6</p>
+<blockquote>
+<p>强制ssh-keyscan仅使用IPv6地址</p>
+</blockquote>
+<p>-c</p>
+<blockquote>
+<p>从目标主机请求证书而不是普通密钥</p>
+</blockquote>
+<p>-D</p>
+<blockquote>
+<p>打印以SSHFP DNS记录形式找到的密钥.默认将在ssh known_hosts文件可用格式下打印密钥</p>
+</blockquote>
+<p>-f file</p>
+<blockquote>
+<p>从file读取主机或”addrlist namelist”对.如果提供’-‘而不是文件名,ssh-keyscan将从标准输入中读取.<br>预期输入的格式为:</p>
+<p>1.2.3.4,1.2.4.4 name.my.domain,name,n.my.domain,n,1.2.3.4,1.2.4.4</p>
+</blockquote>
+<p>-H</p>
+<blockquote>
+<p>在输出中hash所有主机名和地址.hash名称可在ssh和sshd中正常使用,且公开后不会透漏任何关键信息</p>
+</blockquote>
+<p>-p port</p>
+<blockquote>
+<p>连接到远程主机的端口</p>
+</blockquote>
+<p>-T timeout</p>
+<blockquote>
+<p>设置尝试连接的超时时间.默认5秒</p>
+</blockquote>
+<p>-t type</p>
+<blockquote>
+<p>指定要从扫描的主机获取的密钥的类型.可能的值为: “dsa”, “ecdsa”, “ed25519”, 或 “rsa”. 默认为”rsa”,”ecdsa”和”ed25519”</p>
+</blockquote>
+<p>-v</p>
+<blockquote>
+<p>详细模式:打印调试信息</p>
+</blockquote>
+<h3 id="ssh-keysign"><a href="#ssh-keysign" class="headerlink" title="ssh-keysign"></a>ssh-keysign</h3><p>ssh-keysign:用于基于主机的身份验证的ssh帮助程序</p>
+<h4 id="描述"><a href="#描述" class="headerlink" title="描述"></a>描述</h4><p>ssh使用ssh-keysign访问本地主机密钥,并生成在主机身份验证方式中需要的数字签名</p>
+<p>ssh-keysign默认被禁用,只能通过在全局客户端配置文件/etc/ssh/ssh_config中配置选项EnableSSHKeysign为”yes”才会启用</p>
+<p>ssh-keysign不会由用户调用,而是从ssh中调用</p>
+<h3 id="ssh-agent"><a href="#ssh-agent" class="headerlink" title="ssh-agent"></a>ssh-agent</h3><p>ssh-agent 认证代理</p>
+<p>ssh-agent 是一个保存用于公钥验证方式的私钥的程序.ssh-agent通常在X-session或登陆会话时启动,其他窗口或程序都作为ssh-agent的客户端启动.通过使用环境变量,代理可以被定为并在ssh登陆到其他机器时自动认证</p>
+<p>ssh-agent最初没有任何私钥.使用ssh或ssh-add添加密钥.多个身份可用同时存储在ssh-agent中,且ssh会自动使用存在的身份.ssh-add也可以从ssh-agnet中移除密钥并查询保存在其中的密钥</p>
+<h4 id="命令与参数-1"><a href="#命令与参数-1" class="headerlink" title="命令与参数"></a>命令与参数</h4><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">ssh-agent	[-c | -s] [-Dd] [-a bind_address] [-E fingerprint_hash] [-P pkcs11_whitelist] [-t life] [command [arg ...]]</span><br><span class="line"></span><br><span class="line">ssh-agent	[-c | -s] -k</span><br></pre></td></tr></table></figure>
+
+<h4 id="参数解释-3"><a href="#参数解释-3" class="headerlink" title="参数解释"></a>参数解释</h4><p>-a bind_address</p>
+<blockquote>
+<p>将代理绑定到UNIX域套接字bind_address.默认值为$TMPDIR/XXXXXXXXXX/agent.<ppid></ppid></p>
+</blockquote>
+<p>-c</p>
+<blockquote>
+<p>在标准输出stdout上生成C-shell命令.如果shell看起来是csh风格的,这是默认项</p>
+</blockquote>
+<p>-D</p>
+<blockquote>
+<p>前景模式.在该选项被指定时,ssh-agent不会分叉</p>
+</blockquote>
+<p>-d</p>
+<blockquote>
+<p>调试模式.在该选项被指定时,ssh-agent不会分叉,并将调试信息写入标准错误stderr</p>
+</blockquote>
+<p>-E fingerprint_hash</p>
+<blockquote>
+<p>指定打印密钥指纹时的散列算法.有效选项是:”md5”和”sha256”.默认值是”sha256”</p>
+</blockquote>
+<p>-k</p>
+<blockquote>
+<p>杀掉当前代理(由SSH_AGENT_PID环境变量给出)</p>
+</blockquote>
+<p>-P pkcs11_whitelist</p>
+<blockquote>
+<p>为可用使用-s选项添加到ssh-add的PKCS#11共享库指定可接受路径的模式列表.默认允许从“/usr/lib/*,/usr/local/lib/*”加载PKCS#11库.与白名单不匹配的PKCS#11库将被拒绝</p>
+</blockquote>
+<p>-s</p>
+<blockquote>
+<p>在标准输出stdout中生成Bourne shell命令.如果shell看起来不是csh风格的代码,则该项为默认项</p>
+</blockquote>
+<p>-t life</p>
+<blockquote>
+<p>为添加到代理的身份设定默认的最长生存周期.以秒或ssh_config中指定的时间格式为单位</p>
+</blockquote>
+
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+      
+    
+    
+
+    
+      <div>
+        
+
+
+
+
+  
+
+
+
+<ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>本文作者： </strong>Simest</li>
+  <li class="post-copyright-link">
+    <strong>本文链接：</strong>
+    
+    <a href="https://sim41.com/2019/06/20/openssh/" title="openssh">https://sim41.com/2019/06/20/openssh/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="noopener" target="_blank"><i class="fa fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！</li>
+</ul>
+
+      </div>
+    
+
+    <footer class="post-footer">
+      
+        
+          
+        
+        <div class="post-tags">
+          
+            <a href="/tags/ssh/" rel="tag"># ssh</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2019/06/19/libssh/" rel="next" title="libssh">
+                <i class="fa fa-chevron-left"></i> libssh
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+  </div>
+
+
+          </div>
+          
+
+  
+    <div class="comments" id="gitalk-container">
+    </div>
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image" src="/images/avatar.png" alt="Simest">
+            
+              <p class="site-author-name" itemprop="name">Simest</p>
+              <div class="site-description motion-element" itemprop="description">Focus on database/Linux/C/go/docker</div>
+          </div>
+
+          
+            <nav class="site-state motion-element">
+              
+                <div class="site-state-item site-state-posts">
+                
+                  <a href="/archives/">
+                
+                    <span class="site-state-item-count">6</span>
+                    <span class="site-state-item-name">日志</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-categories">
+                  
+                    
+                      <a href="/categories/">
+                    
+                  
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">5</span>
+                    <span class="site-state-item-name">分类</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-tags">
+                  
+                    
+                      <a href="/tags/">
+                    
+                  
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">3</span>
+                    <span class="site-state-item-name">标签</span>
+                  </a>
+                </div>
+              
+            </nav>
+          
+
+          
+
+          
+
+          
+
+          
+             <div class="cc-license motion-element" itemprop="license">
+              
+              
+                
+              
+              
+              
+              <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" class="cc-opacity" rel="noopener" target="_blank"><img src="/images/cc-by-nc-sa.svg" alt="Creative Commons"></a>
+             </div>
+          
+
+          
+          
+
+          
+            
+          
+          
+
+        </div>
+      </div>
+
+      
+      <!--noindex-->
+        <div class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+            
+            
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#openssh"><span class="nav-number">1.</span> <span class="nav-text">openssh</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#安装"><span class="nav-number">1.1.</span> <span class="nav-text">安装</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#安装openssh客户端"><span class="nav-number">1.1.1.</span> <span class="nav-text">安装openssh客户端</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#安装openssh服务器"><span class="nav-number">1.1.2.</span> <span class="nav-text">安装openssh服务器</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#配置"><span class="nav-number">1.2.</span> <span class="nav-text">配置</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#服务器配置"><span class="nav-number">1.2.1.</span> <span class="nav-text">服务器配置</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#常用配置"><span class="nav-number">1.2.1.1.</span> <span class="nav-text">常用配置</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#用户手册"><span class="nav-number">1.2.1.2.</span> <span class="nav-text">用户手册</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#服务器进程"><span class="nav-number">1.2.2.</span> <span class="nav-text">服务器进程</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#命令"><span class="nav-number">1.2.2.1.</span> <span class="nav-text">命令</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#参数解释"><span class="nav-number">1.2.2.2.</span> <span class="nav-text">参数解释</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#验证"><span class="nav-number">1.2.2.3.</span> <span class="nav-text">验证</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#登陆过程"><span class="nav-number">1.2.2.4.</span> <span class="nav-text">登陆过程</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#SSHRC"><span class="nav-number">1.2.2.5.</span> <span class="nav-text">SSHRC</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#AUTHORIZED-KEYS文件格式"><span class="nav-number">1.2.2.6.</span> <span class="nav-text">AUTHORIZED_KEYS文件格式</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#SSH-KNOWN-HOSTS文件格式"><span class="nav-number">1.2.2.7.</span> <span class="nav-text">SSH_KNOWN_HOSTS文件格式</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#客户端配置"><span class="nav-number">1.2.3.</span> <span class="nav-text">客户端配置</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#概要"><span class="nav-number">1.2.3.1.</span> <span class="nav-text">概要</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#关键字"><span class="nav-number">1.2.3.2.</span> <span class="nav-text">关键字</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#TOKENS-标记"><span class="nav-number">1.2.3.3.</span> <span class="nav-text">TOKENS(标记)</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#客户端进程"><span class="nav-number">1.2.4.</span> <span class="nav-text">客户端进程</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#命令-1"><span class="nav-number">1.2.4.1.</span> <span class="nav-text">命令</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#参数解释-1"><span class="nav-number">1.2.4.2.</span> <span class="nav-text">参数解释</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#ssh-keygen"><span class="nav-number">1.2.5.</span> <span class="nav-text">ssh-keygen</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#命令-2"><span class="nav-number">1.2.5.1.</span> <span class="nav-text">命令</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#模块生成"><span class="nav-number">1.2.5.2.</span> <span class="nav-text">模块生成</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#证书"><span class="nav-number">1.2.5.3.</span> <span class="nav-text">证书</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#ssh-keyscan"><span class="nav-number">1.2.6.</span> <span class="nav-text">ssh-keyscan</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#命令与参数"><span class="nav-number">1.2.6.1.</span> <span class="nav-text">命令与参数</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#参数解释-2"><span class="nav-number">1.2.6.2.</span> <span class="nav-text">参数解释</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#ssh-keysign"><span class="nav-number">1.2.7.</span> <span class="nav-text">ssh-keysign</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#描述"><span class="nav-number">1.2.7.1.</span> <span class="nav-text">描述</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#ssh-agent"><span class="nav-number">1.2.8.</span> <span class="nav-text">ssh-agent</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#命令与参数-1"><span class="nav-number">1.2.8.1.</span> <span class="nav-text">命令与参数</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#参数解释-3"><span class="nav-number">1.2.8.2.</span> <span class="nav-text">参数解释</span></a></li></ol></li></ol></li></ol></li></ol></div>
+            
+
+          </div>
+        </div>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+  
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love" id="animate">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Simest</span>
+
+  
+
+  
+</div>
+
+
+
+
+
+
+
+
+
+        
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+    
+
+    
+  </div>
+
+  
+
+<script>
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script src="/lib/jquery/index.js?v=3.4.1"></script>
+
+  
+  <script src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+
+  
+
+
+  <script src="/js/utils.js?v=7.1.2"></script>
+
+  <script src="/js/motion.js?v=7.1.2"></script>
+
+
+
+  
+  
+
+
+  <script src="/js/schemes/muse.js?v=7.1.2"></script>
+
+
+
+  
+  <script src="/js/scrollspy.js?v=7.1.2"></script>
+<script src="/js/post-details.js?v=7.1.2"></script>
+
+
+
+  
+
+
+  <script src="/js/next-boot.js?v=7.1.2"></script>
+
+
+  
+
+  
+
+  
+
+  
+
+
+  
+    
+
+<script src="//cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.js"></script>
+
+
+
+<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.css">
+
+
+
+<script src="//cdn.jsdelivr.net/npm/js-md5@0.7.3/src/md5.min.js"></script>
+
+<script>
+  var gitalk = new Gitalk({
+    clientID: '959bd6f4a9ccefbd3618',
+    clientSecret: '54441cf712a8521ff81aa43897433808fb7548d8',
+    repo: 'comment',
+    owner: 'sim41',
+    admin: ['sim41'],
+    id: md5(location.pathname),
+    
+      language: window.navigator.language || window.navigator.userLanguage,
+    
+    distractionFreeMode: 'true'
+  });
+  gitalk.render('gitalk-container');
+</script>
+
+  
+
+
+  
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
