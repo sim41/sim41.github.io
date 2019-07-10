@@ -2,6 +2,13 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>https://sim41.com/2019/06/17/mysql-charset/</loc>
+    
+    <lastmod>2019-07-10T08:21:49.988Z</lastmod>
+    
+  </url>
+  
+  <url>
     <loc>https://sim41.com/2019/06/20/openssh/</loc>
     
     <lastmod>2019-06-20T10:03:31.528Z</lastmod>
@@ -33,13 +40,6 @@
     <loc>https://sim41.com/2019/06/18/ssh-protocol/</loc>
     
     <lastmod>2019-06-18T09:33:40.474Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>https://sim41.com/2019/06/17/mysql-charset/</loc>
-    
-    <lastmod>2019-06-18T03:45:26.652Z</lastmod>
     
   </url>
   
