@@ -96,18 +96,18 @@
 
 
 
-  <meta name="description" content="数据库系列 1—MySQL数据库协议之字符集与排序开篇碎碎念​        因为日常工作与数据库打交道，先准备写点简单的自己关于数据库的认识。今天刚好在看有关字符集协商的问题，简单的开篇讲一下MySQL中的字符集设定。 ​        MySQL数据库的设置与其协议都是简洁且自由度高的，这两种特性综合起来就导致了在使用MySQL数据库中会遇到一些由于灵活的配置导致的坑。 ​        可能">
-<meta name="keywords" content="MySQL">
+  <meta name="description" content="10% + 10% 他为什么等于0.11好久没有更新了，最近比较忙。昨天微博上突然「曝光」(现在这个词都只有读bào光了，高考的时候还是pù光，歪题了)出好多安卓手机的简单计算器在计算10%+10%时居然给出了结果是0.11，不是人们预想的0.2=20%。">
+<meta name="keywords" content="编译原理,语义分析">
 <meta property="og:type" content="article">
-<meta property="og:title" content="mysql-charset">
-<meta property="og:url" content="https://sim41.com/2019/06/17/mysql-charset/index.html">
+<meta property="og:title" content="caculator">
+<meta property="og:url" content="https://sim41.com/2019/09/03/caculator/index.html">
 <meta property="og:site_name" content="Simest&#39;s Blog">
-<meta property="og:description" content="数据库系列 1—MySQL数据库协议之字符集与排序开篇碎碎念​        因为日常工作与数据库打交道，先准备写点简单的自己关于数据库的认识。今天刚好在看有关字符集协商的问题，简单的开篇讲一下MySQL中的字符集设定。 ​        MySQL数据库的设置与其协议都是简洁且自由度高的，这两种特性综合起来就导致了在使用MySQL数据库中会遇到一些由于灵活的配置导致的坑。 ​        可能">
+<meta property="og:description" content="10% + 10% 他为什么等于0.11好久没有更新了，最近比较忙。昨天微博上突然「曝光」(现在这个词都只有读bào光了，高考的时候还是pù光，歪题了)出好多安卓手机的简单计算器在计算10%+10%时居然给出了结果是0.11，不是人们预想的0.2=20%。">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2019-07-10T08:21:49.988Z">
+<meta property="og:updated_time" content="2019-09-03T01:58:04.359Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="mysql-charset">
-<meta name="twitter:description" content="数据库系列 1—MySQL数据库协议之字符集与排序开篇碎碎念​        因为日常工作与数据库打交道，先准备写点简单的自己关于数据库的认识。今天刚好在看有关字符集协商的问题，简单的开篇讲一下MySQL中的字符集设定。 ​        MySQL数据库的设置与其协议都是简洁且自由度高的，这两种特性综合起来就导致了在使用MySQL数据库中会遇到一些由于灵活的配置导致的坑。 ​        可能">
+<meta name="twitter:title" content="caculator">
+<meta name="twitter:description" content="10% + 10% 他为什么等于0.11好久没有更新了，最近比较忙。昨天微博上突然「曝光」(现在这个词都只有读bào光了，高考的时候还是pù光，歪题了)出好多安卓手机的简单计算器在计算10%+10%时居然给出了结果是0.11，不是人们预想的0.2=20%。">
 
 
 
@@ -115,7 +115,7 @@
 
   
   
-  <link rel="canonical" href="https://sim41.com/2019/06/17/mysql-charset/">
+  <link rel="canonical" href="https://sim41.com/2019/09/03/caculator/">
 
 
 
@@ -125,7 +125,7 @@
   };
 </script>
 
-  <title>mysql-charset | Simest's Blog</title>
+  <title>caculator | Simest's Blog</title>
   
 
 
@@ -345,7 +345,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://sim41.com/2019/06/17/mysql-charset/">
+    <link itemprop="mainEntityOfPage" href="https://sim41.com/2019/09/03/caculator/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Simest">
@@ -362,7 +362,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">mysql-charset
+          <h1 class="post-title" itemprop="name headline">caculator
 
               
             
@@ -388,24 +388,12 @@
                 
               
 
-              <time title="创建时间：2019-06-17 22:18:59" itemprop="dateCreated datePublished" datetime="2019-06-17T22:18:59+08:00">2019-06-17</time>
+              <time title="创建时间：2019-09-03 09:05:37 / 修改时间：09:58:04" itemprop="dateCreated datePublished" datetime="2019-09-03T09:05:37+08:00">2019-09-03</time>
             
 
             
               
 
-              
-                
-                <span class="post-meta-divider">|</span>
-                
-
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-calendar-check-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">更新于</span>
-                
-                <time title="修改时间：2019-07-10 16:21:49" itemprop="dateModified" datetime="2019-07-10T16:21:49+08:00">2019-07-10</time>
               
             
           </span>
@@ -422,14 +410,7 @@
                 <span class="post-meta-item-text">分类于</span>
               
               
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/database/" itemprop="url" rel="index"><span itemprop="name">database</span></a></span>
-
-                
-                
-                  ，
-                
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/database/MySQL/" itemprop="url" rel="index"><span itemprop="name">MySQL</span></a></span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/编译原理/" itemprop="url" rel="index"><span itemprop="name">编译原理</span></a></span>
 
                 
                 
@@ -464,34 +445,28 @@
       
 
       
-        <h1 id="数据库系列-1"><a href="#数据库系列-1" class="headerlink" title="数据库系列 1"></a>数据库系列 1</h1><h2 id="—MySQL数据库协议之字符集与排序"><a href="#—MySQL数据库协议之字符集与排序" class="headerlink" title="—MySQL数据库协议之字符集与排序"></a>—MySQL数据库协议之字符集与排序</h2><h3 id="开篇碎碎念"><a href="#开篇碎碎念" class="headerlink" title="开篇碎碎念"></a>开篇碎碎念</h3><p>​        因为日常工作与数据库打交道，先准备写点简单的自己关于数据库的认识。今天刚好在看有关字符集协商的问题，简单的开篇讲一下MySQL中的字符集设定。</p>
-<p>​        MySQL数据库的设置与其协议都是简洁且自由度高的，这两种特性综合起来就导致了在使用MySQL数据库中会遇到一些由于灵活的配置导致的坑。</p>
-<p>​        可能很多人都遇到过一个问题，就是在使用MySQL数据库时，会发先一些中文字符或者表情产生了乱码。或者使用了较新的客户端去连接服务器的时候，产生了类似于「ERROR 1115 (42000): Unknown character set: ‘utf8mb4’」这样连接失败的错误。<a id="more"></a></p>
-<h3 id="MySQL中的字符集"><a href="#MySQL中的字符集" class="headerlink" title="MySQL中的字符集"></a>MySQL中的字符集</h3><h4 id="character-sets"><a href="#character-sets" class="headerlink" title="character sets"></a>character sets</h4><p>​        MySQL中的字符集由两部分构成，一是字符的编码方式(character sets)，二是编码的排序方式(collation)。看字面意思，编码方式就是单个字符的编码，排序方式就是比较字符之间顺序的规则。网上搜索相关的内容大多重复讲了这一点。</p>
-<p>​        要搞清楚字符集，首先要弄明白字符集在什么时候需要。字符集是我们可见的字符在计算机中存储的一种方式，每个字符根据规则按照一定长度存储为十六进制（二进制）的值，而这个值如何解释则决定了它在打印时产生的字符。</p>
-<p>​        首先要明确一个分类，字符集在数据库中有两大类的使用（我个人的理解，如有纰漏请指正）。我感觉网上现有的解释都混淆了这两类使用，导致不容易理解。</p>
-<ul>
-<li>存储使用</li>
-<li>传输使用</li>
-</ul>
-<p>​        存储使用，就是在数据库服务端，对数据进行存储时使用的编码格式。在MySQL数据库中的表现为server, database, table, column四个层次的字符集设置，可以很详细地设定字符集。这个一般是在设计数据库时定义的，和我们要存储的数据的类型有关，通常也要同时确认其排序规则，关于排序规则后问再讲。</p>
-<p>​        传输使用，发生在客户端（官方客户端或者我们自己的程序或者代理软件等等）和数据库服务器进行交互时。客户端和服务器交互，必然要进行通信，不论上层的封装是基于tcp/ip，还是pipe转发，本地套接字，其应用层的数据库协议都是相同的。服务端从库中取出数据，按照存储的字符集设定解释，然后再按照某种编码方式传输给客户端，客户端按照这种编码方式解释数据流；反之亦然。</p>
-<p>​        如果我们自己来设计，服务器、客户端、传输协议中的编码方式最好是统一的，这样能够用最少的解释和编码过程。MySQL数据库的做法是让客户端声明一种编码方式，然后服务器与客户端的通信都使用同一种编码方式。在MySQL协议的握手过程中，服务端先发送第一个包，客户端在返回包时声明了自己要用的字符集以及排序方式。（字符集对排序方式是一对多的关系，因此也可以理解为只需要传输特定的排序方式）这个排序方式以一个字节的十六进制值表示。服务端收到这个字符集/排序方式后，查看自己是否支持，如果支持，则采用该方式进行编码解码，进行通行。如果不支持，则产生回退过程，服务器将自己支持的字符集发送给客户端，进行协商，客户端选择一种进行支持，或者双方无法达成一致，断开连接。可以说，在通信过程中，字符集的选择主要取决于客户端的声明。这一个字符集最后的表现形式为三项设定：character_set_client, character_set_results和character_set_connection。可以使用以下语句进行查询。</p>
-<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">SHOW</span> <span class="keyword">SESSION</span> <span class="keyword">VARIABLES</span> <span class="keyword">LIKE</span> <span class="string">'character\_set\_%'</span>;</span><br></pre></td></tr></table></figure>
+        <h1 id="10-10-他为什么等于0-11"><a href="#10-10-他为什么等于0-11" class="headerlink" title="10% + 10% 他为什么等于0.11"></a>10% + 10% 他为什么等于0.11</h1><p>好久没有更新了，最近比较忙。昨天微博上突然「曝光」(现在这个词都只有读bào光了，高考的时候还是pù光，歪题了)出好多安卓手机的简单计算器在计算10%+10%时居然给出了结果是0.11，不是人们预想的0.2=20%。</p>
+<a id="more"></a>
 
-<p>可以看到这三项的值是统一的。据我现在的调研，各种客户端基本都不支持设置默认字符集，不同的客户端版本自己会声明一种字符集，5.5之前多数为latin1，5.7以后基本上都是utf8mb4，所以坑多为5.5.-5.7之间，可能存在声明utf8的字符集。<del>一些比较奇怪的声明是客户端将这一标志位声明为0xff即255，但并没有对应的字符集，我猜测这可能是声称自己自持现有的所有字符集</del>。可能是看到的文档版本不太对，最新的8.0.16文档中0xff(255)即是utf8mb4的标志。</p>
-<p>​        客户端的配置项不提供指定字符集的方式，我们可以直接修改服务器中的三项设定</p>
-<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">SET</span> character_set_client = charset_name;</span><br><span class="line"><span class="keyword">SET</span> character_set_results = charset_name;</span><br><span class="line"><span class="keyword">SET</span> character_set_connection = charset_name;</span><br></pre></td></tr></table></figure>
+<h2 id="现象"><a href="#现象" class="headerlink" title="现象"></a>现象</h2><p>先描述现象，简单计算器中，计算某项加或减百分数。xx + n% / xx - n%</p>
+<figure class="highlight bnf"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">BNF表示：</span><br><span class="line">PERCENT ::= &#123;expr&#125; &lt;+|-&gt; (&lt;num&gt;<span class="string">"%"</span>)</span><br></pre></td></tr></table></figure>
 
-<p>一般来说使用匹配版本的客户端和服务器，能够避免大量问题，如果要自己指定通信时的字符集，推荐5.1之前都使用latin1（5.5之前不止此utf8mb4编码），5.5以后都可以使用utf8mb4编码。<strong>注意：ucs2，utf16，utf32是不被支持的。</strong></p>
-<p>​        而关于之前容易产生的两种错误，第一个乱码的情况，一般是因为字符集不统一导致解码错误。在MySQL中，多数表现为按照utf8格式进行编码时产生的。因为历史遗留问题，MySQL中的一个坑是其utf8编码并不是我们通常认知中的utf8编码，这是一种最大长度为3字节的编码，因此当字符的长度是4字节时，解析就会出现错误，导致乱码的出现。MySQL官方也终于在MySQL5.5版本开始支持了4字节uft8，即utf8mb4字符集。第二个错误是使用了较高的（默认版本为5.7+）客户端连接较老的服务器（5.1），导致后续客户端申请更换字符集时遭到了拒绝。</p>
-<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">SET</span> <span class="keyword">NAMES</span> <span class="string">'utf8mb4'</span>;</span><br></pre></td></tr></table></figure>
+<p>此时计算器会将算式解释为 xx 为某个计算结果，+/-n%代表着对当前计算结果进行+/-n%倍的计算。例如昨天产生的争议10% + 10%，被解释为10% + 10% * 10%。事实上前边的表达式为纯数字/计算结果时，也会有同样的现象。例如6 + 10%，计算结果为6 + 6 *10% = 6.6。这种现象其实在Windows计算器的标准模式下也会出现，还有一干的安卓计算器的简单模式。</p>
+<h2 id="结论"><a href="#结论" class="headerlink" title="结论"></a>结论</h2><p>再说结论，先把结论放上来，有兴趣的可以继续看，不想继续了解的看完结论就明白了。首先，结论是，这不是bug，这是产品特性。因为在这些计算器里就是这样定义百分数计算的。这些计算器将+/-百分数的计算解释为对之前的结果进行加/减比例的计算。</p>
+<p>之所以这样做，是因为在设计计算器的算法时，出于一个前提，即人们很少计算百分数的直接加减法，更常见的是诸如在计算税收，利息等等问题时，会对某个结果进行（1 + n%）的计算。比如存款10000元，年利息5%，一年后的存款为10000 + 5%，得到10500。计算器一般都是边解释边进行计算的，所以实时都会出现一个当前结果。也可能早起的计算器屏幕有限，输入方法不够友好，所以不方便输入1 * （1 + 10%）这种结合，所以有这种设计。</p>
+<p>而针对乘法/除法，用户的需求就是直接对某个数计算百分比倍数，所以和我们通常认知的结果是一致的。</p>
+<p>所以这种现象只是产品设计，不是bug，windows和安卓都存在。安卓软件可能用了相同的开源组件/库或者内置计算器等，而部分手机没有采用这种解决方案。至于看到一些乱分析说自己是学计算机的，这种明显就是浮点数的问题blabla的，笑一笑就ok了。结论很简单，是审计问题，不是bug，是「产品经理」的锅hhh。</p>
+<h2 id="分析"><a href="#分析" class="headerlink" title="分析"></a>分析</h2><p>我最开始也以为是语义分析一类做错了导致的bug，后来一想，计算器一般都采用的是逆波兰式进行分析计算的，应该不存在二义性，而且简单计算器都是一边计算一边出结果的，显然不会有这样的bug。后来发现微软在Windows中的计算器也是这样设计的，那应该是某种设计问题。刚好微软的计算器开源了，那我们找一下他们是怎样实现的。</p>
+<p>Windows计算器中的标准模式中对于百分数计算的定义：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">case</span> IDC_PERCENT:</span><br><span class="line">        &#123;</span><br><span class="line">            <span class="comment">// If the operator is multiply/divide, we evaluate this as "X [op] (Y%)"</span></span><br><span class="line">            <span class="comment">// Otherwise, we evaluate it as "X [op] (X * Y%)"</span></span><br><span class="line">            <span class="keyword">if</span> (m_nOpCode == IDC_MUL || m_nOpCode == IDC_DIV)</span><br><span class="line">            &#123;</span><br><span class="line">                result = rat / <span class="number">100</span>;</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">else</span></span><br><span class="line">            &#123;</span><br><span class="line">                result = rat * (m_lastVal / <span class="number">100</span>);</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">break</span>;</span><br><span class="line">        &#125;</span><br></pre></td></tr></table></figure>
 
-<h4 id="collations"><a href="#collations" class="headerlink" title="collations"></a>collations</h4><p>​        排序方式是比较单个字符顺序的规则定义，比如忽视大小写，则A与a的排序是等同的；而b则应该排在a之后。每个字符编码方式都对应一种默认的排序方式。</p>
-<h3 id="尾记"><a href="#尾记" class="headerlink" title="尾记"></a>尾记</h3><p>​        第一次写文章，思路不够清晰，可能存在问题的地方也比较多，希望接下来能够清晰地做一个数据库专题，尤其是关于数据库协议相关的内容。</p>
-<p><strong>引用</strong></p>
+<p>这样逻辑就十分清晰了，注释中也解释了会将加减百分数计算解释为result = pre-result * persent / 100（1 + 10%解释为 1 + 1 * 10 / 100)</p>
+<p>至于逆波兰式，有兴趣的话我可以再写一篇解释一下解释过程和计算过程。</p>
+<p>参考：</p>
 <blockquote>
-<p><a href="https://dev.mysql.com/doc/refman/5.5/en/charset-connection.html" target="_blank" rel="noopener">https://dev.mysql.com/doc/refman/5.5/en/charset-connection.html</a></p>
+<p>Microsoft github caculator</p>
+<p><a href="https://github.com/microsoft/calculator/blob/2826d370565092dfca9a983a5fc6ec0b8b1c62e1/src/CalcManager/CEngine/scifunc.cpp" target="_blank" rel="noopener">https://github.com/microsoft/calculator/blob/2826d370565092dfca9a983a5fc6ec0b8b1c62e1/src/CalcManager/CEngine/scifunc.cpp</a></p>
+<p>row 79</p>
 </blockquote>
 
       
@@ -527,7 +502,7 @@
   <li class="post-copyright-link">
     <strong>本文链接：</strong>
     
-    <a href="https://sim41.com/2019/06/17/mysql-charset/" title="mysql-charset">https://sim41.com/2019/06/17/mysql-charset/</a>
+    <a href="https://sim41.com/2019/09/03/caculator/" title="caculator">https://sim41.com/2019/09/03/caculator/</a>
   </li>
   <li class="post-copyright-license">
     <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="noopener" target="_blank"><i class="fa fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！</li>
@@ -543,7 +518,7 @@
         
         <div class="post-tags">
           
-            <a href="/tags/MySQL/" rel="tag"># MySQL</a>
+            <a href="/tags/编译原理-语义分析/" rel="tag"># 编译原理,语义分析</a>
           
         </div>
       
@@ -556,8 +531,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2019/06/13/index/" rel="next" title="开篇">
-                <i class="fa fa-chevron-left"></i> 开篇
+              <a href="/2019/08/23/mysql-parser/" rel="next" title>
+                <i class="fa fa-chevron-left"></i> 
               </a>
             
           </div>
@@ -565,10 +540,6 @@
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2019/06/18/tls/" rel="prev" title="tls">
-                tls <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
@@ -745,7 +716,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#数据库系列-1"><span class="nav-number">1.</span> <span class="nav-text">数据库系列 1</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#—MySQL数据库协议之字符集与排序"><span class="nav-number">1.1.</span> <span class="nav-text">—MySQL数据库协议之字符集与排序</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#开篇碎碎念"><span class="nav-number">1.1.1.</span> <span class="nav-text">开篇碎碎念</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#MySQL中的字符集"><span class="nav-number">1.1.2.</span> <span class="nav-text">MySQL中的字符集</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#character-sets"><span class="nav-number">1.1.2.1.</span> <span class="nav-text">character sets</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#collations"><span class="nav-number">1.1.2.2.</span> <span class="nav-text">collations</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#尾记"><span class="nav-number">1.1.3.</span> <span class="nav-text">尾记</span></a></li></ol></li></ol></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#10-10-他为什么等于0-11"><span class="nav-number">1.</span> <span class="nav-text">10% + 10% 他为什么等于0.11</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#现象"><span class="nav-number">1.1.</span> <span class="nav-text">现象</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#结论"><span class="nav-number">1.2.</span> <span class="nav-text">结论</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#分析"><span class="nav-number">1.3.</span> <span class="nav-text">分析</span></a></li></ol></li></ol></div>
             
 
           </div>

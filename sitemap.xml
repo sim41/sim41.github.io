@@ -2,6 +2,27 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>https://sim41.com/2019/09/03/caculator/</loc>
+    
+    <lastmod>2019-09-03T01:58:04.359Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>https://sim41.com/2019/08/23/mysql-parser/</loc>
+    
+    <lastmod>2019-08-23T07:18:42.219Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>https://sim41.com/2019/06/18/tls/</loc>
+    
+    <lastmod>2019-07-27T06:00:23.709Z</lastmod>
+    
+  </url>
+  
+  <url>
     <loc>https://sim41.com/2019/06/17/mysql-charset/</loc>
     
     <lastmod>2019-07-10T08:21:49.988Z</lastmod>
@@ -26,13 +47,6 @@
     <loc>https://sim41.com/about/index.html</loc>
     
     <lastmod>2019-06-19T07:04:00.414Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>https://sim41.com/2019/06/18/tls/</loc>
-    
-    <lastmod>2019-06-18T09:36:43.559Z</lastmod>
     
   </url>
   
