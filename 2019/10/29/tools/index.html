@@ -96,18 +96,18 @@
 
 
 
-  <meta name="description" content="有关SQL语句的一些思考日常关于SQL语句的一些想法，一点自己的见解，今天分享出来记录并提供更正和补全。主要是关于SQL语句的分类和原理的拙见。">
-<meta name="keywords" content="sql">
+  <meta name="description" content="生产工具在开发的过程中，逐渐摸索一些适合模块化、规模化的应用需要的开发环境，更新使用的生产工具。">
+<meta name="keywords" content="tools">
 <meta property="og:type" content="article">
-<meta property="og:title" content="sql">
-<meta property="og:url" content="https://sim41.com/2019/09/05/sql/index.html">
+<meta property="og:title" content="tools">
+<meta property="og:url" content="https://sim41.com/2019/10/29/tools/index.html">
 <meta property="og:site_name" content="Simest&#39;s Blog">
-<meta property="og:description" content="有关SQL语句的一些思考日常关于SQL语句的一些想法，一点自己的见解，今天分享出来记录并提供更正和补全。主要是关于SQL语句的分类和原理的拙见。">
+<meta property="og:description" content="生产工具在开发的过程中，逐渐摸索一些适合模块化、规模化的应用需要的开发环境，更新使用的生产工具。">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2019-09-05T11:38:42.299Z">
+<meta property="og:updated_time" content="2019-10-29T10:10:23.537Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="sql">
-<meta name="twitter:description" content="有关SQL语句的一些思考日常关于SQL语句的一些想法，一点自己的见解，今天分享出来记录并提供更正和补全。主要是关于SQL语句的分类和原理的拙见。">
+<meta name="twitter:title" content="tools">
+<meta name="twitter:description" content="生产工具在开发的过程中，逐渐摸索一些适合模块化、规模化的应用需要的开发环境，更新使用的生产工具。">
 
 
 
@@ -115,7 +115,7 @@
 
   
   
-  <link rel="canonical" href="https://sim41.com/2019/09/05/sql/">
+  <link rel="canonical" href="https://sim41.com/2019/10/29/tools/">
 
 
 
@@ -125,7 +125,7 @@
   };
 </script>
 
-  <title>sql | Simest's Blog</title>
+  <title>tools | Simest's Blog</title>
   
 
 
@@ -345,7 +345,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://sim41.com/2019/09/05/sql/">
+    <link itemprop="mainEntityOfPage" href="https://sim41.com/2019/10/29/tools/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Simest">
@@ -362,7 +362,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">sql
+          <h1 class="post-title" itemprop="name headline">tools
 
               
             
@@ -388,7 +388,7 @@
                 
               
 
-              <time title="创建时间：2019-09-05 16:41:30 / 修改时间：19:38:42" itemprop="dateCreated datePublished" datetime="2019-09-05T16:41:30+08:00">2019-09-05</time>
+              <time title="创建时间：2019-10-29 17:20:02 / 修改时间：18:10:23" itemprop="dateCreated datePublished" datetime="2019-10-29T17:20:02+08:00">2019-10-29</time>
             
 
             
@@ -410,14 +410,7 @@
                 <span class="post-meta-item-text">分类于</span>
               
               
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/database/" itemprop="url" rel="index"><span itemprop="name">database</span></a></span>
-
-                
-                
-                  ，
-                
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/database/concept/" itemprop="url" rel="index"><span itemprop="name">concept</span></a></span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/tools/" itemprop="url" rel="index"><span itemprop="name">tools</span></a></span>
 
                 
                 
@@ -452,32 +445,37 @@
       
 
       
-        <h1 id="有关SQL语句的一些思考"><a href="#有关SQL语句的一些思考" class="headerlink" title="有关SQL语句的一些思考"></a>有关SQL语句的一些思考</h1><p>日常关于SQL语句的一些想法，一点自己的见解，今天分享出来记录并提供更正和补全。主要是关于SQL语句的分类和原理的拙见。</p>
+        <h1 id="生产工具"><a href="#生产工具" class="headerlink" title="生产工具"></a>生产工具</h1><p>在开发的过程中，逐渐摸索一些适合模块化、规模化的应用需要的开发环境，更新使用的生产工具。</p>
 <a id="more"></a>
 
-<h2 id="SQL语句分类"><a href="#SQL语句分类" class="headerlink" title="SQL语句分类"></a>SQL语句分类</h2><p>一般来说，SQL语句根据用途分为</p>
-<ol>
-<li><p>数据操作语言(DML：Data Manipulation Language)</p>
-<p>由数据库管理系统(DBMS) 提供，用于让用户或程序员使用，实现对数据库中数据的操作。 主要包含 SELECT、 INSERT、 UPDATE、 DELETE、 MERGE、 CALL、 EXPLAIN PLAN、 LOCK TABLE等语句。</p>
-</li>
-<li><p>数据定义语言(DDL：Data Definition Language)</p>
-<p>用于定义SQL模式、基本表、视图和索引的创建和撤消操作。 主要包含 CREATE、 ALTER、 DROP、 TRUNCATE、 COMMENT、 REPLACE(RENAME)等语句，一般不需要commit等事务操作。</p>
-</li>
-<li><p>数据控制语言(DCL：Data Control Language)</p>
-<p>用于数据库授权、角色控制等管理工作。 主要包含 GRANT、 REVOKE等语句。</p>
-</li>
-<li><p>事务控制语言(TCL：Transaction Control Language)</p>
-<p>用于数据库的事务管理。 主要包含 SAVEPOINT、 ROLLBACK、 COMMIT、 SET TRANSACTION等语句。</p>
-</li>
-</ol>
-<p>这种分类方式是oracle给出的，网上可以查询到的也大多认可了此分类方式。不过今天谈的不是这种分类，以上仅作为参考。</p>
-<h2 id="另一种分类"><a href="#另一种分类" class="headerlink" title="另一种分类"></a>另一种分类</h2><p>也算不上是分类吧，我个人的一点看法。因为我工作的性质，我更关注数据库协议相关的内容。按照数据库查询语句的生命周期和用途，也大致可以分为四种类型。</p>
-<p>第一种是最简洁常用的操作/查询语句，其实与DML的定义差不多，在MySQL中就是query，ASE中叫language等等。这种语句的生命周期就是一次查询，一次完整请求对应一次完整响应，基本上不需要进行维护操作。</p>
-<p>第二种是在基础查询语句上提供参数化的功能，可能叫参数化/模版/动态查询等等。这种语句也可以看作一种函数，将查询语句中的一些参数作为变量，有的支持变量命名，有的数据库只支持匿名参数。改语句的生命周期有一次查询语句的，此时多数由客户端进行维护，复用模版时自行进行参数化查询，然后附加参数的值。也有的生命周期存在于创建和释放模版之间，可以认为是在服务器注册了一个临时的函数。针对一次查询可以认为将参数替换后，也是一次交互，一次请求对一次响应。</p>
-<p>第三种就是RPC。可以认为是函数，执行了一系列的查询操作。服务器一般都内置了很多的RPC，生命周期可以视为永久，不过针对结果来讲，还是一次请求对一次完整响应。自定义的RPC生命周期维护在创建和释放之间。</p>
-<p>第四种就是游标。游标是针对查询结果的，生命周期一般是伴随着创建游标产生，附加在一条查询语句上，随着删除游标请求而释放。之所以需要游标，是很多查询是长期且返回很大的结果集的，我们不太可能一次性获取所有结果，游标可以让我们随着需要去取自己想要的数据。大部分游标不仅绑定在查询语句上，而且是与连接相关的，一旦连接断开，服务器会自动释放游标。不过也有些游标是由服务器维护，直到客户端请求释放才会结束游标的。</p>
-<p>综上，第一种类型可以认为客户端不需要维护任何的生命周期，可以迅速的拿到请求与响应。第二种主要需要维护一条查询语句和一个参数列表。第三种一般需要维护一个RPC名称/查询语句和可能的参数列表。而第四种需要维护的就比较多了，要维护游标id，查询语句，参数，以及需要用到的结果集。</p>
-<p>其实好像这篇比较水，主要是想到一些就记下来了。</p>
+<h2 id="IDE"><a href="#IDE" class="headerlink" title="IDE"></a>IDE</h2><h3 id="vim"><a href="#vim" class="headerlink" title="vim"></a>vim</h3><p>现阶段还是以vim为主要生产工具，暂时还是vim的簇拥。</p>
+<h4 id="base"><a href="#base" class="headerlink" title="base"></a>base</h4><p>一些基础环境配置：</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">syntax <span class="built_in">enable</span></span><br><span class="line"></span><br><span class="line"><span class="built_in">set</span> nocompatible</span><br><span class="line"><span class="built_in">set</span> nu</span><br><span class="line"><span class="built_in">set</span> hlsearch</span><br><span class="line"></span><br><span class="line">filetype off</span><br><span class="line"></span><br><span class="line"><span class="built_in">set</span> et</span><br><span class="line"><span class="built_in">set</span> smarttab</span><br><span class="line"><span class="built_in">set</span> smartindent</span><br><span class="line"><span class="built_in">set</span> lbr</span><br><span class="line"><span class="built_in">set</span> fo+=mB</span><br><span class="line"><span class="built_in">set</span> sm</span><br><span class="line"><span class="built_in">set</span> selection=inclusive</span><br><span class="line"><span class="built_in">set</span> backspace=indent,eol,start</span><br></pre></td></tr></table></figure>
+
+<p>主要是关于缩进等设置，这里将tab转化成了空格，关于这个问题看个人爱好与项目组的整体要求，统一就可以。</p>
+<h4 id="plugin"><a href="#plugin" class="headerlink" title="plugin"></a>plugin</h4><p>vim的强大功能，将vim配置成IDE是靠各种插件的，这里主要放了一些我常用的插件。</p>
+<h5 id="vundle"><a href="#vundle" class="headerlink" title="vundle"></a>vundle</h5><p>vundle是一个插件管理插件，方便插件的安装管理。</p>
+<p>配置：</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="string">"Vundle</span></span><br><span class="line"><span class="string">set rtp+=~/.vim/bundle/Vundle.vim  </span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">call vundle#begin()  </span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">Plugin 'gmarik/Vundle.vim'</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">call vundle#end()</span></span><br></pre></td></tr></table></figure>
+
+<p>上述配置使vundle生效，一般需要安装插件在Plugin项中写入仓库名$user/$repo即可，然后在vim中使用:PluginInstall进行下载安装。当然也可以直接把vim插件clone或者下载到~/.vim/bundle/目录下</p>
+<h5 id="YCM"><a href="#YCM" class="headerlink" title="YCM"></a>YCM</h5><p>我主要是开发C，所以选择了大名鼎鼎的YouCompleteMe插件，这个在一些低版本的系统中的安装是很麻烦的，不过在高版本，如centos7中就比较容易安装了。</p>
+<p>配置：</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">Plugin <span class="string">'Valloric/YouCompleteMe'</span></span><br><span class="line"></span><br><span class="line"><span class="string">"ycm</span></span><br><span class="line"><span class="string">let g:ycm_global_ycm_extra_conf = '~/.vim/bundle/YouCompleteMe/third_party/ycmd/cpp/ycm/.ycm_extra_conf.py'</span></span><br></pre></td></tr></table></figure>
+
+<h5 id="插件列表"><a href="#插件列表" class="headerlink" title="插件列表"></a>插件列表</h5><p>现在使用的全部插件如下</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">Plugin <span class="string">'gmarik/Vundle.vim'</span>  </span><br><span class="line">Plugin <span class="string">'Valloric/YouCompleteMe'</span>  </span><br><span class="line">Plugin <span class="string">'fatih/vim-go'</span></span><br><span class="line">Plugin <span class="string">'scrooloose/nerdtree'</span></span><br><span class="line">Plugin <span class="string">'majutsushi/tagbar'</span></span><br><span class="line">Plugin <span class="string">'Raimondi/delimitMate'</span></span><br><span class="line">Plugin <span class="string">'DoxygenToolkit.vim'</span></span><br><span class="line"><span class="string">" uncommonly used</span></span><br><span class="line"><span class="string">"</span>	Plugin <span class="string">'mileszs/ack.vim'</span></span><br><span class="line"><span class="string">"	Plugin 'liuchengxu/graphviz.vim'</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="tmux"><a href="#tmux" class="headerlink" title="tmux"></a>tmux</h3><p>tmux用于分屏，实质是多会话</p>
+<h3 id="cscope-ctags"><a href="#cscope-ctags" class="headerlink" title="cscope + ctags"></a>cscope + ctags</h3><p>看代码时必不可少的函数定义跳转gd和引用查询。当然看代码用sourceinsight一类的也是可以的。</p>
+<h3 id="ag-the-silver-searcher"><a href="#ag-the-silver-searcher" class="headerlink" title="ag:the silver searcher"></a>ag:the silver searcher</h3><p>一个快速查找的引擎，很好用</p>
+<h3 id="AStyle-indent"><a href="#AStyle-indent" class="headerlink" title="AStyle / indent"></a>AStyle / indent</h3><p>代码格式化，我一般使用K&amp;R风格。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">indent -kr -i8</span><br></pre></td></tr></table></figure>
+
+<p>或者使用AStyle。可以与vim绑定在每次保存退出时自动格式化，与gofmt类似。</p>
+<h3 id="Doxygen-mscgen-graphviz"><a href="#Doxygen-mscgen-graphviz" class="headerlink" title="Doxygen mscgen graphviz"></a>Doxygen mscgen graphviz</h3><p>采用doxygen风格代码注释，配合DoxygenToolkit.vim使用，方便生成代码文档。mscgen是基于graphviz简化语法的绘图工具，可以嵌入到doxygen注释中，也可以独立使用。在生成一些不需要固定位置的图表时比较方便。</p>
+<h3 id="Cunit-gcov-lcov"><a href="#Cunit-gcov-lcov" class="headerlink" title="Cunit gcov+lcov"></a>Cunit gcov+lcov</h3><p>单元测试框架与代码覆盖度。gcov是gcc自带的，lcov则是将gcov的结果可视化。</p>
+<p>to be continue…</p>
 
       
     </div>
@@ -512,7 +510,7 @@
   <li class="post-copyright-link">
     <strong>本文链接：</strong>
     
-    <a href="https://sim41.com/2019/09/05/sql/" title="sql">https://sim41.com/2019/09/05/sql/</a>
+    <a href="https://sim41.com/2019/10/29/tools/" title="tools">https://sim41.com/2019/10/29/tools/</a>
   </li>
   <li class="post-copyright-license">
     <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="noopener" target="_blank"><i class="fa fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！</li>
@@ -528,7 +526,7 @@
         
         <div class="post-tags">
           
-            <a href="/tags/sql/" rel="tag"># sql</a>
+            <a href="/tags/tools/" rel="tag"># tools</a>
           
         </div>
       
@@ -541,8 +539,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2019/09/03/caculator/" rel="next" title="caculator">
-                <i class="fa fa-chevron-left"></i> caculator
+              <a href="/2019/09/05/sql/" rel="next" title="sql">
+                <i class="fa fa-chevron-left"></i> sql
               </a>
             
           </div>
@@ -550,10 +548,6 @@
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2019/10/29/tools/" rel="prev" title="tools">
-                tools <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
@@ -738,7 +732,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#有关SQL语句的一些思考"><span class="nav-number">1.</span> <span class="nav-text">有关SQL语句的一些思考</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#SQL语句分类"><span class="nav-number">1.1.</span> <span class="nav-text">SQL语句分类</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#另一种分类"><span class="nav-number">1.2.</span> <span class="nav-text">另一种分类</span></a></li></ol></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#生产工具"><span class="nav-number">1.</span> <span class="nav-text">生产工具</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#IDE"><span class="nav-number">1.1.</span> <span class="nav-text">IDE</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#vim"><span class="nav-number">1.1.1.</span> <span class="nav-text">vim</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#base"><span class="nav-number">1.1.1.1.</span> <span class="nav-text">base</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#plugin"><span class="nav-number">1.1.1.2.</span> <span class="nav-text">plugin</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#vundle"><span class="nav-number">1.1.1.2.1.</span> <span class="nav-text">vundle</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#YCM"><span class="nav-number">1.1.1.2.2.</span> <span class="nav-text">YCM</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#插件列表"><span class="nav-number">1.1.1.2.3.</span> <span class="nav-text">插件列表</span></a></li></ol></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#tmux"><span class="nav-number">1.1.2.</span> <span class="nav-text">tmux</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#cscope-ctags"><span class="nav-number">1.1.3.</span> <span class="nav-text">cscope + ctags</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#ag-the-silver-searcher"><span class="nav-number">1.1.4.</span> <span class="nav-text">ag:the silver searcher</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#AStyle-indent"><span class="nav-number">1.1.5.</span> <span class="nav-text">AStyle / indent</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Doxygen-mscgen-graphviz"><span class="nav-number">1.1.6.</span> <span class="nav-text">Doxygen mscgen graphviz</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Cunit-gcov-lcov"><span class="nav-number">1.1.7.</span> <span class="nav-text">Cunit gcov+lcov</span></a></li></ol></li></ol></li></ol></div>
             
 
           </div>
