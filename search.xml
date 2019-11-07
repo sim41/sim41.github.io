@@ -1,6 +1,37 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title>protocol</title>
+    <url>/2019/11/06/protocol/</url>
+    <content><![CDATA[<h1 id="数据库协议浅谈"><a href="#数据库协议浅谈" class="headerlink" title="数据库协议浅谈"></a>数据库协议浅谈</h1><p>在日常工作中接触了各种类型的数据库传输协议，这里粗浅地介绍一下各个协议，可以大概了解一下如何解析一个数据库协议，如何设计一个数据库的通信过程，以及自定义协议是如何实现的。</p>
+<a id="more"></a>
+
+<h2 id="数据通信流程"><a href="#数据通信流程" class="headerlink" title="数据通信流程"></a>数据通信流程</h2><html>
+<script src="https://sverweij.github.io/mscgen_js/mscgen-inpage.js" defer> </script><pre class="mscgen_js">
+msc {
+    a [label="consumer"], b [label="shopfront"], c;
+
+<pre><code>a =&gt;&gt; b [label=&quot;buy (commestible)&quot;];
+b =&gt;&gt; c [label=&quot;lookup_price(commestible)&quot;];
+c &gt;&gt; b [label=&quot;price&quot;];
+b =&gt;&gt; a [label=&quot;&quot;];
+a =&gt;&gt; b [label=&quot;money&quot;];
+...;</code></pre><p>}
+</p></pre><p></p>
+</html>
+
+
+
+]]></content>
+      <categories>
+        <category>database</category>
+        <category>protocol</category>
+      </categories>
+      <tags>
+        <tag>protocol</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>bignuminc</title>
     <url>/2019/11/04/bignuminc/</url>
     <content><![CDATA[<h1 id="编程时使用的大数运算"><a href="#编程时使用的大数运算" class="headerlink" title="编程时使用的大数运算"></a>编程时使用的大数运算</h1><p>在编程中，有时候会遇到大数运算的情况（大于语言本身定义的最大长度的数的运算，一般都是64位）。在密码学或者自定义数据类型，如数据库中deicmal类型，定义了数的精度和比例(precision 精度，有效数字。scale不知道怎么翻译了…就是小数点的位数)。在这种情况下需要自己定义针对大数的运算。</p>
