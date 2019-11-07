@@ -6,19 +6,18 @@
     <content><![CDATA[<h1 id="数据库协议浅谈"><a href="#数据库协议浅谈" class="headerlink" title="数据库协议浅谈"></a>数据库协议浅谈</h1><p>在日常工作中接触了各种类型的数据库传输协议，这里粗浅地介绍一下各个协议，可以大概了解一下如何解析一个数据库协议，如何设计一个数据库的通信过程，以及自定义协议是如何实现的。</p>
 <a id="more"></a>
 
-<h2 id="数据通信流程"><a href="#数据通信流程" class="headerlink" title="数据通信流程"></a>数据通信流程</h2><html>
-<script src="https://sverweij.github.io/mscgen_js/mscgen-inpage.js" defer> </script><pre class="mscgen_js">
+<h2 id="数据通信流程"><a href="#数据通信流程" class="headerlink" title="数据通信流程"></a>数据通信流程</h2><pre class="mscgen_js">
 msc {
     a [label="consumer"], b [label="shopfront"], c;
 
-<pre><code>a =&gt;&gt; b [label=&quot;buy (commestible)&quot;];
-b =&gt;&gt; c [label=&quot;lookup_price(commestible)&quot;];
-c &gt;&gt; b [label=&quot;price&quot;];
-b =&gt;&gt; a [label=&quot;&quot;];
-a =&gt;&gt; b [label=&quot;money&quot;];
-...;</code></pre><p>}
-</p></pre><p></p>
-</html>
+    a =>> b [label="buy (commestible)"];
+    b =>> c [label="lookup_price(commestible)"];
+    c >> b [label="price"];
+    b =>> a [label=""];
+    a =>> b [label="money"];
+    ...;
+}
+</pre>
 
 
 
