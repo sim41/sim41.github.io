@@ -96,18 +96,18 @@
 
 
 
-  <meta name="description" content="数据库协议浅谈在日常工作中接触了各种类型的数据库传输协议，这里粗浅地介绍一下各个协议，可以大概了解一下如何解析一个数据库协议，如何设计一个数据库的通信过程，以及自定义协议是如何实现的。">
+  <meta name="description" content="数据库协议浅谈在日常工作中接触了各种类型的数据库传输协议， 这里粗浅地介绍一下各个协议，可以大概了解一下如何解析一个数据库协议， 如何设计一个数据库的通信过程，以及自定义协议是如何实现的。">
 <meta name="keywords" content="protocol">
 <meta property="og:type" content="article">
 <meta property="og:title" content="protocol">
 <meta property="og:url" content="https://sim41.com/2019/11/06/protocol/index.html">
 <meta property="og:site_name" content="Simest&#39;s Blog">
-<meta property="og:description" content="数据库协议浅谈在日常工作中接触了各种类型的数据库传输协议，这里粗浅地介绍一下各个协议，可以大概了解一下如何解析一个数据库协议，如何设计一个数据库的通信过程，以及自定义协议是如何实现的。">
+<meta property="og:description" content="数据库协议浅谈在日常工作中接触了各种类型的数据库传输协议， 这里粗浅地介绍一下各个协议，可以大概了解一下如何解析一个数据库协议， 如何设计一个数据库的通信过程，以及自定义协议是如何实现的。">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2019-11-07T08:06:28.988Z">
+<meta property="og:updated_time" content="2019-11-12T11:08:12.762Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="protocol">
-<meta name="twitter:description" content="数据库协议浅谈在日常工作中接触了各种类型的数据库传输协议，这里粗浅地介绍一下各个协议，可以大概了解一下如何解析一个数据库协议，如何设计一个数据库的通信过程，以及自定义协议是如何实现的。">
+<meta name="twitter:description" content="数据库协议浅谈在日常工作中接触了各种类型的数据库传输协议， 这里粗浅地介绍一下各个协议，可以大概了解一下如何解析一个数据库协议， 如何设计一个数据库的通信过程，以及自定义协议是如何实现的。">
 
 
 
@@ -405,7 +405,7 @@
                 
                   <span class="post-meta-item-text">更新于</span>
                 
-                <time title="修改时间：2019-11-07 16:06:28" itemprop="dateModified" datetime="2019-11-07T16:06:28+08:00">2019-11-07</time>
+                <time title="修改时间：2019-11-12 19:08:12" itemprop="dateModified" datetime="2019-11-12T19:08:12+08:00">2019-11-12</time>
               
             
           </span>
@@ -464,24 +464,71 @@
       
 
       
-        <h1 id="数据库协议浅谈"><a href="#数据库协议浅谈" class="headerlink" title="数据库协议浅谈"></a>数据库协议浅谈</h1><p>在日常工作中接触了各种类型的数据库传输协议，这里粗浅地介绍一下各个协议，可以大概了解一下如何解析一个数据库协议，如何设计一个数据库的通信过程，以及自定义协议是如何实现的。</p>
+        <h1 id="数据库协议浅谈"><a href="#数据库协议浅谈" class="headerlink" title="数据库协议浅谈"></a>数据库协议浅谈</h1><p>在日常工作中接触了各种类型的数据库传输协议，</p>
+<p>这里粗浅地介绍一下各个协议，可以大概了解一下如何解析一个数据库协议，</p>
+<p>如何设计一个数据库的通信过程，以及自定义协议是如何实现的。</p>
 <a id="more"></a>
 
-<h2 id="数据通信流程"><a href="#数据通信流程" class="headerlink" title="数据通信流程"></a>数据通信流程</h2><pre class="mscgen_js">
+<h2 id="数据通信流程"><a href="#数据通信流程" class="headerlink" title="数据通信流程"></a>数据通信流程</h2><script src="https://mscgen.js.org/mscgen-inpage.js" defer></script>
+<script>
+    var mscgen_js_config = {
+        clickable : "true"
+    };
+</script>
+<code class="mscgen_js">
+# regular database transport process
 msc {
-    a [label="consumer"], b [label="shopfront"], c;
+        a [label = "client"], b [label = "server"];
 
-    a =>> b [label="buy (commestible)"];
-    b =>> c [label="lookup_price(commestible)"];
-    c >> b [label="price"];
-    b =>> a [label=""];
-    a =>> b [label="money"];
-    ...;
-}
-</pre>
+<pre><code>---    [label = &quot;TCP handshake&quot;];
+a -&gt; b [label = &quot;TCP(SYN a)&quot;, arcskip = 1];
+a &lt;- b [label = &quot;TCP(SYN b, ACK a + 1)&quot;, arcskip = 1];
+a -&gt; b [label = &quot;TCP(ACK b + 1)&quot;, arcskip = 1];
+---    [label = &quot;Optional TLS/SSL handshake&quot;];
+a -&gt; b;
+a &lt;- b;
+---    [label = &quot;Database Protocol handshake&quot;];
+a -&gt; b;
+a &lt;- b;
+---    [label = &quot;Database message transport&quot;];
+a -&gt; b;
+a &lt;- b;</code></pre><p>}
+</p></code><p></p>
+<figure class="highlight mipsasm"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">附上图msc语言描述</span><br><span class="line"><span class="comment"># regular database transport process</span></span><br><span class="line">msc &#123;</span><br><span class="line">        a [label = <span class="string">"client"</span>], <span class="keyword">b </span>[label = <span class="string">"server"</span>]<span class="comment">;</span></span><br><span class="line"></span><br><span class="line">        ---    [label = <span class="string">"TCP handshake"</span>]<span class="comment">;</span></span><br><span class="line">        a -&gt; <span class="keyword">b </span>[label = <span class="string">"TCP(SYN a)"</span>, arcskip = <span class="number">1</span>]<span class="comment">;</span></span><br><span class="line">        a &lt;- <span class="keyword">b </span>[label = <span class="string">"TCP(SYN b, ACK a + 1)"</span>, arcskip = <span class="number">1</span>]<span class="comment">;</span></span><br><span class="line">        a -&gt; <span class="keyword">b </span>[label = <span class="string">"TCP(ACK b + 1)"</span>, arcskip = <span class="number">1</span>]<span class="comment">;</span></span><br><span class="line">        ---    [label = <span class="string">"Optional TLS/SSL handshake"</span>]<span class="comment">;</span></span><br><span class="line">        a -&gt; <span class="keyword">b;</span></span><br><span class="line"><span class="keyword"> </span>       a &lt;- <span class="keyword">b;</span></span><br><span class="line"><span class="keyword"> </span>       ---    [label = <span class="string">"Database Protocol handshake"</span>]<span class="comment">;</span></span><br><span class="line">        a -&gt; <span class="keyword">b;</span></span><br><span class="line"><span class="keyword"> </span>       a &lt;- <span class="keyword">b;</span></span><br><span class="line"><span class="keyword"> </span>       ---    [label = <span class="string">"Database message transport"</span>]<span class="comment">;</span></span><br><span class="line">        a -&gt; <span class="keyword">b;</span></span><br><span class="line"><span class="keyword"> </span>       a &lt;- <span class="keyword">b;</span></span><br><span class="line"><span class="keyword">&#125;</span></span><br></pre></td></tr></table></figure>
 
-
-
+<p>数据库协议作为一种应用层协议，一般来说数据库协议的通信过程如上图所示，有这样几个步骤。不过每个协议的实现略有差异。</p>
+<p>从功能上分析，首先通信双方要建立连接，所以TCP握手肯定是最先要完成的。</p>
+<p>然后在通信过程中想要保证数据的安全性，需要一种通用的数据加密方式，因此设计可选的SSL/TLS加密。关于SSL/TLS可以看我写的<a href="https://sim41.com/2019/06/18/tls/">另一篇文章</a></p>
+<p>接下来则是数据库协议本身的设计，协议的通信首先要达成共识，通信双方互相能够解释对方的信息。因此在进行数据的传输通信之前，要进行协议的协商，内容主要是采用的协议版本，客户端版本，服务器版本，采用的编码方式，支持的数据类型等等。进行了这样的一系列能力协商后，客户端和数据库服务器之间达成一致（或者无法达成一致则断开连接），这样双方就可以使用对方能够理解的协议格式进行通信。</p>
+<p>通信过程中，则使用数据库协议定义的格式对来往数据进行封装、解析，完成通信。此时如果采用了SSL/TLS加密，则相当于在TCP的出口和入口处进行了一次对称加密。数据库应用层协议不需要关心加密。</p>
+<p>整体流程来看，TCP握手是必须最早进行的，接下来可能是由数据库协议接管的TLS协商阶段，如MySQL先进行协议协商，看双方是否支持TLS协议。也可以直接依赖如openssl等库监听在数据库端口上自己进行协商，如ASE在TCP握手后可能直接进行TLS的握手（可选的，未配置则无改过程）。不过TLS协议握手的阶段一定是在协议认证之前的，毕竟要保护数据的安全性。通常数据库协议会设计为能力协商、认证和通信三个阶段。不过有些数据库的实现会将前两个阶段结合在一起实现。</p>
+<h2 id="协议细节"><a href="#协议细节" class="headerlink" title="协议细节"></a>协议细节</h2><h3 id="协议设计的一些规范"><a href="#协议设计的一些规范" class="headerlink" title="协议设计的一些规范"></a>协议设计的一些规范</h3><h4 id="ASN-1"><a href="#ASN-1" class="headerlink" title="ASN.1"></a>ASN.1</h4><p>ASN.1（Abstract Syntax Notation One) 是一套标准，是描述数据的表示、编码、传输、解码的灵活的记法。它提供了一套正式、无歧义和精确的规则以描述独立于特定计算机硬件的对象结构。本身只定义了表示信息的抽象句法，但是没有限定其编码的方法。</p>
+<p>通俗地说，ASN.1是常用于通信协议中定义协议语法的一种标准，这个看一下就行，常用但是不知道定义的一个概念，会用就好。</p>
+<h4 id="BER"><a href="#BER" class="headerlink" title="BER"></a>BER</h4><p>BER（Basic Encoding Rule）是ASN.1的实现方式之一，是一种编码规则。其实就是一种TLV形式的编码规则。讲到这里就都是听说过的概念了。以上主要是追溯一下我们常用的规定的一些出处来源。</p>
+<h4 id="TLV"><a href="#TLV" class="headerlink" title="TLV"></a>TLV</h4><p>T: type | tag,  L: length, V: value。就是一种以类型，数据长度为前导的数据编码方式。数据库中包含各种类型的数据/语句/包类型等，常用TLV进行封装。</p>
+<h4 id="字节序"><a href="#字节序" class="headerlink" title="字节序"></a>字节序</h4><p>分为大端序和小端序，用于表示多余1字节的数。一般肉眼看起来是反着的那个是小端序，低位字节放在内存的低地址端，所以看起来好像是反的。字节序一般由CPU架构决定，不过数据库协议中也会对此进行定义，常见为小端序，基本上都是可以协商的，在协商阶段客户端与服务端关于字节序达成一致。一般通过标识位进行协商，也可以通过1的表示方法来确定字节序。</p>
+<p>网络字节序是TCP/IP协议提供的一个字节序转换出口，是大端序。</p>
+<h4 id="协议优化"><a href="#协议优化" class="headerlink" title="协议优化"></a>协议优化</h4><p>这一节叫协议优化，其实也是真实的数据库协议的规定方法。如果全都使用TLV协议，那么会有很多冗余的数据，在传输时增加了很多工作量。可以将TLV协议弱化为TV，比如定长的数据，4字节整数等，有了类型就决定了定长。还可以进一步弱化为V，按照固定的字节序对数据进行封装，多用于包头的定长数据封装。可以节省很多数据空间。</p>
+<h2 id="常见数据库协议赏析"><a href="#常见数据库协议赏析" class="headerlink" title="常见数据库协议赏析"></a>常见数据库协议赏析</h2><h3 id="MySQL"><a href="#MySQL" class="headerlink" title="MySQL"></a>MySQL</h3><p>MySQL数据库协议我接触的最多最熟悉，不过其实不是一个好的协议实现。MySQL数据库可能是出于不想浪费三次握手的最后一个回合，在客户端向服务器发送第三次握手包后，服务器直接返回一个能力协商用的包。是不太常见的服务器先发包。</p>
+<p>MySQL协议整体是基于字符串协议的，客户端和服务端都会将数据打印为字符串形式然后发送。</p>
+<p>整体流程是服务器发送握手包，如果服务器支持SSL则进行SSL握手，然后进行认证流程，客户端会先尝试使用默认加密方式，如果服务器需要切换认证方式，会发送auth switch的请求到客户端，然后使用新的认证方式进行认证。之后就是通信过程。</p>
+<p>MySQL定义了很多类型的数据包，但是以实际使用情况来看，客户端请求会将全部的sql语句封装到MYSQL_QUERY类型的事务中。游标靠客户端进行维护，基于一次连接。这样的做法可能是即使通过包类型区分了语句类型，最终还是会对sql语句进行解析，进入sql_parser中。所以索性去掉了各种转换和解析协议的过程，全部使用字符串形式的query。这也是多数数据库的一种趋势，抛弃不同类型的包，统一使用字符串的事务进行封装，然后交给sql解析模块处理。</p>
+<h3 id="Oracle"><a href="#Oracle" class="headerlink" title="Oracle"></a>Oracle</h3><p>Oracle是公认的比较好的商业数据库，但是可惜TNS协议是非开源的，可以看看Wireshark等的解析，不过基本上也只能解析基础的数据。这里就不展开讲了，我掌握的也不多。</p>
+<h3 id="MSSQL-ASE"><a href="#MSSQL-ASE" class="headerlink" title="MSSQL | ASE"></a>MSSQL | ASE</h3><p>MSSQL（ Microsoft SQL Server），与Sybase（现被SAP整体收购）ASE 有一定的历史渊源。MSSQL最早是买的ASE的代码，均使用TDS协议。不过后来产生了分支。在TDS4.0版本都是统一的，现在两个数据库都早就不再使用这么古老的版本。现在ASE的分支是TDS 5.0 ，MSSQL是TDS 7.x（最新TDS7.4）</p>
+<p>协议整体是基于token的组合的，token可以理解为子报，按照一定顺序组合成包。</p>
+<p>TDS 5.0 与 TDS 4.0 的思路是一致的，先进行TCP握手，后将SSL握手交给其他模块。如果无密码登陆，认证与协议协商阶段融合到一个包中进行。配置了加密方法后，在能力协商后进行认证。其能力协商细节很多，包含了各种token（子包）和数据类型的支持情况。ASE定义了游标类型的包，不过现在多数会以language（等同于MySQL的query包）进行封装的。</p>
+<p>TDS7.x的版本在TDS4的版本上做出了较大的改动，加入了prelogin包进行认证前的能力协商，然后根据协商结果进行SSL握手，再进行认证。整体是基于UCS2LE编码的，可见英文字符基本上呈现为ascii和0的双字节编码。</p>
+<p>TDS7在协议上提供了类似于SSH tunnel实现的连接复用功能。</p>
+<h3 id="DB2"><a href="#DB2" class="headerlink" title="DB2"></a>DB2</h3><p>DB2也采用了块数据按顺序组成包的形式进行通信。整体比较简单，不过这个协议不是很熟，就不乱讲了。</p>
+<h3 id="MongoDB"><a href="#MongoDB" class="headerlink" title="MongoDB"></a>MongoDB</h3><p>采用了一种二进制封装的bison格式传输json格式形式的k-v数据。</p>
+<h3 id="PostgreSQL"><a href="#PostgreSQL" class="headerlink" title="PostgreSQL"></a>PostgreSQL</h3><p>学院派的数据库，定义严格清晰，所以也是近年来互联网企业更加青睐的数据库。现进行能力协商，然后进行认证连接。易于进行控制。也采用了块数据排序的形式进行组包，块的类型就是一个字母定义，比较容易理解。</p>
+<h3 id="Redis"><a href="#Redis" class="headerlink" title="Redis"></a>Redis</h3><p>redis是没有用户概念的，协议很简单，通过定义的关键字加数据的形式进行通信，类似于http报文头，和他的使用场景非常符合。</p>
+<h3 id="elasticsearch"><a href="#elasticsearch" class="headerlink" title="elasticsearch"></a>elasticsearch</h3><p>TODO，这个协议暂时没有了解，也是开源的，以后去了解一下。</p>
+<h3 id="其他数据库"><a href="#其他数据库" class="headerlink" title="其他数据库"></a>其他数据库</h3><p>很多数据库都是基于开源数据库开发的，因此协议主流为MySQL协议与PostgreSQL协议。</p>
+<h2 id="如何设计一个协议"><a href="#如何设计一个协议" class="headerlink" title="如何设计一个协议"></a>如何设计一个协议</h2><p>首先，如果存在通信需求，设计协议的通信过程。先进行TCP握手，然后进行应用的能力协商，确认是否进行SSL/TLS加密。然后可选的进行SSL握手，之后的协议通过SSL进行通信。再进行认证，认证通过后进行应用的通信。</p>
+<p>协议包中，首先要设计包头，一般包含包类型。长度（最大长度固定或可以协商，或定义为一定长度超过则不发）。是否存在连接复用，多数以id进行区别（一般用不到，我觉得不需要这样设计）。包序号（如果是阻塞类型则可选），标识位等等。</p>
+<p>协议的数据可以参考TLV类型进行定义，有一些约定俗成的规定，如时间的表示方法，字符串的表示方法等，可以参考常见的协议实现。针对TLV的冗余，可以根据解析代码的易于轮转实现采用全TLV。或者根据通信要求进行压缩省略。</p>
+<h2 id="参考"><a href="#参考" class="headerlink" title="[参考]"></a>[参考]</h2><p>wiki:<a href="https://zh.wikipedia.org/wiki/ASN.1" target="_blank" rel="noopener">ASN.1</a></p>
 
       
     </div>
@@ -748,7 +795,7 @@ msc {
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#数据库协议浅谈"><span class="nav-number">1.</span> <span class="nav-text">数据库协议浅谈</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#数据通信流程"><span class="nav-number">1.1.</span> <span class="nav-text">数据通信流程</span></a></li></ol></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#数据库协议浅谈"><span class="nav-number">1.</span> <span class="nav-text">数据库协议浅谈</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#数据通信流程"><span class="nav-number">1.1.</span> <span class="nav-text">数据通信流程</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#协议细节"><span class="nav-number">1.2.</span> <span class="nav-text">协议细节</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#协议设计的一些规范"><span class="nav-number">1.2.1.</span> <span class="nav-text">协议设计的一些规范</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#ASN-1"><span class="nav-number">1.2.1.1.</span> <span class="nav-text">ASN.1</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#BER"><span class="nav-number">1.2.1.2.</span> <span class="nav-text">BER</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#TLV"><span class="nav-number">1.2.1.3.</span> <span class="nav-text">TLV</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#字节序"><span class="nav-number">1.2.1.4.</span> <span class="nav-text">字节序</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#协议优化"><span class="nav-number">1.2.1.5.</span> <span class="nav-text">协议优化</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#常见数据库协议赏析"><span class="nav-number">1.3.</span> <span class="nav-text">常见数据库协议赏析</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#MySQL"><span class="nav-number">1.3.1.</span> <span class="nav-text">MySQL</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Oracle"><span class="nav-number">1.3.2.</span> <span class="nav-text">Oracle</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#MSSQL-ASE"><span class="nav-number">1.3.3.</span> <span class="nav-text">MSSQL | ASE</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#DB2"><span class="nav-number">1.3.4.</span> <span class="nav-text">DB2</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#MongoDB"><span class="nav-number">1.3.5.</span> <span class="nav-text">MongoDB</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#PostgreSQL"><span class="nav-number">1.3.6.</span> <span class="nav-text">PostgreSQL</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Redis"><span class="nav-number">1.3.7.</span> <span class="nav-text">Redis</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#elasticsearch"><span class="nav-number">1.3.8.</span> <span class="nav-text">elasticsearch</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#其他数据库"><span class="nav-number">1.3.9.</span> <span class="nav-text">其他数据库</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#如何设计一个协议"><span class="nav-number">1.4.</span> <span class="nav-text">如何设计一个协议</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#参考"><span class="nav-number">1.5.</span> <span class="nav-text">[参考]</span></a></li></ol></li></ol></div>
             
 
           </div>
@@ -878,7 +925,6 @@ msc {
   
   <script src="/js/scrollspy.js?v=7.1.2"></script>
 <script src="/js/post-details.js?v=7.1.2"></script>
-<script src="https://sverweij.github.io/mscgen_js/mscgen-inpage.js" defer></script>
 
 
 
