@@ -1,0 +1,975 @@
+<!DOCTYPE html>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+<html class="theme-next muse use-motion" lang="zh-CN">
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css?v=4.7.0">
+
+<link rel="stylesheet" href="/css/main.css?v=7.1.2">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=7.1.2">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=7.1.2">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=7.1.2">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=7.1.2" color="#222">
+
+
+
+
+
+
+
+<script id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Muse',
+    version: '7.1.2',
+    sidebar: {"position":"left","display":"post","offset":12,"onmobile":false,"dimmer":false},
+    back2top: true,
+    back2top_sidebar: false,
+    fancybox: false,
+    fastclick: false,
+    lazyload: false,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+  
+
+
+
+
+  <meta name="description" content="C语言中的函数调用函数是C语言的重要组成部分，每个C语言的程序，至少都有一个函数，即入口函数main函数，那么在程序运行时函数是以怎样的方式运行的呢。本文主要讨论C语言中函数的调用原理和存储方式。">
+<meta name="keywords" content="c">
+<meta property="og:type" content="article">
+<meta property="og:title" content="function">
+<meta property="og:url" content="https://sim41.com/2020/03/19/function/index.html">
+<meta property="og:site_name" content="Simest&#39;s Blog">
+<meta property="og:description" content="C语言中的函数调用函数是C语言的重要组成部分，每个C语言的程序，至少都有一个函数，即入口函数main函数，那么在程序运行时函数是以怎样的方式运行的呢。本文主要讨论C语言中函数的调用原理和存储方式。">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/sim41/pic/blog/%E5%87%BD%E6%95%B0%E6%A0%88%E5%B8%A7.png">
+<meta property="og:updated_time" content="2020-03-21T21:14:54.962Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="function">
+<meta name="twitter:description" content="C语言中的函数调用函数是C语言的重要组成部分，每个C语言的程序，至少都有一个函数，即入口函数main函数，那么在程序运行时函数是以怎样的方式运行的呢。本文主要讨论C语言中函数的调用原理和存储方式。">
+<meta name="twitter:image" content="https://cdn.jsdelivr.net/gh/sim41/pic/blog/%E5%87%BD%E6%95%B0%E6%A0%88%E5%B8%A7.png">
+
+
+
+
+
+  
+  
+  <link rel="canonical" href="https://sim41.com/2020/03/19/function/">
+
+
+
+<script id="page.configurations">
+  CONFIG.page = {
+    sidebar: "",
+  };
+</script>
+
+  <title>function | Simest's Blog</title>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .motion-element,
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-title { opacity: initial; }
+
+  .use-motion .logo,
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Simest's Blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+    
+      
+        <p class="site-subtitle">Life and code</p>
+      
+    
+    
+  </div>
+
+  <div class="site-nav-toggle">
+    <button aria-label="切换导航栏">
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  
+    <ul id="menu" class="menu">
+      
+        
+        
+        
+          
+          <li class="menu-item menu-item-home">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/" rel="section"><i class="menu-item-icon fa fa-fw fa-home"></i> <br>首页</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-about">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/about/" rel="section"><i class="menu-item-icon fa fa-fw fa-user"></i> <br>关于</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-tags">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/tags/" rel="section"><i class="menu-item-icon fa fa-fw fa-tags"></i> <br>标签</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-categories">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/categories/" rel="section"><i class="menu-item-icon fa fa-fw fa-th"></i> <br>分类</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-archives">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/archives/" rel="section"><i class="menu-item-icon fa fa-fw fa-archive"></i> <br>归档</a>
+
+  </li>
+
+      
+      
+    </ul>
+  
+
+  
+    
+
+  
+
+  
+</nav>
+
+
+
+  
+
+
+
+</div>
+    </header>
+
+    
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://sim41.com/2020/03/19/function/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Simest">
+      <meta itemprop="description" content="Focus on database/Linux/C/go/docker">
+      <meta itemprop="image" content="/images/avatar.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Simest's Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">function
+
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2020-03-19 03:31:12" itemprop="dateCreated datePublished" datetime="2020-03-19T03:31:12+08:00">2020-03-19</time>
+            
+
+            
+              
+
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">更新于</span>
+                
+                <time title="修改时间：2020-03-22 05:14:54" itemprop="dateModified" datetime="2020-03-22T05:14:54+08:00">2020-03-22</time>
+              
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/c/" itemprop="url" rel="index"><span itemprop="name">c</span></a></span>
+
+                
+                
+                  ，
+                
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/c/底层原理/" itemprop="url" rel="index"><span itemprop="name">底层原理</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="C语言中的函数调用"><a href="#C语言中的函数调用" class="headerlink" title="C语言中的函数调用"></a>C语言中的函数调用</h1><p>函数是C语言的重要组成部分，每个C语言的程序，至少都有一个函数，即入口函数main函数，那么在程序运行时函数是以怎样的方式运行的呢。本文主要讨论C语言中函数的调用原理和存储方式。</p>
+<a id="more"></a>
+
+<h2 id="形式"><a href="#形式" class="headerlink" title="形式"></a>形式</h2><p>这个简单提一下，C语言的函数形式时是[可选的返回值类型]函数名(参数…)。严格的定义如下:</p>
+<figure class="highlight 1c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">C语言函数的BNF范式（节选，并未完整展开）:</span><br><span class="line">function_definition	: decl_specs declarator decl_list compound_stat</span><br><span class="line">			<span class="string">|		declarator decl_list compound_stat</span></span><br><span class="line">			<span class="string">| decl_specs declarator		compound_stat</span></span><br><span class="line">			<span class="string">|		declarator 	compound_stat</span></span><br><span class="line">			;</span><br></pre></td></tr></table></figure>
+
+<h2 id="存储"><a href="#存储" class="headerlink" title="存储"></a>存储</h2><p>在以前的文章中讲到了进程的内存布局，在进程运行时，程序的函数加载到栈中，栈的单位可以用栈帧来表示。</p>
+<p><img src="https://cdn.jsdelivr.net/gh/sim41/pic/blog/%E5%87%BD%E6%95%B0%E6%A0%88%E5%B8%A7.png" alt="函数栈"></p>
+<h3 id="寄存器"><a href="#寄存器" class="headerlink" title="寄存器"></a>寄存器</h3><h4 id="栈寄存器"><a href="#栈寄存器" class="headerlink" title="栈寄存器"></a>栈寄存器</h4><p>栈在内存中从高地址向低地址增长。一个函数一次入栈的是局部变量，参数列表和返回地址。栈顶指针和栈底指针分别存在专用的寄存器中，栈顶指针存在栈指针寄存器(16位SP寄存器 <em>stack pointer</em>，32位ESP寄存器<em>extended stack pointer</em>，64位RSP寄存器 <em>register stack pointer</em>)，栈底指针存在基址指针寄存器(16位BP寄存器 <em>base pointer</em>，32位EBP寄存器 <em>extended base pointer</em>，64位RBP寄存器 <em>register base pointer</em>)。</p>
+<h4 id="代码段寄存器"><a href="#代码段寄存器" class="headerlink" title="代码段寄存器"></a>代码段寄存器</h4><p>CS寄存器(code segment)，代码段寄存器，指向当前代码段的初始内存地址。</p>
+<h4 id="指令寄存器"><a href="#指令寄存器" class="headerlink" title="指令寄存器"></a>指令寄存器</h4><p>IP寄存器(instruction pointer)，指令指针寄存器，存储着当前要执行的下一条指令的指令地址，即相对于代码段初始位置的偏移量。</p>
+<h2 id="函数执行过程"><a href="#函数执行过程" class="headerlink" title="函数执行过程"></a>函数执行过程</h2><h3 id="汇编指令"><a href="#汇编指令" class="headerlink" title="汇编指令"></a>汇编指令</h3><p>push 入栈</p>
+<p>pop 出栈</p>
+<p>call 调用指令</p>
+<p>mov 传递值</p>
+<p>jmp (无条件)跳转</p>
+<h3 id="函数的汇编指令"><a href="#函数的汇编指令" class="headerlink" title="函数的汇编指令"></a>函数的汇编指令</h3><p>注：汇编指令均以32位CPU为例</p>
+<p><strong>函数调用开始时</strong></p>
+<ol>
+<li><p>函数调用时，栈帧中压入上一个栈帧的栈底地址  汇编指令是<figure class="highlight plain"><figcaption><span>ebp```</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">2. 上一个栈帧的栈顶地址作为当前栈帧的栈底地址 汇编指令是```mov ebp, esp</span><br></pre></td></tr></table></figure></p>
+</li>
+<li><p>为当前函数的局部变量开辟足够的存储空间 汇编指令时<figure class="highlight plain"><figcaption><span>esp, M```</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">**函数调用返回时**</span><br><span class="line"></span><br><span class="line">1. 将函数为局部变量分配的空间释放，只需要将栈顶指针指向开辟空间前的位置即可 汇编指令是```mov esp, ebp``` 此时esp中的值是上一个栈帧的栈底地址。</span><br><span class="line">2. 将ebp恢复为上一个栈帧的栈底指针 汇编指令是```mov ebp, [esp]``` 此时esp指向存放返回地址的地址。</span><br><span class="line">3. 将指令寄存器指向call指令操作值的地址 汇编指令```mov eip, [esp]```， 此时esp寄存器指向函数第一个参数(从右向左顺序加载)</span><br><span class="line">4. 将栈顶指针指向函数为参数开辟空间之前的地址 汇编指令为 `pop ...`，此时esp 的值是第一个局部变量的地址。</span><br><span class="line"></span><br><span class="line">## 附录：C语言语法的完整BNF范式：</span><br></pre></td></tr></table></figure></p>
+</li>
+</ol>
+<p>translation_unit    : external_decl<br>            | translation_unit external_decl<br>            ;<br>external_decl        : function_definition<br>            | decl<br>            ;<br>function_definition    : decl_specs declarator decl_list compound_stat<br>            |        declarator decl_list compound_stat<br>            | decl_specs declarator        compound_stat<br>            |        declarator     compound_stat<br>            ;<br>decl            : decl_specs init_declarator_list ‘;’<br>            | decl_specs            ‘;’<br>            ;<br>decl_list        : decl<br>            | decl_list decl<br>            ;<br>decl_specs        : storage_class_spec decl_specs<br>            | storage_class_spec<br>            | type_spec decl_specs<br>            | type_spec<br>            | type_qualifier decl_specs<br>            | type_qualifier<br>            ;<br>storage_class_spec    : ‘auto’ | ‘register’ | ‘static’ | ‘extern’ | ‘typedef’<br>            ;<br>type_spec        : ‘void’ | ‘char’ | ‘short’ | ‘int’ | ‘long’ | ‘float’<br>            | ‘double’ | ‘signed’ | ‘unsigned’<br>            | struct_or_union_spec<br>            | enum_spec<br>            | typedef_name<br>            ;<br>type_qualifier        : ‘const’ | ‘volatile’<br>            ;<br>struct_or_union_spec    : struct_or_union id ‘{‘ struct_decl_list ‘}’<br>            | struct_or_union    ‘{‘ struct_decl_list ‘}’<br>            | struct_or_union id<br>            ;<br>struct_or_union        : ‘struct’ | ‘union’<br>            ;<br>struct_decl_list    : struct_decl<br>            | struct_decl_list struct_decl<br>            ;<br>init_declarator_list    : init_declarator<br>            | init_declarator_list ‘,’ init_declarator<br>            ;<br>init_declarator        : declarator<br>            | declarator ‘=’ initializer<br>            ;<br>struct_decl        : spec_qualifier_list struct_declarator_list ‘;’<br>            ;<br>spec_qualifier_list    : type_spec spec_qualifier_list<br>            | type_spec<br>            | type_qualifier spec_qualifier_list<br>            | type_qualifier<br>            ;<br>struct_declarator_list    : struct_declarator<br>            | struct_declarator_list ‘,’ struct_declarator<br>            ;<br>struct_declarator    : declarator<br>            | declarator ‘:’ const_exp<br>            |        ‘:’ const_exp<br>            ;<br>enum_spec        : ‘enum’ id ‘{‘ enumerator_list ‘}’<br>            | ‘enum’    ‘{‘ enumerator_list ‘}’<br>            | ‘enum’ id<br>            ;<br>enumerator_list        : enumerator<br>            | enumerator_list ‘,’ enumerator<br>            ;<br>enumerator        : id<br>            | id ‘=’ const_exp<br>            ;<br>declarator        : pointer direct_declarator<br>            |    direct_declarator<br>            ;<br>direct_declarator    : id<br>            | ‘(‘ declarator ‘)’<br>            | direct_declarator ‘[‘ const_exp ‘]’<br>            | direct_declarator ‘[‘        ‘]’<br>            | direct_declarator ‘(‘ param_type_list ‘)’<br>            | direct_declarator ‘(‘ id_list ‘)’<br>            | direct_declarator ‘(‘        ‘)’<br>            ;<br>pointer            : ‘<em>‘ type_qualifier_list<br>            | ‘</em>‘
+            | ‘<em>‘ type_qualifier_list pointer<br>            | ‘</em>‘            pointer<br>            ;<br>type_qualifier_list    : type_qualifier<br>            | type_qualifier_list type_qualifier<br>            ;<br>param_type_list        : param_list<br>            | param_list ‘,’ ‘…’<br>            ;<br>param_list        : param_decl<br>            | param_list ‘,’ param_decl<br>            ;<br>param_decl        : decl_specs declarator<br>            | decl_specs abstract_declarator<br>            | decl_specs<br>            ;<br>id_list            : id<br>            | id_list ‘,’ id<br>            ;<br>initializer        : assignment_exp<br>            | ‘{‘ initializer_list ‘}’<br>            | ‘{‘ initializer_list ‘,’ ‘}’<br>            ;<br>initializer_list    : initializer<br>            | initializer_list ‘,’ initializer<br>            ;<br>type_name        : spec_qualifier_list abstract_declarator<br>            | spec_qualifier_list<br>            ;<br>abstract_declarator    : pointer<br>            | pointer direct_abstract_declarator<br>            |    direct_abstract_declarator<br>            ;<br>direct_abstract_declarator: ‘(‘ abstract_declarator ‘)’<br>            | direct_abstract_declarator ‘[‘ const_exp ‘]’<br>            |                ‘[‘ const_exp ‘]’<br>            | direct_abstract_declarator ‘[‘    ‘]’<br>            |                ‘[‘    ‘]’<br>            | direct_abstract_declarator ‘(‘ param_type_list ‘)’<br>            |                ‘(‘ param_type_list ‘)’<br>            | direct_abstract_declarator ‘(‘        ‘)’<br>            |                ‘(‘        ‘)’<br>            ;<br>typedef_name        : id<br>            ;<br>stat            : labeled_stat<br>            | exp_stat<br>            | compound_stat<br>            | selection_stat<br>            | iteration_stat<br>            | jump_stat<br>            ;<br>labeled_stat        : id ‘:’ stat<br>            | ‘case’ const_exp ‘:’ stat<br>            | ‘default’ ‘:’ stat<br>            ;<br>exp_stat        : exp ‘;’<br>            |    ‘;’<br>            ;<br>compound_stat        : ‘{‘ decl_list stat_list ‘}’<br>            | ‘{‘        stat_list ‘}’<br>            | ‘{‘ decl_list        ‘}’<br>            | ‘{‘            ‘}’<br>            ;<br>stat_list        : stat<br>            | stat_list stat<br>            ;<br>selection_stat        : ‘if’ ‘(‘ exp ‘)’ stat<br>            | ‘if’ ‘(‘ exp ‘)’ stat ‘else’ stat<br>            | ‘switch’ ‘(‘ exp ‘)’ stat<br>            ;<br>iteration_stat        : ‘while’ ‘(‘ exp ‘)’ stat<br>            | ‘do’ stat ‘while’ ‘(‘ exp ‘)’ ‘;’<br>            | ‘for’ ‘(‘ exp ‘;’ exp ‘;’ exp ‘)’ stat<br>            | ‘for’ ‘(‘ exp ‘;’ exp ‘;’    ‘)’ stat<br>            | ‘for’ ‘(‘ exp ‘;’    ‘;’ exp ‘)’ stat<br>            | ‘for’ ‘(‘ exp ‘;’    ‘;’    ‘)’ stat<br>            | ‘for’ ‘(‘    ‘;’ exp ‘;’ exp ‘)’ stat<br>            | ‘for’ ‘(‘    ‘;’ exp ‘;’    ‘)’ stat<br>            | ‘for’ ‘(‘    ‘;’    ‘;’ exp ‘)’ stat<br>            | ‘for’ ‘(‘    ‘;’    ‘;’    ‘)’ stat<br>            ;<br>jump_stat        : ‘goto’ id ‘;’<br>            | ‘continue’ ‘;’<br>            | ‘break’ ‘;’<br>            | ‘return’ exp ‘;’<br>            | ‘return’    ‘;’<br>            ;<br>exp            : assignment_exp<br>            | exp ‘,’ assignment_exp<br>            ;<br>assignment_exp        : conditional_exp<br>            | unary_exp assignment_operator assignment_exp<br>            ;<br>assignment_operator    : ‘=’ | ‘<em>=’ | ‘/=’ | ‘%=’ | ‘+=’ | ‘-=’ | ‘&lt;&lt;=’<br>            | ‘&gt;&gt;=’ | ‘&amp;=’ | ‘^=’ | ‘|=’<br>            ;<br>conditional_exp        : logical_or_exp<br>            | logical_or_exp ‘?’ exp ‘:’ conditional_exp<br>            ;<br>const_exp        : conditional_exp<br>            ;<br>logical_or_exp        : logical_and_exp<br>            | logical_or_exp ‘||’ logical_and_exp<br>            ;<br>logical_and_exp        : inclusive_or_exp<br>            | logical_and_exp ‘&amp;&amp;’ inclusive_or_exp<br>            ;<br>inclusive_or_exp    : exclusive_or_exp<br>            | inclusive_or_exp ‘|’ exclusive_or_exp<br>            ;<br>exclusive_or_exp    : and_exp<br>            | exclusive_or_exp ‘^’ and_exp<br>            ;<br>and_exp            : equality_exp<br>            | and_exp ‘&amp;’ equality_exp<br>            ;<br>equality_exp        : relational_exp<br>            | equality_exp ‘==’ relational_exp<br>            | equality_exp ‘!=’ relational_exp<br>            ;<br>relational_exp        : shift_expression<br>            | relational_exp ‘&lt;’ shift_expression<br>            | relational_exp ‘&gt;’ shift_expression<br>            | relational_exp ‘&lt;=’ shift_expression<br>            | relational_exp ‘&gt;=’ shift_expression<br>            ;<br>shift_expression    : additive_exp<br>            | shift_expression ‘&lt;&lt;’ additive_exp<br>            | shift_expression ‘&gt;&gt;’ additive_exp<br>            ;<br>additive_exp        : mult_exp<br>            | additive_exp ‘+’ mult_exp<br>            | additive_exp ‘-‘ mult_exp<br>            ;<br>mult_exp        : cast_exp<br>            | mult_exp ‘</em>‘ cast_exp<br>            | mult_exp ‘/‘ cast_exp<br>            | mult_exp ‘%’ cast_exp<br>            ;<br>cast_exp        : unary_exp<br>            | ‘(‘ type_name ‘)’ cast_exp<br>            ;<br>unary_exp        : postfix_exp<br>            | ‘++’ unary_exp<br>            | ‘–’ unary_exp<br>            | unary_operator cast_exp<br>            | ‘sizeof’ unary_exp<br>            | ‘sizeof’ ‘(‘ type_name ‘)’<br>            ;<br>unary_operator        : ‘&amp;’ | ‘*’ | ‘+’ | ‘-‘ | ‘~’ | ‘!’<br>            ;<br>postfix_exp        : primary_exp<br>            | postfix_exp ‘[‘ exp ‘]’<br>            | postfix_exp ‘(‘ argument_exp_list ‘)’<br>            | postfix_exp ‘(‘            ‘)’<br>            | postfix_exp ‘.’ id<br>            | postfix_exp ‘-&gt;’ id<br>            | postfix_exp ‘++’<br>            | postfix_exp ‘–’<br>            ;<br>primary_exp        : id<br>            | const<br>            | string<br>            | ‘(‘ exp ‘)’<br>            ;<br>argument_exp_list    : assignment_exp<br>            | argument_exp_list ‘,’ assignment_exp<br>            ;<br>const            : int_const<br>            | char_const<br>            | float_const<br>            | enumeration_const<br>            ;</p>
+<pre><code>
+## 参考
+
+[iamsile-c语言的bnf总结](https://blog.csdn.net/sileiam/article/details/16362719)
+
+[HubbardHuang-C/C++ 函数调用原理](https://www.jianshu.com/p/9f547d8428c3)
+</code></pre>
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+      
+    
+    
+
+    
+      <div>
+        
+
+
+
+
+  
+
+
+
+<ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>本文作者： </strong>Simest</li>
+  <li class="post-copyright-link">
+    <strong>本文链接：</strong>
+    
+    <a href="https://sim41.com/2020/03/19/function/" title="function">https://sim41.com/2020/03/19/function/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="noopener" target="_blank"><i class="fa fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！</li>
+</ul>
+
+      </div>
+    
+
+    <footer class="post-footer">
+      
+        
+          
+        
+        <div class="post-tags">
+          
+            <a href="/tags/c/" rel="tag"># c</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2019/12/02/memory/" rel="next" title="memory">
+                <i class="fa fa-chevron-left"></i> memory
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2020/03/19/update-in-2020/" rel="prev" title="update-in-2020">
+                update-in-2020 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+  </div>
+
+
+          </div>
+          
+
+  
+      <div class="comments" id="comments">
+        
+  <script src="https://utteranc.es/client.js" repo="sim41/comment" issue-term theme="github-light" crossorigin="anonymous" async>
+  </script>
+
+
+      </div>
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image" src="/images/avatar.png" alt="Simest">
+            
+              <p class="site-author-name" itemprop="name">Simest</p>
+              <div class="site-description motion-element" itemprop="description">Focus on database/Linux/C/go/docker</div>
+          </div>
+
+          
+            <nav class="site-state motion-element">
+              
+                <div class="site-state-item site-state-posts">
+                
+                  <a href="/archives/">
+                
+                    <span class="site-state-item-count">17</span>
+                    <span class="site-state-item-name">日志</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-categories">
+                  
+                    
+                      <a href="/categories/">
+                    
+                  
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">15</span>
+                    <span class="site-state-item-name">分类</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-tags">
+                  
+                    
+                      <a href="/tags/">
+                    
+                  
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">11</span>
+                    <span class="site-state-item-name">标签</span>
+                  </a>
+                </div>
+              
+            </nav>
+          
+
+          
+
+          
+
+          
+
+          
+             <div class="cc-license motion-element" itemprop="license">
+              
+              
+                
+              
+              
+              
+              <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" class="cc-opacity" rel="noopener" target="_blank"><img src="/images/cc-by-nc-sa.svg" alt="Creative Commons"></a>
+             </div>
+          
+
+          
+          
+
+          
+            
+          
+          
+
+        </div>
+      </div>
+
+      
+      <!--noindex-->
+        <div class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+            
+            
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#C语言中的函数调用"><span class="nav-number">1.</span> <span class="nav-text">C语言中的函数调用</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#形式"><span class="nav-number">1.1.</span> <span class="nav-text">形式</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#存储"><span class="nav-number">1.2.</span> <span class="nav-text">存储</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#寄存器"><span class="nav-number">1.2.1.</span> <span class="nav-text">寄存器</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#栈寄存器"><span class="nav-number">1.2.1.1.</span> <span class="nav-text">栈寄存器</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#代码段寄存器"><span class="nav-number">1.2.1.2.</span> <span class="nav-text">代码段寄存器</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#指令寄存器"><span class="nav-number">1.2.1.3.</span> <span class="nav-text">指令寄存器</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#函数执行过程"><span class="nav-number">1.3.</span> <span class="nav-text">函数执行过程</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#汇编指令"><span class="nav-number">1.3.1.</span> <span class="nav-text">汇编指令</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#函数的汇编指令"><span class="nav-number">1.3.2.</span> <span class="nav-text">函数的汇编指令</span></a></li></ol></li></ol></li></ol></div>
+            
+
+          </div>
+        </div>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+  
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; 2019 – <span itemprop="copyrightYear">2020</span>
+  <span class="with-love" id="animate">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Simest</span>
+
+  
+
+  
+</div>
+
+
+
+
+
+
+
+
+
+        
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+    
+
+    
+  </div>
+
+  
+
+<script>
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script src="/lib/jquery/index.js?v=3.4.1"></script>
+
+  
+  <script src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+
+  
+
+
+  <script src="/js/utils.js?v=7.1.2"></script>
+
+  <script src="/js/motion.js?v=7.1.2"></script>
+
+
+
+  
+  
+
+
+  <script src="/js/schemes/muse.js?v=7.1.2"></script>
+
+
+
+  
+  <script src="/js/scrollspy.js?v=7.1.2"></script>
+<script src="/js/post-details.js?v=7.1.2"></script>
+
+
+
+  
+
+
+  <script src="/js/next-boot.js?v=7.1.2"></script>
+
+
+  
+
+  
+
+  
+
+  
+
+
+  
+
+
+  
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

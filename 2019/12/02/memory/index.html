@@ -1,0 +1,978 @@
+<!DOCTYPE html>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+<html class="theme-next muse use-motion" lang="zh-CN">
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css?v=4.7.0">
+
+<link rel="stylesheet" href="/css/main.css?v=7.1.2">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=7.1.2">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=7.1.2">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=7.1.2">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=7.1.2" color="#222">
+
+
+
+
+
+
+
+<script id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Muse',
+    version: '7.1.2',
+    sidebar: {"position":"left","display":"post","offset":12,"onmobile":false,"dimmer":false},
+    back2top: true,
+    back2top_sidebar: false,
+    fancybox: false,
+    fastclick: false,
+    lazyload: false,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+  
+
+
+
+
+  <meta name="description" content="Linux内存布局与C的内存布局使用C作为开发语言，最重要的就是指针，而指针就是一个指向内存的索引。理解Linux和C程序的内存布局是深入理解C语言开发和程序运行等原理的一个必要条件。">
+<meta name="keywords" content="c, 操作系统">
+<meta property="og:type" content="article">
+<meta property="og:title" content="memory">
+<meta property="og:url" content="https://sim41.com/2019/12/02/memory/index.html">
+<meta property="og:site_name" content="Simest&#39;s Blog">
+<meta property="og:description" content="Linux内存布局与C的内存布局使用C作为开发语言，最重要的就是指针，而指针就是一个指向内存的索引。理解Linux和C程序的内存布局是深入理解C语言开发和程序运行等原理的一个必要条件。">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/sim41/pic/blog/memory-3.jpg">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/sim41/pic/blog/memory-2.jpg">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/sim41/pic/blog/memory-1.jpg">
+<meta property="og:updated_time" content="2020-03-16T21:36:02.570Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="memory">
+<meta name="twitter:description" content="Linux内存布局与C的内存布局使用C作为开发语言，最重要的就是指针，而指针就是一个指向内存的索引。理解Linux和C程序的内存布局是深入理解C语言开发和程序运行等原理的一个必要条件。">
+<meta name="twitter:image" content="https://cdn.jsdelivr.net/gh/sim41/pic/blog/memory-3.jpg">
+
+
+
+
+
+  
+  
+  <link rel="canonical" href="https://sim41.com/2019/12/02/memory/">
+
+
+
+<script id="page.configurations">
+  CONFIG.page = {
+    sidebar: "",
+  };
+</script>
+
+  <title>memory | Simest's Blog</title>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .motion-element,
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-title { opacity: initial; }
+
+  .use-motion .logo,
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Simest's Blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+    
+      
+        <p class="site-subtitle">Life and code</p>
+      
+    
+    
+  </div>
+
+  <div class="site-nav-toggle">
+    <button aria-label="切换导航栏">
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  
+    <ul id="menu" class="menu">
+      
+        
+        
+        
+          
+          <li class="menu-item menu-item-home">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/" rel="section"><i class="menu-item-icon fa fa-fw fa-home"></i> <br>首页</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-about">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/about/" rel="section"><i class="menu-item-icon fa fa-fw fa-user"></i> <br>关于</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-tags">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/tags/" rel="section"><i class="menu-item-icon fa fa-fw fa-tags"></i> <br>标签</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-categories">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/categories/" rel="section"><i class="menu-item-icon fa fa-fw fa-th"></i> <br>分类</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-archives">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/archives/" rel="section"><i class="menu-item-icon fa fa-fw fa-archive"></i> <br>归档</a>
+
+  </li>
+
+      
+      
+    </ul>
+  
+
+  
+    
+
+  
+
+  
+</nav>
+
+
+
+  
+
+
+
+</div>
+    </header>
+
+    
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://sim41.com/2019/12/02/memory/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Simest">
+      <meta itemprop="description" content="Focus on database/Linux/C/go/docker">
+      <meta itemprop="image" content="/images/avatar.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Simest's Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">memory
+
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2019-12-02 15:47:48" itemprop="dateCreated datePublished" datetime="2019-12-02T15:47:48+08:00">2019-12-02</time>
+            
+
+            
+              
+
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">更新于</span>
+                
+                <time title="修改时间：2020-03-17 05:36:02" itemprop="dateModified" datetime="2020-03-17T05:36:02+08:00">2020-03-17</time>
+              
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/c/" itemprop="url" rel="index"><span itemprop="name">c</span></a></span>
+
+                
+                
+                  ，
+                
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/c/底层原理/" itemprop="url" rel="index"><span itemprop="name">底层原理</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="Linux内存布局与C的内存布局"><a href="#Linux内存布局与C的内存布局" class="headerlink" title="Linux内存布局与C的内存布局"></a>Linux内存布局与C的内存布局</h1><p>使用C作为开发语言，最重要的就是指针，而指针就是一个指向内存的索引。理解Linux和C程序的内存布局是深入理解C语言开发和程序运行等原理的一个必要条件。</p>
+<a id="more"></a>
+
+<h2 id="Linux内存布局"><a href="#Linux内存布局" class="headerlink" title="Linux内存布局"></a>Linux内存布局</h2><h3 id="虚拟内存"><a href="#虚拟内存" class="headerlink" title="虚拟内存"></a>虚拟内存</h3><p>虚拟内存是操作系统对于内存的抽象，为进程对于内存的使用提供了易于使用的接口，将多进程使用内存的复杂性留给操作系统和硬件，内存使用者则可以以独占内存的方式进行开发使用。</p>
+<p>虚拟内存需要对应到实际的物理内存上才可以真正地分配使用，我们很容易（其实是站在设计好的前提下开上帝视角才容易）想到可以建立一个虚拟内存与物理内存的映射表，将虚拟的内存地址与物理内存对应起来，进程通过虚拟内存寻址、使用，实际的指令通过物理内存执行。CPU中的内存管理单元（Memory Management Unit，MMU）负责处理虚拟内存地址向物理地址的翻译工作。</p>
+<h3 id="分页和页表"><a href="#分页和页表" class="headerlink" title="分页和页表"></a>分页和页表</h3><p>32位系统中，地址的长度为32位，4字节；而在64位系统中，理论上地址的长度是64位，8字节，但是由于现在基本上用不到这么多的寻址空间，一般的64位CPU架构设计中都只使用了40位（4x位）来作为地址位，因此64位系统中也只采用了40位作为地址的长度，也就是5字节。一般在操作系统中，对于内存的最小标识单位为字节，也就是可以用32位表示字节地址，对应2^32Byte(4GB)内存；64位系统中，可以寻址40位对应2^40Byte(1TB)内存。</p>
+<p>操作系统需要对进程实现从虚拟内存到物理内存的映射，维护一个内存映射表，虚拟地址-&gt;物理地址，以32位系统为例，在极端情况下需要维护一个4GB地址-&gt;4GB地址的大映射表。解决这个问题，就要引入分级的方式，也就是内存的分页。操作系统以2^n作为一个内存页的大小，将内存分页，此时地址可以分为两部分，前一部分表示内存的页标号，后一部分表示页内的偏移量。</p>
+<p>其实写这里的时候我产生了一些困惑，即使采用了分页，维护的映射表大小难道不是一样的吗。后来又经过思考，这里的主要解决问题是：在运行大内存的进程时，物理内存是不够用的，这种情况下，暂时不用的部分写入磁盘中，活跃的部分取到内存中，因此需要维护一个很大的内存映射表。而分页就是解决这个问题的，就是将内存不再以Byte为基本单位，而是以2^nByte的页为基本单位，内存主要维护一个虚拟内存页-&gt;物理内存页的页表即可。而具体的地址，又可以通过页内的偏移量来查找。此时的页表就是远小于地址映射表的，相当于除以页的大小2^n。这样就说通了，同理也就可以产生分级页表这样进一步分隔的方法，也很容易想到采用hash等方式进行维护。</p>
+<p>而分页的另一个重要的优势，在于以页为单位进行块内存的分配，利于离散的内存分配，提高内存的利用率并减少内存分配的时间开销。</p>
+<p>至于缺页中断等问题，本文就不再探讨，可以在操作系统原理中进一步探究，这里仅为了理清内存布局简单提一下。</p>
+<h3 id="进程的内存"><a href="#进程的内存" class="headerlink" title="进程的内存"></a>进程的内存</h3><p>操作系统就是用户与硬件之间的一个过渡层，将硬件的复杂性屏蔽掉，并提供一些可以直接使用的接口。在内存分配方面，操作系统为进城提供了虚拟内存，使得进程可以认为自己是独占全部内存的，每一个进程都可以看作自己拥有全部的内存空间。</p>
+<h2 id="进程的内存布局"><a href="#进程的内存布局" class="headerlink" title="进程的内存布局"></a>进程的内存布局</h2><p>C的可执行程序在未执行时占用的存储空间分布如下，只包含了程序的代码部分和静态数据段部分。在未执行时，未初始化变量只存在名字与大小，并不真正占用空间。</p>
+<p><img src="https://cdn.jsdelivr.net/gh/sim41/pic/blog/memory-3.jpg" alt="静态存储"></p>
+<p>加载过程与进程的内存布局如下图所示，exec进程将程序的代码段和初始化变量加载到内存中，并将未初始化变量初始化为0。</p>
+<p><img src="https://cdn.jsdelivr.net/gh/sim41/pic/blog/memory-2.jpg" alt="进程加载"></p>
+<p>而加载到内存中的进程内存空间分布如下，从内存空间的低地址开始，存储空间的区域分别为保留区域、代码段、只读数据段，读写数据段、堆、栈、内核空间。</p>
+<p><img src="https://cdn.jsdelivr.net/gh/sim41/pic/blog/memory-1.jpg" alt="进程内存空间"></p>
+<h3 id="保留区域"><a href="#保留区域" class="headerlink" title="保留区域"></a>保留区域</h3><p>以4G内存32位寻址空间为例，0x08048000以下的地址是保留区域，这部分用于存储一些C库，动态加载器如ld.so和vdso等的映射地址。//TODO:需要进一步确认</p>
+<h3 id="静态区域"><a href="#静态区域" class="headerlink" title="静态区域"></a>静态区域</h3><p>一下两个部分是静态区域，在进程中一直存在。</p>
+<h4 id="只读区域"><a href="#只读区域" class="headerlink" title="只读区域"></a>只读区域</h4><p>这部分的权限是RO，即只读权限，包含了程序的二进制代码段(.Text)，和只读数据区(RO data)。只读数据区包含程序中的全局常量和字符串常量。</p>
+<h4 id="读写区域"><a href="#读写区域" class="headerlink" title="读写区域"></a>读写区域</h4><p>这部分的权限是RW，即可读可写权限。这部分包含未初始化变量和初始化变量BSS段(BSS,Block Started by Symbol。未初始化变量包括全局变量和静态变量(static修饰)。</p>
+<h3 id="动态区域"><a href="#动态区域" class="headerlink" title="动态区域"></a>动态区域</h3><p>动态区域的内存会随着进程的运行不断地进行分配和释放。</p>
+<h4 id="堆"><a href="#堆" class="headerlink" title="堆"></a>堆</h4><p>堆一般由开发者进行分配和释放，分配方式类似于链表，维护一个内存块的链表。手动分配的内存要注意释放，否则会出现内存泄漏。堆是自底向上增长的。</p>
+<h4 id="栈"><a href="#栈" class="headerlink" title="栈"></a>栈</h4><p>栈是由编译器自动进行分配和释放的，函数内部使用的变量、函数的参数以及返回值将使用栈空间。栈是自顶向下增长的。栈的分配是按块直接分配的，如果剩余空间足够，就直接进行分配，否则出现栈溢出错误。栈的分配与数据结构中栈的概念类似，遵循FILO原则。在函数调用时，第一个进栈的是主函数中函数调用后的下一条指令的地址，然后是函数的各个参数（在大多数的C编译器中，参数是从右往左入栈的），然后是局部变量。函数调用结束后，局部变量先出栈，然后是参数，最后栈顶指针指向最开始存的地址，读取主函数中的下一条指令。多层嵌套的函数逐级进行入栈出栈。</p>
+<h4 id="内存映射段"><a href="#内存映射段" class="headerlink" title="内存映射段"></a>内存映射段</h4><p>堆和栈的空间并不是直接连接的，中间存在一段空间，并且由于系统对于内存的保护机制，存在随机长度的偏移量。在这段空间中，存在内存映射段。内核将文件的内容直接映射到内存。进程可以通过Linux的mmap()系统调用或者Windows的CreateFileMapping()/MapViewOfFile()请求这种映射。内存映射是一种方便高效的文件I/O方式，所以它被用来加载动态库。创建一个不对应于任何文件的匿名内存映射也是可能的，此方法用于存放程序的数据。在Linux中，如果通过malloc()请求一块大内存，C运行库将会创建这样一个匿名映射而不是使用堆内存。大内存意味着比MMAP_THRESHOLD(缺省值128KB，可以通过mallocp()调整)还大。</p>
+<p>从内存空间的低地址开始，向上增长一次为保留区域，程序代码段(.TEXT)，</p>
+<h3 id="内核空间"><a href="#内核空间" class="headerlink" title="内核空间"></a>内核空间</h3><p>内核空间是所有进程共享的，归操作系统所有，进程从内核空间获取命令行参数和环境变量信息。</p>
+<h2 id="查看内存布局"><a href="#查看内存布局" class="headerlink" title="查看内存布局"></a>查看内存布局</h2><p>进程的内存布局可以通过查询进程pid对应的maps文件来查看，即文件/proc/pid/maps。nm 命令显示关于指定 文件中符号的信息， nm 命令缺省情况下报告十进制符号表示法下的数字值。objdump是显示关于目标文件的各种信息的命令行程序，可用作反汇编器来以汇编代码形式查看可执行文件。nm和objdump都可以查看程序的符号表，从而查看程序静态的内存分布情况。</p>
+<h2 id="参考："><a href="#参考：" class="headerlink" title="参考："></a>参考：</h2><p><a href="https://zhenbianshu.github.io/2018/11/understand_virtual_memory.html" target="_blank" rel="noopener">zhenbianshu-理解 Linux 的虚拟内存</a></p>
+<p><a href="https://www.jianshu.com/p/9534ba843f02" target="_blank" rel="noopener">关谷神奇-C语言的内存布局</a></p>
+<p><a href="https://blog.csdn.net/gatieme/article/details/43567433" target="_blank" rel="noopener">JeanCheng-C程序的内存布局(Memory Layout)</a></p>
+<p><a href="https://blog.csdn.net/wangxiaolong_china/article/details/6844325" target="_blank" rel="noopener">elite-进程地址空间分布</a></p>
+<p><a href="https://blog.csdn.net/czg13548930186/article/details/54882907" target="_blank" rel="noopener">图片来源: 种瓜大爷-典型C内存空间分布图</a></p>
+
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+      
+    
+    
+
+    
+      <div>
+        
+
+
+
+
+  
+
+
+
+<ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>本文作者： </strong>Simest</li>
+  <li class="post-copyright-link">
+    <strong>本文链接：</strong>
+    
+    <a href="https://sim41.com/2019/12/02/memory/" title="memory">https://sim41.com/2019/12/02/memory/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="noopener" target="_blank"><i class="fa fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！</li>
+</ul>
+
+      </div>
+    
+
+    <footer class="post-footer">
+      
+        
+          
+        
+        <div class="post-tags">
+          
+            <a href="/tags/c-操作系统/" rel="tag"># c, 操作系统</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2019/11/28/stub/" rel="next" title="stub">
+                <i class="fa fa-chevron-left"></i> stub
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2020/03/19/function/" rel="prev" title="function">
+                function <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+  </div>
+
+
+          </div>
+          
+
+  
+      <div class="comments" id="comments">
+        
+  <script src="https://utteranc.es/client.js" repo="sim41/comment" issue-term theme="github-light" crossorigin="anonymous" async>
+  </script>
+
+
+      </div>
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image" src="/images/avatar.png" alt="Simest">
+            
+              <p class="site-author-name" itemprop="name">Simest</p>
+              <div class="site-description motion-element" itemprop="description">Focus on database/Linux/C/go/docker</div>
+          </div>
+
+          
+            <nav class="site-state motion-element">
+              
+                <div class="site-state-item site-state-posts">
+                
+                  <a href="/archives/">
+                
+                    <span class="site-state-item-count">17</span>
+                    <span class="site-state-item-name">日志</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-categories">
+                  
+                    
+                      <a href="/categories/">
+                    
+                  
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">15</span>
+                    <span class="site-state-item-name">分类</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-tags">
+                  
+                    
+                      <a href="/tags/">
+                    
+                  
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">11</span>
+                    <span class="site-state-item-name">标签</span>
+                  </a>
+                </div>
+              
+            </nav>
+          
+
+          
+
+          
+
+          
+
+          
+             <div class="cc-license motion-element" itemprop="license">
+              
+              
+                
+              
+              
+              
+              <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" class="cc-opacity" rel="noopener" target="_blank"><img src="/images/cc-by-nc-sa.svg" alt="Creative Commons"></a>
+             </div>
+          
+
+          
+          
+
+          
+            
+          
+          
+
+        </div>
+      </div>
+
+      
+      <!--noindex-->
+        <div class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+            
+            
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Linux内存布局与C的内存布局"><span class="nav-number">1.</span> <span class="nav-text">Linux内存布局与C的内存布局</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Linux内存布局"><span class="nav-number">1.1.</span> <span class="nav-text">Linux内存布局</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#虚拟内存"><span class="nav-number">1.1.1.</span> <span class="nav-text">虚拟内存</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#分页和页表"><span class="nav-number">1.1.2.</span> <span class="nav-text">分页和页表</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#进程的内存"><span class="nav-number">1.1.3.</span> <span class="nav-text">进程的内存</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#进程的内存布局"><span class="nav-number">1.2.</span> <span class="nav-text">进程的内存布局</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#保留区域"><span class="nav-number">1.2.1.</span> <span class="nav-text">保留区域</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#静态区域"><span class="nav-number">1.2.2.</span> <span class="nav-text">静态区域</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#只读区域"><span class="nav-number">1.2.2.1.</span> <span class="nav-text">只读区域</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#读写区域"><span class="nav-number">1.2.2.2.</span> <span class="nav-text">读写区域</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#动态区域"><span class="nav-number">1.2.3.</span> <span class="nav-text">动态区域</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#堆"><span class="nav-number">1.2.3.1.</span> <span class="nav-text">堆</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#栈"><span class="nav-number">1.2.3.2.</span> <span class="nav-text">栈</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#内存映射段"><span class="nav-number">1.2.3.3.</span> <span class="nav-text">内存映射段</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#内核空间"><span class="nav-number">1.2.4.</span> <span class="nav-text">内核空间</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#查看内存布局"><span class="nav-number">1.3.</span> <span class="nav-text">查看内存布局</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#参考："><span class="nav-number">1.4.</span> <span class="nav-text">参考：</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </div>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+  
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; 2019 – <span itemprop="copyrightYear">2020</span>
+  <span class="with-love" id="animate">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Simest</span>
+
+  
+
+  
+</div>
+
+
+
+
+
+
+
+
+
+        
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+    
+
+    
+  </div>
+
+  
+
+<script>
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script src="/lib/jquery/index.js?v=3.4.1"></script>
+
+  
+  <script src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+
+  
+
+
+  <script src="/js/utils.js?v=7.1.2"></script>
+
+  <script src="/js/motion.js?v=7.1.2"></script>
+
+
+
+  
+  
+
+
+  <script src="/js/schemes/muse.js?v=7.1.2"></script>
+
+
+
+  
+  <script src="/js/scrollspy.js?v=7.1.2"></script>
+<script src="/js/post-details.js?v=7.1.2"></script>
+
+
+
+  
+
+
+  <script src="/js/next-boot.js?v=7.1.2"></script>
+
+
+  
+
+  
+
+  
+
+  
+
+
+  
+
+
+  
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

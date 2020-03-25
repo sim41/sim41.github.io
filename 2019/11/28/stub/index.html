@@ -1,0 +1,992 @@
+<!DOCTYPE html>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+<html class="theme-next muse use-motion" lang="zh-CN">
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css?v=4.7.0">
+
+<link rel="stylesheet" href="/css/main.css?v=7.1.2">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=7.1.2">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=7.1.2">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=7.1.2">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=7.1.2" color="#222">
+
+
+
+
+
+
+
+<script id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Muse',
+    version: '7.1.2',
+    sidebar: {"position":"left","display":"post","offset":12,"onmobile":false,"dimmer":false},
+    back2top: true,
+    back2top_sidebar: false,
+    fancybox: false,
+    fastclick: false,
+    lazyload: false,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+  
+
+
+
+
+  <meta name="description" content="函数打桩函数打桩，就是将一个函数用另一个函数实现(桩代码)进行替换，以达到在原有函数入口的位置执行新的实现。函数打桩类似于Windows系统中的钩子Hook，不过Hook针对的是事件，这里针对的是函数，或者说是函数的入口。在做C的Cunit单元测试时，遇到了这样的概念，在此梳理一下。">
+<meta name="keywords" content="c">
+<meta property="og:type" content="article">
+<meta property="og:title" content="stub">
+<meta property="og:url" content="https://sim41.com/2019/11/28/stub/index.html">
+<meta property="og:site_name" content="Simest&#39;s Blog">
+<meta property="og:description" content="函数打桩函数打桩，就是将一个函数用另一个函数实现(桩代码)进行替换，以达到在原有函数入口的位置执行新的实现。函数打桩类似于Windows系统中的钩子Hook，不过Hook针对的是事件，这里针对的是函数，或者说是函数的入口。在做C的Cunit单元测试时，遇到了这样的概念，在此梳理一下。">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/sim41/pic/blog/Cunit.jpg">
+<meta property="og:updated_time" content="2020-03-25T09:22:51.957Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="stub">
+<meta name="twitter:description" content="函数打桩函数打桩，就是将一个函数用另一个函数实现(桩代码)进行替换，以达到在原有函数入口的位置执行新的实现。函数打桩类似于Windows系统中的钩子Hook，不过Hook针对的是事件，这里针对的是函数，或者说是函数的入口。在做C的Cunit单元测试时，遇到了这样的概念，在此梳理一下。">
+<meta name="twitter:image" content="https://cdn.jsdelivr.net/gh/sim41/pic/blog/Cunit.jpg">
+
+
+
+
+
+  
+  
+  <link rel="canonical" href="https://sim41.com/2019/11/28/stub/">
+
+
+
+<script id="page.configurations">
+  CONFIG.page = {
+    sidebar: "",
+  };
+</script>
+
+  <title>stub | Simest's Blog</title>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .motion-element,
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-title { opacity: initial; }
+
+  .use-motion .logo,
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Simest's Blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+    
+      
+        <p class="site-subtitle">Life and code</p>
+      
+    
+    
+  </div>
+
+  <div class="site-nav-toggle">
+    <button aria-label="切换导航栏">
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  
+    <ul id="menu" class="menu">
+      
+        
+        
+        
+          
+          <li class="menu-item menu-item-home">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/" rel="section"><i class="menu-item-icon fa fa-fw fa-home"></i> <br>首页</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-about">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/about/" rel="section"><i class="menu-item-icon fa fa-fw fa-user"></i> <br>关于</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-tags">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/tags/" rel="section"><i class="menu-item-icon fa fa-fw fa-tags"></i> <br>标签</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-categories">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/categories/" rel="section"><i class="menu-item-icon fa fa-fw fa-th"></i> <br>分类</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-archives">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/archives/" rel="section"><i class="menu-item-icon fa fa-fw fa-archive"></i> <br>归档</a>
+
+  </li>
+
+      
+      
+    </ul>
+  
+
+  
+    
+
+  
+
+  
+</nav>
+
+
+
+  
+
+
+
+</div>
+    </header>
+
+    
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://sim41.com/2019/11/28/stub/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Simest">
+      <meta itemprop="description" content="Focus on database/Linux/C/go/docker">
+      <meta itemprop="image" content="/images/avatar.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Simest's Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">stub
+
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2019-11-28 15:53:18" itemprop="dateCreated datePublished" datetime="2019-11-28T15:53:18+08:00">2019-11-28</time>
+            
+
+            
+              
+
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">更新于</span>
+                
+                <time title="修改时间：2020-03-25 17:22:51" itemprop="dateModified" datetime="2020-03-25T17:22:51+08:00">2020-03-25</time>
+              
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/c/" itemprop="url" rel="index"><span itemprop="name">c</span></a></span>
+
+                
+                
+                  ，
+                
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/c/底层原理/" itemprop="url" rel="index"><span itemprop="name">底层原理</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="函数打桩"><a href="#函数打桩" class="headerlink" title="函数打桩"></a>函数打桩</h1><p>函数打桩，就是将一个函数用另一个函数实现(桩代码)进行替换，以达到在原有函数入口的位置执行新的实现。函数打桩类似于Windows系统中的钩子Hook，不过Hook针对的是事件，这里针对的是函数，或者说是函数的入口。在做C的Cunit单元测试时，遇到了这样的概念，在此梳理一下。</p>
+<a id="more"></a>
+
+<h2 id="目的"><a href="#目的" class="headerlink" title="目的"></a>目的</h2><p>函数打桩的目的一般是隔离、占位和控制，这里是参考其他博主的文章进行的大概分类，其实也不是很严格。</p>
+<p>隔离就是将复杂的函数从程序中隔离，比如一个复杂的嵌套函数，如果只想要知道前几步的运行结果，则可以在调用下一层函数时替换一个简单的实现，甚至直接return。在进行流程的测试时比较常见。</p>
+<p>占位就是对一些未实现的函数进行占位，多见于协同开发中，对于其他人完成的函数可以先使用空函数进行占位。</p>
+<p>控制就是将原本的函数功能进行替换，控制流程。如在测试中，替换函数部分内容得到需要的结果，以进行单元测试。或者对一些系统函数进行替换，实现自己的功能。如常见的将内存分配的函数替换为自己重写的内存池分配等，这里就是一个函数Hook。</p>
+<h2 id="方法"><a href="#方法" class="headerlink" title="方法"></a>方法</h2><h3 id="编译时打桩"><a href="#编译时打桩" class="headerlink" title="编译时打桩"></a>编译时打桩</h3><p>用宏定义#define，在预处理时进行字符串替换，将原函数定义成桩函数的形式。同时可以使用条件编译来控制编译选项。</p>
+<h3 id="链接时打桩"><a href="#链接时打桩" class="headerlink" title="链接时打桩"></a>链接时打桩</h3><p>将桩函数定义到新的库文件中，并在原代码基础上增加条件编译选项，屏蔽原有的库，采用桩函数库。</p>
+<h3 id="运行时打桩"><a href="#运行时打桩" class="headerlink" title="运行时打桩"></a>运行时打桩</h3><p>运行时打桩是对内存的应用，我们知道程序的函数是在代码段中存储，一个函数的操作对应一个栈帧的存储地址，如果在调用函数时，在一旦访问这个栈帧，我们就使它跳转到我们需要的桩函数去，那么也就实现了函数的打桩。这种方法要复杂一点，但是不需要对原有的代码进行修改，而是额外增加了打桩和还原的操作，在进行单元测试时也常用。</p>
+<p>简单来说，就是读取到原函数指令的地址，并读取桩函数的地址，并使用jmp命令从原函数跳转到桩函数去，以实现打桩。</p>
+<p>一个完整的打桩流程应该分为装载和卸载，因此需要做到的是记录原函数的函数指针，记录桩函数的函数指针，计算地址差值，调用jmp指令，完成桩函数的装载。使用完成后，再删除jmp指令，恢复原函数。此间由于操作系统对于进程的保护机制，可能存在对于进程内存的解锁和权限设置，将指定内存区域设定为可读可写可操作的权限。</p>
+<h4 id="数据结构"><a href="#数据结构" class="headerlink" title="数据结构"></a>数据结构</h4><p>设定一个链表用于存储原函数、桩函数之间的对应关系，使用链表是为了动态分配同时记录多个函数。数据结构如下：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">stub</span> &#123;</span></span><br><span class="line">	<span class="class"><span class="keyword">struct</span> <span class="title">stub</span> *<span class="title">node</span>;</span></span><br><span class="line">	<span class="keyword">void</span> *orig_f;						<span class="comment">//原函数的函数指针</span></span><br><span class="line">	<span class="keyword">void</span> *stub_f;						<span class="comment">//桩函数的函数指针</span></span><br><span class="line">	<span class="keyword">unsigned</span> <span class="keyword">int</span> old_flg;		<span class="comment">//存储原有内存的权限</span></span><br><span class="line">	<span class="keyword">unsigned</span> <span class="keyword">char</span> assm[<span class="number">5</span>];	<span class="comment">//用于暂存原函数起始的5字节指令，用于被jmp指令(0xE9 + 4bytes地址)覆盖后恢复</span></span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<h4 id="设置内存的保护属性"><a href="#设置内存的保护属性" class="headerlink" title="设置内存的保护属性"></a>设置内存的保护属性</h4><p>在Linux下，在<figure class="highlight plain"><figcaption><span><sys mmap.h>```中的mprotect()函数可以用于更改指定内存区域的保护属性。</sys></span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">原型为：</span><br><span class="line"></span><br><span class="line">```c</span><br><span class="line">int mprotect(void *addr, size_t len, int prot);</span><br><span class="line">//addr为内存起始地址，必须是内存页的起始地址</span><br><span class="line">//len为内存区域长度,以字节为单位，必须是页大小的整数倍</span><br><span class="line">//prot为权限值，类似于Linux的权限值</span><br></pre></td></tr></table></figure></p>
+<p>同样，在Windows下，采用<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">读取系统的页大小:</span><br><span class="line"></span><br><span class="line">```c</span><br><span class="line">#include &lt;unistd.h&gt;</span><br><span class="line">long pagesize = sysconf(_SC_PAGESIZE);</span><br></pre></td></tr></table></figure></p>
+<p>计算内存页的起始地址：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">static</span> <span class="keyword">inline</span> <span class="keyword">void</span> *<span class="title">pageof</span><span class="params">(<span class="keyword">const</span> <span class="keyword">void</span>* p)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">        <span class="keyword">return</span> (<span class="keyword">void</span> *)((<span class="keyword">unsigned</span> <span class="keyword">long</span>)p &amp; ~(pagesize - <span class="number">1</span>));</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h4 id="安装桩函数"><a href="#安装桩函数" class="headerlink" title="安装桩函数"></a>安装桩函数</h4><p>计算原函数与桩函数地址的偏移量，将原函数的入口5字节指令替换为jmp [offset]，同时缓存原本的5字节，用于后续的恢复。</p>
+<p>jmp指令对应0xE9，后续为4字节的偏移量。</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">install_stub</span><span class="params">(<span class="keyword">void</span> *orig_f, <span class="keyword">void</span> *stub_f)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">  <span class="comment">//初始化stub数据结构</span></span><br><span class="line">  <span class="class"><span class="keyword">struct</span> <span class="title">stub</span> *<span class="title">pstub</span> = <span class="title">calloc</span>(1, <span class="title">sizeof</span>(<span class="title">struct</span> <span class="title">stub</span>));</span></span><br><span class="line">  pstub-&gt;orig_f = orig_f;</span><br><span class="line">  pstub-&gt;stub_f = stub_f;</span><br><span class="line">  </span><br><span class="line">  <span class="comment">//设置内存保护属性</span></span><br><span class="line">  <span class="keyword">if</span> (<span class="number">-1</span> == mprotect(pageof(orig_f), pagesize * <span class="number">2</span>, PROT_READ | PROT_WRITE | PROT_EXEC))</span><br><span class="line">    &#123;</span><br><span class="line">        perror(<span class="string">"mprotect to w+r+x faild"</span>);</span><br><span class="line">        <span class="built_in">exit</span>(errno);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">  <span class="comment">//缓存原函数orig_f头部的5字节指令</span></span><br><span class="line">  <span class="built_in">memcpy</span>(pstub-&gt;assm, pstub-&gt;orig_f, <span class="keyword">sizeof</span>(pstub-&gt;assm));</span><br><span class="line">  <span class="comment">//将头部重写为jmp [offset]</span></span><br><span class="line">  *((<span class="keyword">char</span>*)pstub-&gt;orig_f) = <span class="number">0xE9</span>;</span><br><span class="line">  offset = (<span class="keyword">unsigned</span> <span class="keyword">int</span>)((<span class="keyword">long</span>)pstub-&gt;stub_f - ((<span class="keyword">long</span>)pstub-&gt;orig_f + <span class="number">5</span>));</span><br><span class="line">  *((<span class="keyword">unsigned</span> <span class="keyword">int</span>*)((<span class="keyword">char</span>*)pstub-&gt;orig_f + <span class="number">1</span>)) = offset;</span><br><span class="line">  </span><br><span class="line">  <span class="comment">//如果有多线程同时操作，加锁</span></span><br><span class="line">  <span class="comment">//lock()；</span></span><br><span class="line">  </span><br><span class="line">  <span class="comment">//如果对多个函数打桩，维护struct stub 链表</span></span><br><span class="line">  <span class="comment">//list_add(&amp;ptsub-&gt;node, &amp;head)；</span></span><br><span class="line">  </span><br><span class="line">  <span class="comment">//unlock();</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h4 id="卸载桩函数"><a href="#卸载桩函数" class="headerlink" title="卸载桩函数"></a>卸载桩函数</h4><p>将原函数开始的5字节恢复，并释放stub结构</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">uninstall_stub</span><span class="params">(<span class="keyword">void</span> *stub_f)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">  <span class="comment">//从桩函数链表中找到要释放的桩函数对应的数据结构</span></span><br><span class="line">  <span class="class"><span class="keyword">struct</span> <span class="title">stub</span> *<span class="title">pstub</span> = <span class="title">NULL</span>:</span></span><br><span class="line">  pstub = find_pstub(stub_f);</span><br><span class="line">  </span><br><span class="line">  <span class="comment">//设置内存保护属性</span></span><br><span class="line">  mprotect(pageof(pstub-&gt;orig_f), pagesize * <span class="number">2</span>, PROT_READ | PROT_WRITE | PROT_EXEC);</span><br><span class="line">  </span><br><span class="line">  <span class="comment">//恢复原函数的初始5字节指令</span></span><br><span class="line">  <span class="built_in">memcpy</span>(pstub-&gt;orig_f, pstub-&gt;assm, <span class="keyword">sizeof</span>(pstub-&gt;assm));</span><br><span class="line">  </span><br><span class="line">  <span class="comment">//删除节点</span></span><br><span class="line">  del_node(pstub)；</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>上述代码只包含了关键代码，部分声明省略，并未对异常情况进行处理。</p>
+<h2 id="进程内存安全"><a href="#进程内存安全" class="headerlink" title="进程内存安全"></a>进程内存安全</h2><p>这里的函数打桩利用jmp指令将原有的函数入口跳转到了我们指定的桩函数入口，自然会想到在非法情况下，也利用jmp将原本的函数跳转到指定的函数去。其实这也是一些病毒的做法，跳转到非法代码；或者一些软件破解的方法，将原本的验证机制跳转屏蔽。只不过我们打桩时是在同一进程内部进行了跳转，且是在获取源码到情况下进行的。而在破解和攻击时，一般只有可执行文件的二进制代码，此时可以通过反汇编得到程序的汇编指令，并找到需要修改的函数入口。在攻击时，也存在另外一个问题，就是跨进程的权限，在进程外对进程的内存进行修改。</p>
+<p>操作系统对内存的保护，采取了虚拟地址空间（进程独立的虚拟内存），内存起点的随机偏移量（不能找到代码段段入口）等方式。而且mprotect()仅可以对同一进程的内存块进行修改。如果想要修改其他进程的内存块的保护属性，就要从两个方面下手，一是变成同一个进程，另一个则是对mprotect()动手脚。</p>
+<p>当成同一个进程，可以使用代码注入，让我们的攻击代码从进程自身发出，则我们的代码就有了通过mprotect改变进程保护属性的权限。</p>
+<p>而对mprotect()做手脚，即实现我们自己的mprotect()函数，让其模仿内核函数的行为，但是却拥有跨进程的能力。这就要编写一个类似于mprotect()函数功能的内核模块。</p>
+<p>具体的操作暂时还没有深入了解，原理如上述所示。</p>
+<h2 id="Cunit的使用"><a href="#Cunit的使用" class="headerlink" title="Cunit的使用"></a>Cunit的使用</h2><p>CUnit是一个C语言的单元测试框架，以静态链接库的形式，连接到用户代码中。提供了语义丰富的断言和多种测试结果输出接口，可以方便地生成测试报告。可以结合 gcov/lcov等生成测试覆盖度报表。</p>
+<h3 id="结构"><a href="#结构" class="headerlink" title="结构"></a>结构</h3><p>Cunit的结构基本如下图所示，分为三层，第一层是总的测试入口，第二层是测试包，第三层是测试用例。然后通过一系列的断言展示测试结果。</p>
+<p><img src="https://cdn.jsdelivr.net/gh/sim41/pic/blog/Cunit.jpg" alt="Cunit结构">)</p>
+<h3 id="基本流程"><a href="#基本流程" class="headerlink" title="基本流程"></a>基本流程</h3><ol>
+<li>编写待测函数对应的测试函数（如果必要，需要写suite的init/cleanup函数）</li>
+<li>初始化Test Registry - CU_initialize_registry()</li>
+<li>把测试包（Test Suites）加入到Test Registry - CU_add_suite()</li>
+<li>把测试用例（Test Case）加入到测试包当中 - CU_add_test()</li>
+<li>使用适当的接口来运行测试测试程序，例如 CU_console_run_tests()</li>
+<li>清除Test Registry - CU_cleanup_registry()</li>
+</ol>
+<h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><p><a href="https://blog.csdn.net/wangwencong/article/details/8189778" target="_blank" rel="noopener">wangwencong-认识单元测试中的打桩</a></p>
+<p><a href="https://www.yanbinghu.com/2019/07/28/59484.html" target="_blank" rel="noopener">守望-库打桩机制-偷梁换柱</a></p>
+<p><a href="https://m.2cto.com/kf/201708/667113.html" target="_blank" rel="noopener">一种C语言”打桩”的源码实现</a></p>
+<p><a href="https://www.freebuf.com/articles/system/191865.html" target="_blank" rel="noopener">Covfefe-深入Linux | 如何在任意进程中修改内存保护（含PoC）</a></p>
+<p><a href="https://promisechen.github.io/kbase/cunit.html" target="_blank" rel="noopener">陈令祥-CUnit测试工具</a></p>
+
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+      
+    
+    
+
+    
+      <div>
+        
+
+
+
+
+  
+
+
+
+<ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>本文作者： </strong>Simest</li>
+  <li class="post-copyright-link">
+    <strong>本文链接：</strong>
+    
+    <a href="https://sim41.com/2019/11/28/stub/" title="stub">https://sim41.com/2019/11/28/stub/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="noopener" target="_blank"><i class="fa fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！</li>
+</ul>
+
+      </div>
+    
+
+    <footer class="post-footer">
+      
+        
+          
+        
+        <div class="post-tags">
+          
+            <a href="/tags/c/" rel="tag"># c</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2019/11/06/protocol/" rel="next" title="protocol">
+                <i class="fa fa-chevron-left"></i> protocol
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2019/12/02/memory/" rel="prev" title="memory">
+                memory <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+  </div>
+
+
+          </div>
+          
+
+  
+      <div class="comments" id="comments">
+        
+  <script src="https://utteranc.es/client.js" repo="sim41/comment" issue-term theme="github-light" crossorigin="anonymous" async>
+  </script>
+
+
+      </div>
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image" src="/images/avatar.png" alt="Simest">
+            
+              <p class="site-author-name" itemprop="name">Simest</p>
+              <div class="site-description motion-element" itemprop="description">Focus on database/Linux/C/go/docker</div>
+          </div>
+
+          
+            <nav class="site-state motion-element">
+              
+                <div class="site-state-item site-state-posts">
+                
+                  <a href="/archives/">
+                
+                    <span class="site-state-item-count">17</span>
+                    <span class="site-state-item-name">日志</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-categories">
+                  
+                    
+                      <a href="/categories/">
+                    
+                  
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">15</span>
+                    <span class="site-state-item-name">分类</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-tags">
+                  
+                    
+                      <a href="/tags/">
+                    
+                  
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">11</span>
+                    <span class="site-state-item-name">标签</span>
+                  </a>
+                </div>
+              
+            </nav>
+          
+
+          
+
+          
+
+          
+
+          
+             <div class="cc-license motion-element" itemprop="license">
+              
+              
+                
+              
+              
+              
+              <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" class="cc-opacity" rel="noopener" target="_blank"><img src="/images/cc-by-nc-sa.svg" alt="Creative Commons"></a>
+             </div>
+          
+
+          
+          
+
+          
+            
+          
+          
+
+        </div>
+      </div>
+
+      
+      <!--noindex-->
+        <div class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+            
+            
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#函数打桩"><span class="nav-number">1.</span> <span class="nav-text">函数打桩</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#目的"><span class="nav-number">1.1.</span> <span class="nav-text">目的</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#方法"><span class="nav-number">1.2.</span> <span class="nav-text">方法</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#编译时打桩"><span class="nav-number">1.2.1.</span> <span class="nav-text">编译时打桩</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#链接时打桩"><span class="nav-number">1.2.2.</span> <span class="nav-text">链接时打桩</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#运行时打桩"><span class="nav-number">1.2.3.</span> <span class="nav-text">运行时打桩</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#数据结构"><span class="nav-number">1.2.3.1.</span> <span class="nav-text">数据结构</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#设置内存的保护属性"><span class="nav-number">1.2.3.2.</span> <span class="nav-text">设置内存的保护属性</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#安装桩函数"><span class="nav-number">1.2.3.3.</span> <span class="nav-text">安装桩函数</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#卸载桩函数"><span class="nav-number">1.2.3.4.</span> <span class="nav-text">卸载桩函数</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#进程内存安全"><span class="nav-number">1.3.</span> <span class="nav-text">进程内存安全</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Cunit的使用"><span class="nav-number">1.4.</span> <span class="nav-text">Cunit的使用</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#结构"><span class="nav-number">1.4.1.</span> <span class="nav-text">结构</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#基本流程"><span class="nav-number">1.4.2.</span> <span class="nav-text">基本流程</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#参考"><span class="nav-number">1.5.</span> <span class="nav-text">参考</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </div>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+  
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; 2019 – <span itemprop="copyrightYear">2020</span>
+  <span class="with-love" id="animate">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Simest</span>
+
+  
+
+  
+</div>
+
+
+
+
+
+
+
+
+
+        
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+    
+
+    
+  </div>
+
+  
+
+<script>
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script src="/lib/jquery/index.js?v=3.4.1"></script>
+
+  
+  <script src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+
+  
+
+
+  <script src="/js/utils.js?v=7.1.2"></script>
+
+  <script src="/js/motion.js?v=7.1.2"></script>
+
+
+
+  
+  
+
+
+  <script src="/js/schemes/muse.js?v=7.1.2"></script>
+
+
+
+  
+  <script src="/js/scrollspy.js?v=7.1.2"></script>
+<script src="/js/post-details.js?v=7.1.2"></script>
+
+
+
+  
+
+
+  <script src="/js/next-boot.js?v=7.1.2"></script>
+
+
+  
+
+  
+
+  
+
+  
+
+
+  
+
+
+  
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
