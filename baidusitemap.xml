@@ -1,6 +1,36 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
+    <loc>https://sim41.com/2021/01/08/todo-in-2021/</loc>
+    <lastmod>2021-01-08</lastmod>
+  </url>  <url>
+    <loc>https://sim41.com/2020/03/19/update-in-2020/</loc>
+    <lastmod>2021-01-08</lastmod>
+  </url>  <url>
+    <loc>https://sim41.com/2020/03/25/C-OOP/</loc>
+    <lastmod>2020-08-24</lastmod>
+  </url>  <url>
+    <loc>https://sim41.com/2020/08/24/dbfeature/</loc>
+    <lastmod>2020-08-24</lastmod>
+  </url>  <url>
+    <loc>https://sim41.com/2020/08/16/raft/</loc>
+    <lastmod>2020-08-16</lastmod>
+  </url>  <url>
+    <loc>https://sim41.com/2020/04/14/dbarch/</loc>
+    <lastmod>2020-04-13</lastmod>
+  </url>  <url>
+    <loc>https://sim41.com/2020/03/31/dbstorage/</loc>
+    <lastmod>2020-04-13</lastmod>
+  </url>  <url>
+    <loc>https://sim41.com/2020/03/25/excel2db/</loc>
+    <lastmod>2020-03-31</lastmod>
+  </url>  <url>
+    <loc>https://sim41.com/2019/06/17/mysql-charset/</loc>
+    <lastmod>2020-03-30</lastmod>
+  </url>  <url>
+    <loc>https://sim41.com/2020/03/25/serialization/</loc>
+    <lastmod>2020-03-30</lastmod>
+  </url>  <url>
     <loc>https://sim41.com/2019/11/28/stub/</loc>
     <lastmod>2020-03-25</lastmod>
   </url>  <url>
@@ -9,9 +39,6 @@
   </url>  <url>
     <loc>https://sim41.com/2020/03/19/function/</loc>
     <lastmod>2020-03-21</lastmod>
-  </url>  <url>
-    <loc>https://sim41.com/2020/03/19/update-in-2020/</loc>
-    <lastmod>2020-03-18</lastmod>
   </url>  <url>
     <loc>https://sim41.com/2019/12/02/memory/</loc>
     <lastmod>2020-03-16</lastmod>
@@ -36,9 +63,6 @@
   </url>  <url>
     <loc>https://sim41.com/2019/06/18/tls/</loc>
     <lastmod>2019-07-27</lastmod>
-  </url>  <url>
-    <loc>https://sim41.com/2019/06/17/mysql-charset/</loc>
-    <lastmod>2019-07-10</lastmod>
   </url>  <url>
     <loc>https://sim41.com/2019/06/20/openssh/</loc>
     <lastmod>2019-06-20</lastmod>

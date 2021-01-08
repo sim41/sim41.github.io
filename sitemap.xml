@@ -2,6 +2,76 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>https://sim41.com/2021/01/08/todo-in-2021/</loc>
+    
+    <lastmod>2021-01-08T03:13:01.096Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>https://sim41.com/2020/03/19/update-in-2020/</loc>
+    
+    <lastmod>2021-01-08T01:42:26.182Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>https://sim41.com/2020/03/25/C-OOP/</loc>
+    
+    <lastmod>2020-08-24T06:09:13.879Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>https://sim41.com/2020/08/24/dbfeature/</loc>
+    
+    <lastmod>2020-08-24T06:09:08.181Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>https://sim41.com/2020/08/16/raft/</loc>
+    
+    <lastmod>2020-08-16T07:36:52.414Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>https://sim41.com/2020/04/14/dbarch/</loc>
+    
+    <lastmod>2020-04-13T22:01:40.898Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>https://sim41.com/2020/03/31/dbstorage/</loc>
+    
+    <lastmod>2020-04-13T21:15:25.778Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>https://sim41.com/2020/03/25/excel2db/</loc>
+    
+    <lastmod>2020-03-31T03:39:52.410Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>https://sim41.com/2019/06/17/mysql-charset/</loc>
+    
+    <lastmod>2020-03-30T20:37:00.064Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>https://sim41.com/2020/03/25/serialization/</loc>
+    
+    <lastmod>2020-03-30T20:36:03.626Z</lastmod>
+    
+  </url>
+  
+  <url>
     <loc>https://sim41.com/2019/11/28/stub/</loc>
     
     <lastmod>2020-03-25T09:22:51.957Z</lastmod>
@@ -19,13 +89,6 @@
     <loc>https://sim41.com/2020/03/19/function/</loc>
     
     <lastmod>2020-03-21T21:14:54.962Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>https://sim41.com/2020/03/19/update-in-2020/</loc>
-    
-    <lastmod>2020-03-18T19:56:35.777Z</lastmod>
     
   </url>
   
@@ -82,13 +145,6 @@
     <loc>https://sim41.com/2019/06/18/tls/</loc>
     
     <lastmod>2019-07-27T06:00:23.709Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>https://sim41.com/2019/06/17/mysql-charset/</loc>
-    
-    <lastmod>2019-07-10T08:21:49.988Z</lastmod>
     
   </url>
   

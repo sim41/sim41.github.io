@@ -1,0 +1,947 @@
+<!DOCTYPE html>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+<html class="theme-next muse use-motion" lang="zh-CN">
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css?v=4.7.0">
+
+<link rel="stylesheet" href="/css/main.css?v=7.1.2">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=7.1.2">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=7.1.2">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=7.1.2">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=7.1.2" color="#222">
+
+
+
+
+
+
+
+<script id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Muse',
+    version: '7.1.2',
+    sidebar: {"position":"left","display":"post","offset":12,"onmobile":false,"dimmer":false},
+    back2top: true,
+    back2top_sidebar: false,
+    fancybox: false,
+    fastclick: false,
+    lazyload: false,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+  
+
+
+
+
+  <meta name="description" content="数据库乱谈（二）——数据形式数据库首先能满足的需求，肯定是存数据，这一篇就讲一下数据库如何存数据，数据应该是怎样的形式。">
+<meta name="keywords" content="数据库原理">
+<meta property="og:type" content="article">
+<meta property="og:title" content="dbstorage">
+<meta property="og:url" content="https://sim41.com/2020/03/31/dbstorage/index.html">
+<meta property="og:site_name" content="Simest&#39;s Blog">
+<meta property="og:description" content="数据库乱谈（二）——数据形式数据库首先能满足的需求，肯定是存数据，这一篇就讲一下数据库如何存数据，数据应该是怎样的形式。">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2020-04-13T21:15:25.778Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="dbstorage">
+<meta name="twitter:description" content="数据库乱谈（二）——数据形式数据库首先能满足的需求，肯定是存数据，这一篇就讲一下数据库如何存数据，数据应该是怎样的形式。">
+
+
+
+
+
+  
+  
+  <link rel="canonical" href="https://sim41.com/2020/03/31/dbstorage/">
+
+
+
+<script id="page.configurations">
+  CONFIG.page = {
+    sidebar: "",
+  };
+</script>
+
+  <title>dbstorage | Simest's Blog</title>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .motion-element,
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-title { opacity: initial; }
+
+  .use-motion .logo,
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Simest's Blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+    
+      
+        <p class="site-subtitle">Life and code</p>
+      
+    
+    
+  </div>
+
+  <div class="site-nav-toggle">
+    <button aria-label="切换导航栏">
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  
+    <ul id="menu" class="menu">
+      
+        
+        
+        
+          
+          <li class="menu-item menu-item-home">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/" rel="section"><i class="menu-item-icon fa fa-fw fa-home"></i> <br>首页</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-about">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/about/" rel="section"><i class="menu-item-icon fa fa-fw fa-user"></i> <br>关于</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-tags">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/tags/" rel="section"><i class="menu-item-icon fa fa-fw fa-tags"></i> <br>标签</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-categories">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/categories/" rel="section"><i class="menu-item-icon fa fa-fw fa-th"></i> <br>分类</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-archives">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/archives/" rel="section"><i class="menu-item-icon fa fa-fw fa-archive"></i> <br>归档</a>
+
+  </li>
+
+      
+      
+    </ul>
+  
+
+  
+    
+
+  
+
+  
+</nav>
+
+
+
+  
+
+
+
+</div>
+    </header>
+
+    
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://sim41.com/2020/03/31/dbstorage/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Simest">
+      <meta itemprop="description" content="Focus on database/Linux/C/go/docker">
+      <meta itemprop="image" content="/images/avatar.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Simest's Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">dbstorage
+
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2020-03-31 23:14:14" itemprop="dateCreated datePublished" datetime="2020-03-31T23:14:14+08:00">2020-03-31</time>
+            
+
+            
+              
+
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">更新于</span>
+                
+                <time title="修改时间：2020-04-14 05:15:25" itemprop="dateModified" datetime="2020-04-14T05:15:25+08:00">2020-04-14</time>
+              
+            
+          </span>
+
+          
+
+          
+            
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="数据库乱谈（二）——数据形式"><a href="#数据库乱谈（二）——数据形式" class="headerlink" title="数据库乱谈（二）——数据形式"></a>数据库乱谈（二）——数据形式</h1><p>数据库首先能满足的需求，肯定是存数据，这一篇就讲一下数据库如何存数据，数据应该是怎样的形式。</p>
+<a id="more"></a>
+
+<h2 id="文本形式"><a href="#文本形式" class="headerlink" title="文本形式"></a>文本形式</h2><p>我们很容易想到以文本的形式保存数据，就像我们日常生活中具体的数据，以文本的形式呈现出来，记录下来。可以使用我们常见的csv或者json形式的文本将数据存储下来。但此时的数据是离散的，直观但是不产生关联。</p>
+<h2 id="表格形式"><a href="#表格形式" class="headerlink" title="表格形式"></a>表格形式</h2><p>这里需要引入一个概念，由埃德加·科德提出的关系模型(Relational Model)。简单来说，这个经典的理论，假定所有的数据都表示为数学中的关系。数据以元组的形式存在，数据的范围是一个域或者叫数据类型，因而每个元组也就是一个数据单元都对应着一些数据类型，这些数据类型就是数据的属性。具有某些属性的元组排列在一起就形成了关系。关于关系代数等问题会在后续的关于sql语言的文章中进行详细说明。这里只要明确一个理论基础，数据的基础单位是元组，每个元组具有一定的属性，元组的集合形成关系。</p>
+<p>这样我们也比较容易的想到，在简单一些的二元关系中，数据的存储可以以表格的方式呈现，数据基本单位元组对应行数据，属性对应列属性，元组的集合关系对应一张表。这样呈现出来的数据类似于我们平时使用的二元表格或者Excel中表格的数据表的形式。</p>
+<p>现在数据产生了一定的对应关系，更加直观，但是所有数据依旧是以近似文本的形式存在(当然在Excel中也产生了一些数据类型，可供计算，算是初级形态)。</p>
+<h2 id="进一步优化"><a href="#进一步优化" class="headerlink" title="进一步优化"></a>进一步优化</h2><p>当我们确认了依照关系模型来划分数据，数据的基本单元是表，最小单位是一个元组(类似于表格中行列交错的一格数据)。</p>
+<h3 id="分离数据属性"><a href="#分离数据属性" class="headerlink" title="分离数据属性"></a>分离数据属性</h3><p>在我们的数据表格中，一列的数据都具有相同的属性，那么我们就考虑可以将这个属性作为一个表头提取出来，这样数据的属性更加直观，也减少了每一个数据上都要附加属性的存储空间的浪费。这就产生了关系数据库中字段的概念。此时如果加入和删除数据，就可以只操作数据，无需关心数据的属性。而修改数据的属性时，增加属性可以将数据的该项属性设定一个默认的初始值，删除某项属性时可以让所有数据都忽略该项设定，修改属性时则会比较繁琐，需要调整大量的数据。</p>
+<h3 id="数据标记"><a href="#数据标记" class="headerlink" title="数据标记"></a>数据标记</h3><p>我们已经将数据的属性提取出来，同样可以把这种思路应用到数据本身。就像硬盘中的数据存储一样，我们在删除文件时，并不是真正将这一部分删除掉，而是对这块空间做一个可以写入的标记。我们对于表中的数据也可以用一个标记位来表示，如果该行被删除，我们可以对其标记一个已删除的mark，提取出一个标记数据是否有效的表，对应到具体数据中去。</p>
+<h3 id="数据编码"><a href="#数据编码" class="headerlink" title="数据编码"></a>数据编码</h3><p>下面可以考虑具体数据的存储，对于用户而言，数据直观的表示是字符串形式，结合数据的属性我们赋予数据真实的意义。而对于存储而言，按照字符串存储一个数据是不易于计算机理解数据的形式，也不好进行各种计算操作。所以对于不同类型的数据我们可以指定一定的编码格式，将数据以编码规范进行二进制存储。</p>
+<h3 id="行存与列存"><a href="#行存与列存" class="headerlink" title="行存与列存"></a>行存与列存</h3><p>一般来说我们读取数据库中的内容时，是按照行的格式读取的，需要某一项数据，就将该项数据的所有字段读取出来。在大数据发展迅速的今天，常见的场景是一个数据实体对应多项记录，其中一些项是描述数据实体相关的辅助信息，一般不会在查询、计算和统计分析中用到。在一般的大数据使用场景中，会针对几项数据进行大量的统计使用(这里引入了数据仓库的概念)。因此更需要用到的查询是针对大量行中个别列的查询，此时遍历所有行的消耗很大且浪费(因为多数列没有用到)。我们就提出了列存的概念。列存储在这样的应用场景下，有较多的优势。</p>
+<p>列数据都具有相同的属性，所以在列存储时，我们可以使用相同的数据格式存储，也就更方便使用压缩算法对整列的数据进行压缩。同时，在查询时只需要取出需要用到的几列数据即可，大大减少了时间和空间的开销。</p>
+<hr>
+<p>确定了数据的存储格式后，我们就可以进一步规划数据库的功能实现，下一篇将从总体架构上探讨数据库应该有什么功能，又如何架构一个数据库系统。</p>
+
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+      
+    
+    
+
+    
+      <div>
+        
+
+
+
+
+  
+
+
+
+<ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>本文作者： </strong>Simest</li>
+  <li class="post-copyright-link">
+    <strong>本文链接：</strong>
+    
+    <a href="https://sim41.com/2020/03/31/dbstorage/" title="dbstorage">https://sim41.com/2020/03/31/dbstorage/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="noopener" target="_blank"><i class="fa fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！</li>
+</ul>
+
+      </div>
+    
+
+    <footer class="post-footer">
+      
+        
+          
+        
+        <div class="post-tags">
+          
+            <a href="/tags/数据库原理/" rel="tag"># 数据库原理</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2020/03/25/excel2db/" rel="next" title="excel2db">
+                <i class="fa fa-chevron-left"></i> excel2db
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2020/04/14/dbarch/" rel="prev" title="dbarch">
+                dbarch <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+  </div>
+
+
+          </div>
+          
+
+  
+    <div class="comments" id="comments">
+      
+<script src="https://utteranc.es/client.js" repo="sim41/comment" issue-term="0" label="Comment" theme="github-light" crossorigin="anonymous" async>
+</script>
+
+
+    </div>
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image" src="/images/avatar.png" alt="Simest">
+            
+              <p class="site-author-name" itemprop="name">Simest</p>
+              <div class="site-description motion-element" itemprop="description">Focus on database/Linux/C/go/docker</div>
+          </div>
+
+          
+            <nav class="site-state motion-element">
+              
+                <div class="site-state-item site-state-posts">
+                
+                  <a href="/archives/">
+                
+                    <span class="site-state-item-count">25</span>
+                    <span class="site-state-item-name">日志</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-categories">
+                  
+                    
+                      <a href="/categories/">
+                    
+                  
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">19</span>
+                    <span class="site-state-item-name">分类</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-tags">
+                  
+                    
+                      <a href="/tags/">
+                    
+                  
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">15</span>
+                    <span class="site-state-item-name">标签</span>
+                  </a>
+                </div>
+              
+            </nav>
+          
+
+          
+
+          
+
+          
+
+          
+             <div class="cc-license motion-element" itemprop="license">
+              
+              
+                
+              
+              
+              
+              <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" class="cc-opacity" rel="noopener" target="_blank"><img src="/images/cc-by-nc-sa.svg" alt="Creative Commons"></a>
+             </div>
+          
+
+          
+          
+
+          
+            
+          
+          
+
+        </div>
+      </div>
+
+      
+      <!--noindex-->
+        <div class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+            
+            
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#数据库乱谈（二）——数据形式"><span class="nav-number">1.</span> <span class="nav-text">数据库乱谈（二）——数据形式</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#文本形式"><span class="nav-number">1.1.</span> <span class="nav-text">文本形式</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#表格形式"><span class="nav-number">1.2.</span> <span class="nav-text">表格形式</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#进一步优化"><span class="nav-number">1.3.</span> <span class="nav-text">进一步优化</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#分离数据属性"><span class="nav-number">1.3.1.</span> <span class="nav-text">分离数据属性</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#数据标记"><span class="nav-number">1.3.2.</span> <span class="nav-text">数据标记</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#数据编码"><span class="nav-number">1.3.3.</span> <span class="nav-text">数据编码</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#行存与列存"><span class="nav-number">1.3.4.</span> <span class="nav-text">行存与列存</span></a></li></ol></li></ol></li></ol></div>
+            
+
+          </div>
+        </div>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+  
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; 2019 – <span itemprop="copyrightYear">2021</span>
+  <span class="with-love" id="animate">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Simest</span>
+
+  
+
+  
+</div>
+
+
+
+
+
+
+
+
+
+        
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+    
+
+    
+  </div>
+
+  
+
+<script>
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script src="/lib/jquery/index.js?v=3.4.1"></script>
+
+  
+  <script src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+
+  
+
+
+  <script src="/js/utils.js?v=7.1.2"></script>
+
+  <script src="/js/motion.js?v=7.1.2"></script>
+
+
+
+  
+  
+
+
+  <script src="/js/schemes/muse.js?v=7.1.2"></script>
+
+
+
+  
+  <script src="/js/scrollspy.js?v=7.1.2"></script>
+<script src="/js/post-details.js?v=7.1.2"></script>
+
+
+
+  
+
+
+  <script src="/js/next-boot.js?v=7.1.2"></script>
+
+
+  
+
+  
+
+  
+
+  
+
+
+  
+
+
+  
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
