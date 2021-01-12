@@ -2,9 +2,37 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>https://sim41.com/2020/03/19/update-in-2020/</loc>
+    
+    <lastmod>2021-01-12T06:22:24.202Z</lastmod>
+    
+  </url>
+  
+  <url>
     <loc>https://sim41.com/2021/01/12/typing/</loc>
     
-    <lastmod>2021-01-12T06:16:12.186Z</lastmod>
+    <lastmod>2021-01-12T06:22:21.693Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>https://sim41.com/2019/09/03/caculator/</loc>
+    
+    <lastmod>2021-01-12T06:21:51.238Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>https://sim41.com/2020/03/25/C-OOP/</loc>
+    
+    <lastmod>2021-01-12T06:21:44.091Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>https://sim41.com/2019/12/02/memory/</loc>
+    
+    <lastmod>2021-01-12T06:21:39.253Z</lastmod>
     
   </url>
   
@@ -12,20 +40,6 @@
     <loc>https://sim41.com/2021/01/08/todo-in-2021/</loc>
     
     <lastmod>2021-01-08T03:19:21.423Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>https://sim41.com/2020/03/19/update-in-2020/</loc>
-    
-    <lastmod>2021-01-08T01:42:26.182Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>https://sim41.com/2020/03/25/C-OOP/</loc>
-    
-    <lastmod>2020-08-24T06:09:13.879Z</lastmod>
     
   </url>
   
@@ -100,13 +114,6 @@
   </url>
   
   <url>
-    <loc>https://sim41.com/2019/12/02/memory/</loc>
-    
-    <lastmod>2020-03-16T21:36:02.570Z</lastmod>
-    
-  </url>
-  
-  <url>
     <loc>https://sim41.com/2019/11/06/protocol/</loc>
     
     <lastmod>2019-11-21T03:37:31.352Z</lastmod>
@@ -131,13 +138,6 @@
     <loc>https://sim41.com/2019/09/05/sql/</loc>
     
     <lastmod>2019-09-05T11:38:42.299Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>https://sim41.com/2019/09/03/caculator/</loc>
-    
-    <lastmod>2019-09-03T01:58:04.359Z</lastmod>
     
   </url>
   

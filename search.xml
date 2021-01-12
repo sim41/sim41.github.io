@@ -22,7 +22,8 @@
         <category>tools</category>
       </categories>
       <tags>
-        <tag>效率, 工具,</tag>
+        <tag>效率</tag>
+        <tag>工具</tag>
       </tags>
   </entry>
   <entry>
@@ -188,7 +189,8 @@
         <category>编程思想</category>
       </categories>
       <tags>
-        <tag>c，面向对象</tag>
+        <tag>c</tag>
+        <tag>面向对象</tag>
       </tags>
   </entry>
   <entry>
@@ -327,7 +329,8 @@
         <category>底层原理</category>
       </categories>
       <tags>
-        <tag>c, 操作系统</tag>
+        <tag>c</tag>
+        <tag>操作系统</tag>
       </tags>
   </entry>
   <entry>
@@ -630,7 +633,8 @@ a &lt;- b;</code></pre><p>}
         <category>编译原理</category>
       </categories>
       <tags>
-        <tag>编译原理,语义分析</tag>
+        <tag>编译原理</tag>
+        <tag>语义分析</tag>
       </tags>
   </entry>
   <entry>
