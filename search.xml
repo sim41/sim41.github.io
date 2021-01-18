@@ -1,9 +1,100 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title>bnf</title>
+    <url>/2021/01/18/bnf/</url>
+    <content><![CDATA[<h1 id="BNF范式"><a href="#BNF范式" class="headerlink" title="BNF范式"></a>BNF范式</h1><p>最近在学习关于词法/语法分析的知识，看到yacc采用BNF范式定义语法规则，此前没有接触过BNF，发现其实以前看过的许多文档中的协议与语法定义都是采用了BNF或扩充巴科斯范式（ABNF）和扩展巴克斯范式（EBNF）。之前在分析微软的SQL Server数据库的TDS协议文档时，还用了好久去总结符号标识的意义，现在看来是自己孤陋寡闻连大名鼎鼎的BNF都不懂。（一看就知道编译原理就没好好学）</p>
+<a id="more"></a>
+
+<h2 id="几个简单概念"><a href="#几个简单概念" class="headerlink" title="几个简单概念"></a>几个简单概念</h2><h3 id="形式文法"><a href="#形式文法" class="headerlink" title="形式文法"></a>形式文法</h3><p>一个形式文法<em>G</em>是下述元素构成的一个<a href="https://zh.wikipedia.org/wiki/多元组" target="_blank" rel="noopener">四元组</a>（<em>N</em>, Σ, <em>P</em>, <em>S</em>）：</p>
+<ul>
+<li><p>“<strong>非终结符号</strong>”集合<em>N</em>。</p>
+</li>
+<li><p>“<strong>终结符号</strong>”集合Σ，Σ与<em>N</em>无交。</p>
+</li>
+<li><p>“<strong>产生式规则</strong>” <em>P</em>，</p>
+</li>
+<li><p>“<strong>起始符号</strong>”<em>S</em>，<em>S</em>属于<em>N</em>。</p>
+</li>
+</ul>
+<p><a href="https://zh.wikipedia.org/wiki/%E5%BD%A2%E5%BC%8F%E6%96%87%E6%B3%95" target="_blank" rel="noopener">引用自维基百科</a></p>
+<p>通俗地理解，就是一个文法的解释，需要一个产生的规则，里边允许递推扩展文法，但是总需要一个终结符来结束这句话，不会无限的递推下去。而开始的标志则可以来源于非终结符号。</p>
+<h3 id="上下文无关文法"><a href="#上下文无关文法" class="headerlink" title="上下文无关文法"></a>上下文无关文法</h3><p>BNF是一种用于描述上下文无关语法的规范，那么什么是上下文无关文法呢？概念定义就不再叙述，意会地理解，即把上下文去掉，无视语境，这个词如何解释是不变的。</p>
+<p><a href="https://zh.wikipedia.org/wiki/%E4%B8%8A%E4%B8%8B%E6%96%87%E6%97%A0%E5%85%B3%E6%96%87%E6%B3%95" target="_blank" rel="noopener">维基中的解释</a></p>
+<h2 id="BNF的应用"><a href="#BNF的应用" class="headerlink" title="BNF的应用"></a>BNF的应用</h2><p>我们的自然语言通常来说都是需要语境的，就无法用BNF这样的上下文无关文法来定义。但是程序语言都是上下文无关的，都可以以BNF的形式定义出来。不过现在多数是以EBNF扩展巴克斯范式来定义的。</p>
+<h3 id="BNF语法"><a href="#BNF语法" class="headerlink" title="BNF语法"></a>BNF语法</h3><figure class="highlight bnf"><table><tr><td class="code"><pre><span class="line">BNF范式的产生规则</span><br><span class="line">BNF的元符号</span><br><span class="line">::=    表示“定义为 ”</span><br><span class="line">|      表示“或者”</span><br><span class="line"><span class="attribute">&lt; &gt;</span>    尖括号用于括起类别名字</span><br></pre></td></tr></table></figure>
+
+<h3 id="EBNF语法"><a href="#EBNF语法" class="headerlink" title="EBNF语法"></a>EBNF语法</h3><table>
+<thead>
+<tr>
+<th align="center">用途</th>
+<th>符号表示</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">定义</td>
+<td>=</td>
+</tr>
+<tr>
+<td align="center">串接</td>
+<td>,</td>
+</tr>
+<tr>
+<td align="center">终止</td>
+<td>;</td>
+</tr>
+<tr>
+<td align="center">分隔</td>
+<td>|</td>
+</tr>
+<tr>
+<td align="center">可选</td>
+<td><strong>[ … ]</strong></td>
+</tr>
+<tr>
+<td align="center">重复</td>
+<td>{…}</td>
+</tr>
+<tr>
+<td align="center">分组</td>
+<td><strong>( … )</strong></td>
+</tr>
+<tr>
+<td align="center">单引号</td>
+<td><strong>‘ … ‘</strong></td>
+</tr>
+<tr>
+<td align="center">双引号</td>
+<td>“ … “</td>
+</tr>
+<tr>
+<td align="center">注释</td>
+<td><strong>(* … *)</strong></td>
+</tr>
+<tr>
+<td align="center">特殊序列</td>
+<td><strong>? … ?</strong></td>
+</tr>
+<tr>
+<td align="center">除外</td>
+<td><strong>-</strong></td>
+</tr>
+</tbody></table>
+]]></content>
+      <categories>
+        <category>编译原理</category>
+      </categories>
+      <tags>
+        <tag>parser</tag>
+        <tag>编译原理</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>typing</title>
     <url>/2021/01/12/typing/</url>
     <content><![CDATA[<h1 id="关于打字"><a href="#关于打字" class="headerlink" title="关于打字"></a>关于打字</h1><p>工作输出再加上日常聊天，打字占据了一天中很长的一部分时间。说实话我的打字基本上是从QQ聊天中练熟的，还是比较野路子。从关注到打字的问题到现在大概有一个多月的时间，这里来谈谈最近关于打字的一些感受。</p>
+<a id="more"></a>
+
 <h2 id="键位"><a href="#键位" class="headerlink" title="键位"></a>键位</h2><p>大概是小学一年级接触到电脑，在电脑课上学使用电脑，当时无聊的时候就玩金山打字游戏和金山画王。不过我的打字游戏一直都很菜，只能玩玩简单的青蛙过河，还有类似于雷电的那种击落飞船的游戏，警察抓小偷就算设置了小偷坐驾是自行车，警察是开车，也依旧抓不到。那时候打字速度非常慢，还不能盲打，完整地打一句话都很困难。</p>
 <p>打字速度略微提升就是初高中聊QQ练出来的，电脑键盘和手机的九宫格输入法，不过速度也一般吧，聊天也不算太多。其实直到今日的打字速度也只能算是过得去，远不算快。</p>
 <p>注意到键位的问题是突然有一天觉得右手很累，才发现自己的右手打字基本上只用了食指，中指基本上没有用到，打标点符号的时候动作幅度很大。另一个问题是输入Shift的时候基本上用的都是右手小指，这样右手主管标点符号就很奇怪。自己一直以来都没有很注意打字的键位，也一直都不太规范。</p>

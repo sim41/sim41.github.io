@@ -96,18 +96,18 @@
 
 
 
-  <meta name="description" content="编程时使用的大数运算在编程中，有时候会遇到大数运算的情况（大于语言本身定义的最大长度的数的运算，一般都是64位）。在密码学或者自定义数据类型，如数据库中deicmal类型，定义了数的精度和比例(precision 精度，有效数字。scale不知道怎么翻译了…就是小数点的位数)。在这种情况下需要自己定义针对大数的运算。">
-<meta name="keywords" content="数学">
+  <meta name="description" content="BNF范式最近在学习关于词法/语法分析的知识，看到yacc采用BNF范式定义语法规则，此前没有接触过BNF，发现其实以前看过的许多文档中的协议与语法定义都是采用了BNF或扩充巴科斯范式（ABNF）和扩展巴克斯范式（EBNF）。之前在分析微软的SQL Server数据库的TDS协议文档时，还用了好久去总结符号标识的意义，现在看来是自己孤陋寡闻连大名鼎鼎的BNF都不懂。（一看就知道编译原理就没好好学）">
+<meta name="keywords" content="parser,编译原理">
 <meta property="og:type" content="article">
-<meta property="og:title" content="bignuminc">
-<meta property="og:url" content="https://sim41.com/2019/11/04/bignuminc/index.html">
+<meta property="og:title" content="bnf">
+<meta property="og:url" content="https://sim41.com/2021/01/18/bnf/index.html">
 <meta property="og:site_name" content="Simest&#39;s Blog">
-<meta property="og:description" content="编程时使用的大数运算在编程中，有时候会遇到大数运算的情况（大于语言本身定义的最大长度的数的运算，一般都是64位）。在密码学或者自定义数据类型，如数据库中deicmal类型，定义了数的精度和比例(precision 精度，有效数字。scale不知道怎么翻译了…就是小数点的位数)。在这种情况下需要自己定义针对大数的运算。">
+<meta property="og:description" content="BNF范式最近在学习关于词法/语法分析的知识，看到yacc采用BNF范式定义语法规则，此前没有接触过BNF，发现其实以前看过的许多文档中的协议与语法定义都是采用了BNF或扩充巴科斯范式（ABNF）和扩展巴克斯范式（EBNF）。之前在分析微软的SQL Server数据库的TDS协议文档时，还用了好久去总结符号标识的意义，现在看来是自己孤陋寡闻连大名鼎鼎的BNF都不懂。（一看就知道编译原理就没好好学）">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2019-11-04T09:56:43.621Z">
+<meta property="og:updated_time" content="2021-01-18T07:53:36.155Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="bignuminc">
-<meta name="twitter:description" content="编程时使用的大数运算在编程中，有时候会遇到大数运算的情况（大于语言本身定义的最大长度的数的运算，一般都是64位）。在密码学或者自定义数据类型，如数据库中deicmal类型，定义了数的精度和比例(precision 精度，有效数字。scale不知道怎么翻译了…就是小数点的位数)。在这种情况下需要自己定义针对大数的运算。">
+<meta name="twitter:title" content="bnf">
+<meta name="twitter:description" content="BNF范式最近在学习关于词法/语法分析的知识，看到yacc采用BNF范式定义语法规则，此前没有接触过BNF，发现其实以前看过的许多文档中的协议与语法定义都是采用了BNF或扩充巴科斯范式（ABNF）和扩展巴克斯范式（EBNF）。之前在分析微软的SQL Server数据库的TDS协议文档时，还用了好久去总结符号标识的意义，现在看来是自己孤陋寡闻连大名鼎鼎的BNF都不懂。（一看就知道编译原理就没好好学）">
 
 
 
@@ -115,7 +115,7 @@
 
   
   
-  <link rel="canonical" href="https://sim41.com/2019/11/04/bignuminc/">
+  <link rel="canonical" href="https://sim41.com/2021/01/18/bnf/">
 
 
 
@@ -125,7 +125,7 @@
   };
 </script>
 
-  <title>bignuminc | Simest's Blog</title>
+  <title>bnf | Simest's Blog</title>
   
 
 
@@ -345,7 +345,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://sim41.com/2019/11/04/bignuminc/">
+    <link itemprop="mainEntityOfPage" href="https://sim41.com/2021/01/18/bnf/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Simest">
@@ -362,7 +362,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">bignuminc
+          <h1 class="post-title" itemprop="name headline">bnf
 
               
             
@@ -388,7 +388,7 @@
                 
               
 
-              <time title="创建时间：2019-11-04 16:10:53 / 修改时间：17:56:43" itemprop="dateCreated datePublished" datetime="2019-11-04T16:10:53+08:00">2019-11-04</time>
+              <time title="创建时间：2021-01-18 15:49:21 / 修改时间：15:53:36" itemprop="dateCreated datePublished" datetime="2021-01-18T15:49:21+08:00">2021-01-18</time>
             
 
             
@@ -410,14 +410,7 @@
                 <span class="post-meta-item-text">分类于</span>
               
               
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/密码学/" itemprop="url" rel="index"><span itemprop="name">密码学</span></a></span>
-
-                
-                
-                  ，
-                
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/密码学/数学/" itemprop="url" rel="index"><span itemprop="name">数学</span></a></span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/编译原理/" itemprop="url" rel="index"><span itemprop="name">编译原理</span></a></span>
 
                 
                 
@@ -452,45 +445,83 @@
       
 
       
-        <h1 id="编程时使用的大数运算"><a href="#编程时使用的大数运算" class="headerlink" title="编程时使用的大数运算"></a>编程时使用的大数运算</h1><p>在编程中，有时候会遇到大数运算的情况（大于语言本身定义的最大长度的数的运算，一般都是64位）。在密码学或者自定义数据类型，如数据库中deicmal类型，定义了数的精度和比例(precision 精度，有效数字。scale不知道怎么翻译了…就是小数点的位数)。在这种情况下需要自己定义针对大数的运算。</p>
+        <h1 id="BNF范式"><a href="#BNF范式" class="headerlink" title="BNF范式"></a>BNF范式</h1><p>最近在学习关于词法/语法分析的知识，看到yacc采用BNF范式定义语法规则，此前没有接触过BNF，发现其实以前看过的许多文档中的协议与语法定义都是采用了BNF或扩充巴科斯范式（ABNF）和扩展巴克斯范式（EBNF）。之前在分析微软的SQL Server数据库的TDS协议文档时，还用了好久去总结符号标识的意义，现在看来是自己孤陋寡闻连大名鼎鼎的BNF都不懂。（一看就知道编译原理就没好好学）</p>
 <a id="more"></a>
 
-<h2 id="大数运算的原理"><a href="#大数运算的原理" class="headerlink" title="大数运算的原理"></a>大数运算的原理</h2><p>一般语言中提供的最大长度的数就是64位，8bytes，能表示的最大数是无符号类型的64位的数。想要存储更大的数，只要进行分段即可。算法也基本上都是基于竖式计算的方法进行分段运算。具体的算法和相关的优化此处就不讨论了。</p>
-<h2 id="GO语言中的大数运算"><a href="#GO语言中的大数运算" class="headerlink" title="GO语言中的大数运算"></a>GO语言中的大数运算</h2><p>我日常主要使用C和go，这里也只讲这两种语言的大数运算。各种语言都会遇到大数运算的需求，因此我们也没必要去造轮子自己写一遍。</p>
-<p>go的math/big包中就实现了大数运算的各种运算法则，还是很方便的，也就不再讲了。</p>
-<h2 id="C语言中的大数运算"><a href="#C语言中的大数运算" class="headerlink" title="C语言中的大数运算"></a>C语言中的大数运算</h2><p>c语言的原则导致官方提供的库是很少的，但是这么多年的发展，也存在各种稳定的库实现。</p>
-<h3 id="gmp"><a href="#gmp" class="headerlink" title="gmp"></a>gmp</h3><p>一般大数运算都是用<a href="https://gmplib.org/" target="_blank" rel="noopener">gmp库</a>，libgmp。用法也比较简单。编译时需要增加选项-lgmp进行链接。由于不符合我的要求所以没有深入了解。网上文章很多，就不造轮子了。</p>
-<h3 id="openssl"><a href="#openssl" class="headerlink" title="openssl"></a>openssl</h3><p>openssl算是公认的加密算法库实现的标准了。一般系统中都内置了openssl库。既然是实现加密算法的，那一定需要用到大数运算。这次有大数运算的简单需求后，不想引入新的依赖，所以我想openssl内部的接口能否满足我的需求呢。经过查询发现&lt;openssl/bn.h&gt;中(bn =》bignumber)提供了大数运算的接口。网上的教程大多是错误的，通过查阅openssl的官方文档简单总结了一下openssl中大数运算的接口调用。</p>
-<p><strong>definition</strong></p>
-<figure class="highlight armasm"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">BIGNUM	</span>	//<span class="keyword">struct</span></span><br><span class="line"><span class="keyword">BN_CTX	</span>	//<span class="keyword">struct</span></span><br><span class="line"><span class="keyword">BN_ULONG	</span>//unsigned long</span><br><span class="line"><span class="symbol">...</span></span><br></pre></td></tr></table></figure>
+<h2 id="几个简单概念"><a href="#几个简单概念" class="headerlink" title="几个简单概念"></a>几个简单概念</h2><h3 id="形式文法"><a href="#形式文法" class="headerlink" title="形式文法"></a>形式文法</h3><p>一个形式文法<em>G</em>是下述元素构成的一个<a href="https://zh.wikipedia.org/wiki/多元组" target="_blank" rel="noopener">四元组</a>（<em>N</em>, Σ, <em>P</em>, <em>S</em>）：</p>
+<ul>
+<li><p>“<strong>非终结符号</strong>”集合<em>N</em>。</p>
+</li>
+<li><p>“<strong>终结符号</strong>”集合Σ，Σ与<em>N</em>无交。</p>
+</li>
+<li><p>“<strong>产生式规则</strong>” <em>P</em>，</p>
+</li>
+<li><p>“<strong>起始符号</strong>”<em>S</em>，<em>S</em>属于<em>N</em>。</p>
+</li>
+</ul>
+<p><a href="https://zh.wikipedia.org/wiki/%E5%BD%A2%E5%BC%8F%E6%96%87%E6%B3%95" target="_blank" rel="noopener">引用自维基百科</a></p>
+<p>通俗地理解，就是一个文法的解释，需要一个产生的规则，里边允许递推扩展文法，但是总需要一个终结符来结束这句话，不会无限的递推下去。而开始的标志则可以来源于非终结符号。</p>
+<h3 id="上下文无关文法"><a href="#上下文无关文法" class="headerlink" title="上下文无关文法"></a>上下文无关文法</h3><p>BNF是一种用于描述上下文无关语法的规范，那么什么是上下文无关文法呢？概念定义就不再叙述，意会地理解，即把上下文去掉，无视语境，这个词如何解释是不变的。</p>
+<p><a href="https://zh.wikipedia.org/wiki/%E4%B8%8A%E4%B8%8B%E6%96%87%E6%97%A0%E5%85%B3%E6%96%87%E6%B3%95" target="_blank" rel="noopener">维基中的解释</a></p>
+<h2 id="BNF的应用"><a href="#BNF的应用" class="headerlink" title="BNF的应用"></a>BNF的应用</h2><p>我们的自然语言通常来说都是需要语境的，就无法用BNF这样的上下文无关文法来定义。但是程序语言都是上下文无关的，都可以以BNF的形式定义出来。不过现在多数是以EBNF扩展巴克斯范式来定义的。</p>
+<h3 id="BNF语法"><a href="#BNF语法" class="headerlink" title="BNF语法"></a>BNF语法</h3><figure class="highlight bnf"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">BNF范式的产生规则</span><br><span class="line">BNF的元符号</span><br><span class="line">::=    表示“定义为 ”</span><br><span class="line">|      表示“或者”</span><br><span class="line"><span class="attribute">&lt; &gt;</span>    尖括号用于括起类别名字</span><br></pre></td></tr></table></figure>
 
-<p><strong>赋值</strong></p>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">BN_bn2bin</span><span class="params">(<span class="keyword">const</span> BIGNUM *a, <span class="keyword">unsigned</span> <span class="keyword">char</span> *to)</span></span>;</span><br><span class="line"> <span class="function"><span class="keyword">int</span> <span class="title">BN_bn2binpad</span><span class="params">(<span class="keyword">const</span> BIGNUM *a, <span class="keyword">unsigned</span> <span class="keyword">char</span> *to, <span class="keyword">int</span> tolen)</span></span>;</span><br><span class="line"> <span class="function">BIGNUM *<span class="title">BN_bin2bn</span><span class="params">(<span class="keyword">const</span> <span class="keyword">unsigned</span> <span class="keyword">char</span> *s, <span class="keyword">int</span> len, BIGNUM *ret)</span></span>;</span><br></pre></td></tr></table></figure>
-
-<p>BN_bn2bin 从大数存储结构转换为二进制数的字符串形式, to 为目标存储区，需要长度足够存二进制的数，形式是字符串%s</p>
-<p>BN_bn2binpad 转换为二进制，用0填充到指定长度</p>
-<p>BN_bin2bn     从正二进制字符串转换为big number结构</p>
-<p>以上均为大端序</p>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">BN_bn2lebinpad</span><span class="params">(<span class="keyword">const</span> BIGNUM *a, <span class="keyword">unsigned</span> <span class="keyword">char</span> *to, <span class="keyword">int</span> tolen)</span></span>;</span><br><span class="line"> <span class="function">BIGNUM *<span class="title">BN_lebin2bn</span><span class="params">(<span class="keyword">const</span> <span class="keyword">unsigned</span> <span class="keyword">char</span> *s, <span class="keyword">int</span> len, BIGNUM *ret)</span></span>;</span><br></pre></td></tr></table></figure>
-
-<p>以上为小端序版本</p>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">char</span> *<span class="title">BN_bn2hex</span><span class="params">(<span class="keyword">const</span> BIGNUM *a)</span></span>;</span><br><span class="line"> <span class="function"><span class="keyword">char</span> *<span class="title">BN_bn2dec</span><span class="params">(<span class="keyword">const</span> BIGNUM *a)</span></span>;</span><br><span class="line"> <span class="function"><span class="keyword">int</span> <span class="title">BN_hex2bn</span><span class="params">(BIGNUM **a, <span class="keyword">const</span> <span class="keyword">char</span> *str)</span></span>;</span><br><span class="line"> <span class="function"><span class="keyword">int</span> <span class="title">BN_dec2bn</span><span class="params">(BIGNUM **a, <span class="keyword">const</span> <span class="keyword">char</span> *str)</span></span>;</span><br></pre></td></tr></table></figure>
-
-<p>BN_bn2hex 从BIGNUM 转换为十六进制字符串</p>
-<p>BN_bn2dec 从BIGNUM转换为十进制字符串</p>
-<p>BN_hex2bn 从十六进制字符串转换为BIGNUM，可以带负号’-‘， 不带十六进制标示0x，总体呈现为“-deadbeef“</p>
-<p>BN_dec2bn 从十进制转换为BIGNUM，可以带负号</p>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">BN_print</span><span class="params">(BIO *fp, <span class="keyword">const</span> BIGNUM *a)</span></span>;</span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">BN_print_fp</span><span class="params">(FILE *fp, <span class="keyword">const</span> BIGNUM *a)</span></span>;</span><br></pre></td></tr></table></figure>
-
-<p>以十六进制，带负号形式，打印存储的大数</p>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">BN_bn2mpi</span><span class="params">(<span class="keyword">const</span> BIGNUM *a, <span class="keyword">unsigned</span> <span class="keyword">char</span> *to)</span></span>;</span><br><span class="line"><span class="function">BIGNUM *<span class="title">BN_mpi2bn</span><span class="params">(<span class="keyword">unsigned</span> <span class="keyword">char</span> *s, <span class="keyword">int</span> len, BIGNUM *ret)</span></span>;</span><br></pre></td></tr></table></figure>
-
-<p>这一组函数很有用，在进行数据通信的时候，数据都是以十六进制流的形式通信。此处定义了一种格式，以4字节大端序表示数据长度，随后跟着同样以大端序呈现的数据。（转换输出后的结果会讲MSB最高有效位作为符号位使用，但是不知道为什么他自己的解析函数并没有解析符号位，还是以正数使用为主。（采用MSB表示的以null byte为前缀，这一句定义没有get到)</p>
-<p><strong>运算</strong></p>
-<p>运算的接口比较好理解，我用到的也不多，就不细说了。</p>
-<p>openssl需要安装openssl-devel （或者形如libssl-devel等）。编译时需要使用-lcrypto 进行链接。</p>
-<p><strong>[引用]</strong></p>
-<p><a href="https://www.openssl.org/docs/man1.1.0/man3/BN_hex2bn.html" target="_blank" rel="noopener">openssl官方文档</a></p>
+<h3 id="EBNF语法"><a href="#EBNF语法" class="headerlink" title="EBNF语法"></a>EBNF语法</h3><table>
+<thead>
+<tr>
+<th align="center">用途</th>
+<th>符号表示</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">定义</td>
+<td>=</td>
+</tr>
+<tr>
+<td align="center">串接</td>
+<td>,</td>
+</tr>
+<tr>
+<td align="center">终止</td>
+<td>;</td>
+</tr>
+<tr>
+<td align="center">分隔</td>
+<td>|</td>
+</tr>
+<tr>
+<td align="center">可选</td>
+<td><strong>[ … ]</strong></td>
+</tr>
+<tr>
+<td align="center">重复</td>
+<td>{…}</td>
+</tr>
+<tr>
+<td align="center">分组</td>
+<td><strong>( … )</strong></td>
+</tr>
+<tr>
+<td align="center">单引号</td>
+<td><strong>‘ … ‘</strong></td>
+</tr>
+<tr>
+<td align="center">双引号</td>
+<td>“ … “</td>
+</tr>
+<tr>
+<td align="center">注释</td>
+<td><strong>(* … *)</strong></td>
+</tr>
+<tr>
+<td align="center">特殊序列</td>
+<td><strong>? … ?</strong></td>
+</tr>
+<tr>
+<td align="center">除外</td>
+<td><strong>-</strong></td>
+</tr>
+</tbody></table>
 
       
     </div>
@@ -525,7 +556,7 @@
   <li class="post-copyright-link">
     <strong>本文链接：</strong>
     
-    <a href="https://sim41.com/2019/11/04/bignuminc/" title="bignuminc">https://sim41.com/2019/11/04/bignuminc/</a>
+    <a href="https://sim41.com/2021/01/18/bnf/" title="bnf">https://sim41.com/2021/01/18/bnf/</a>
   </li>
   <li class="post-copyright-license">
     <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="noopener" target="_blank"><i class="fa fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！</li>
@@ -541,7 +572,9 @@
         
         <div class="post-tags">
           
-            <a href="/tags/数学/" rel="tag"># 数学</a>
+            <a href="/tags/parser/" rel="tag"># parser</a>
+          
+            <a href="/tags/编译原理/" rel="tag"># 编译原理</a>
           
         </div>
       
@@ -554,8 +587,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2019/10/29/tools/" rel="next" title="tools">
-                <i class="fa fa-chevron-left"></i> tools
+              <a href="/2021/01/12/typing/" rel="next" title="typing">
+                <i class="fa fa-chevron-left"></i> typing
               </a>
             
           </div>
@@ -563,10 +596,6 @@
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2019/11/06/protocol/" rel="prev" title="protocol">
-                protocol <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
@@ -804,7 +833,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#编程时使用的大数运算"><span class="nav-number">1.</span> <span class="nav-text">编程时使用的大数运算</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#大数运算的原理"><span class="nav-number">1.1.</span> <span class="nav-text">大数运算的原理</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#GO语言中的大数运算"><span class="nav-number">1.2.</span> <span class="nav-text">GO语言中的大数运算</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#C语言中的大数运算"><span class="nav-number">1.3.</span> <span class="nav-text">C语言中的大数运算</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#gmp"><span class="nav-number">1.3.1.</span> <span class="nav-text">gmp</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#openssl"><span class="nav-number">1.3.2.</span> <span class="nav-text">openssl</span></a></li></ol></li></ol></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#BNF范式"><span class="nav-number">1.</span> <span class="nav-text">BNF范式</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#几个简单概念"><span class="nav-number">1.1.</span> <span class="nav-text">几个简单概念</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#形式文法"><span class="nav-number">1.1.1.</span> <span class="nav-text">形式文法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#上下文无关文法"><span class="nav-number">1.1.2.</span> <span class="nav-text">上下文无关文法</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#BNF的应用"><span class="nav-number">1.2.</span> <span class="nav-text">BNF的应用</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#BNF语法"><span class="nav-number">1.2.1.</span> <span class="nav-text">BNF语法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#EBNF语法"><span class="nav-number">1.2.2.</span> <span class="nav-text">EBNF语法</span></a></li></ol></li></ol></li></ol></div>
             
 
           </div>
